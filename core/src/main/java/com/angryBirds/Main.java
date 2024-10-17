@@ -16,6 +16,9 @@ public class Main extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
+
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+
     }
 
     @Override
