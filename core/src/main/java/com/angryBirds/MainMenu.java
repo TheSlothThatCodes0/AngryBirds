@@ -90,6 +90,7 @@ public class MainMenu implements Screen {
                 // Will be implemented later to switch to settings screen
             } else if (playBounds.contains(touchPos.x, touchPos.y)) {
                 // Will be implemented later to switch to game screen
+                game.setScreen(new Levels(game));
             }
         }
     }
