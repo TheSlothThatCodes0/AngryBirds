@@ -9,7 +9,7 @@ public class Level_1 extends BaseLevel {
 
     public Level_1(Main game) {
         super(game);
-        setBackground("level1_background.png");
+        setBackground("level_background.png");
         initializeGameObjects();
     }
 
@@ -20,10 +20,10 @@ public class Level_1 extends BaseLevel {
         addBird(new BlueBird(game), 150, 100);
 
         // Adding blocks at specific positions
-        addBlock(new Cube(game, "stone"), 500, 300);
-        addBlock(new Triangle(game, "wood"), 550, 250);
-
-        // Adding pigs at specific positions
-        addPig(new NormalPig(game, "big"), 850, 350);
+//        addBlock(new Cube(game, "stone"), 500, 300);
+//        addBlock(new Triangle(game, "wood"), 550, 250);
+//
+//        // Adding pigs at specific positions
+//        addPig(new NormalPig(game, "big"), 850, 350);
     }
 }

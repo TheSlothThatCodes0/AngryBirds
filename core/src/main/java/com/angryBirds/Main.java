@@ -14,7 +14,7 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         assets = new AssetManager();
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+//        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         setScreen(new SplashScreen(this));
     }
 

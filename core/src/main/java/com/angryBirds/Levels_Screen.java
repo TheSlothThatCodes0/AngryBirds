@@ -1,12 +1,15 @@
 package com.angryBirds;
 
+import com.angryBirds.Levels.Level_1;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -88,10 +91,16 @@ public class Levels_Screen implements Screen {
         portal_I1.setPosition(1500,250);
         portal_I1.setScaling(Scaling.fit);
 
+        portal_I1.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                createLevel1();
+            }
+        });
+
         portal_I2 = new Image(portal_T);
         portal_I2.setPosition(1100, 300 + launch1.getHeight() - 100);
         portal_I2.setScaling(Scaling.fit);
-
 
         portal_I3 = new Image(portal_T);
         portal_I3.setPosition(600, 300 + launch1.getHeight() + 125);
@@ -155,6 +164,10 @@ public class Levels_Screen implements Screen {
 
     @Override
     public void hide() {
+    }
+
+    private void createLevel1() {
+        game.setScreen(new Level_1(game));
     }
 
     @Override

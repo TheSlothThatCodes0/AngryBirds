@@ -39,6 +39,22 @@ public class SplashScreen implements Screen {
         game.assets.load("settings.png", Texture.class);
         game.assets.load("exitButton.png", Texture.class);
         game.assets.load("playButton.png", Texture.class);
+        game.assets.load("level_background.png", Texture.class);
+        game.assets.load("red_bird.png", Texture.class);
+        game.assets.load("blue_bird.png", Texture.class);
+        game.assets.load("yellow_bird.png", Texture.class);
+        game.assets.load("g_b.png",Texture.class);
+        game.assets.load("g_p.png",Texture.class);
+        game.assets.load("g_t.png",Texture.class);
+        game.assets.load("s_b.png",Texture.class);
+        game.assets.load("s_p.png",Texture.class);
+        game.assets.load("s_t.png",Texture.class);
+        game.assets.load("w_p.png",Texture.class);
+        game.assets.load("w_b.png",Texture.class);
+        game.assets.load("w_t.png",Texture.class);
+
+
+
     }
 
     @Override
@@ -65,16 +81,15 @@ public class SplashScreen implements Screen {
         game.batch.begin();
         game.batch.draw(splashImage, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-        // Draw loading bird in bottom center
+        // draw loading bird in bottom center
         float birdWidth = 200;
         float birdHeight = 100;
         float birdX = (WORLD_WIDTH - birdWidth) / 2;
         float birdY = 50; // Distance from bottom
         game.batch.draw(loadingBird, birdX, birdY, birdWidth, birdHeight);
 
-        // Optionally: Draw loading progress
+        // loading progress
         float progress = game.assets.getProgress();
-        // You can use this progress value to draw a loading bar if you want
 
         game.batch.end();
     }
