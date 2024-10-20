@@ -31,4 +31,8 @@ public abstract class Bird {
     public void dispose() {
         birdTexture.dispose();
     }
+
+    public void setPosition(float x, float y) {
+        birdBounds.setPosition(x, y);
+    }
 }

@@ -1,6 +1,5 @@
 package com.angryBirds.Birds;
 
-import com.angryBirds.Birds.Bird;
 import com.angryBirds.Main;
 import com.badlogic.gdx.graphics.Texture;
 

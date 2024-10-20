@@ -12,6 +12,6 @@ public class BlueBird extends Bird {
 
     @Override
     protected void loadTexture() {
-        birdTexture = game.assets.get("blue_bird.png", Texture.class);
+        birdTexture = game.assets.get("Blue_Bird.png", Texture.class);
     }
 }

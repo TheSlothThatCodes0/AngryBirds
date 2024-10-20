@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class Levels implements Screen {
+public class Levels_Screen implements Screen {
     private Main game;
     private Viewport viewport;
     private Stage stage;
@@ -36,7 +36,7 @@ public class Levels implements Screen {
     private Image portal_I2;
     private Image portal_I3;
 
-    public Levels(Main game) {
+    public Levels_Screen(Main game) {
         this.game = game;
 
         camera = new OrthographicCamera();
