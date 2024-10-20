@@ -25,9 +25,16 @@ public class Levels implements Screen {
     private Texture ground_shape;
     private Texture launcher1;
     private Texture launcher2;
+    private Texture rbird;
+    private Texture portal_T;
 
     private Image background;
-    private Image test_image;
+    private Image launch1;
+    private Image launch2;
+    private Image redBird;
+    private Image portal_I1;
+    private Image portal_I2;
+    private Image portal_I3;
 
     public Levels(Main game) {
         this.game = game;
@@ -44,32 +51,71 @@ public class Levels implements Screen {
     private void loadTextures() {
         backgroundTexture = new Texture("level_background.png");
 //        ground_shape = new Texture("ground_shape.png");
-        launcher1 = new Texture("launcher1.png");
-        launcher2 = new Texture("launcher2.png");
+        launcher1 = new Texture("launcher_1.png");
+        launcher2 = new Texture("launcher_2.png");
+        portal_T = new Texture("portal.png");
+        rbird = new Texture("red_bird.png");
 //        backgroundTexture = new Texture("game_background.png");
 //        background = new Image(backgroundTexture);
 //        background.setSize(800, 480);
 //
-//        test_image = new Image(launcher1);
-////        test_image.setSize(100,100);
-//        test_image.setPosition(50,50);
-//        test_image.setScaling(Scaling.fit);
+//        launch1 = new Image(launcher1);
+////        launch1.setSize(100,100);
+//        launch1.setPosition(50,50);
+//        launch1.setScaling(Scaling.fit);
 //
 //        stage.addActor(background);
-//        stage.addActor(test_image);
+//        stage.addActor(launch1);
     }
 
     private void setupStage(){
         background = new Image(backgroundTexture);
         background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
 
-        test_image = new Image(launcher1);
-        test_image.setPosition(100, 200);
-//        test_image.setSize(10,10);
-        test_image.setScaling(Scaling.fit);
+        launch1 = new Image(launcher1);
+        launch1.setPosition(240, 200);
+        launch1.setScaling(Scaling.fit);
+
+        launch2 = new Image(launcher2);
+        launch2.setPosition(327, 340);
+        launch2.setScaling(Scaling.fit);
+
+        redBird = new Image(rbird);
+        redBird.setPosition(320, 400);
+        redBird.setScaling(Scaling.fit);
+
+        portal_I1 = new Image(portal_T);
+        portal_I1.setPosition(1500,250);
+        portal_I1.setScaling(Scaling.fit);
+
+        portal_I2 = new Image(portal_T);
+        portal_I2.setPosition(1100, 300 + launch1.getHeight() - 100);
+        portal_I2.setScaling(Scaling.fit);
+
+
+        portal_I3 = new Image(portal_T);
+        portal_I3.setPosition(600, 300 + launch1.getHeight() + 125);
+        portal_I3.setScaling(Scaling.fit);
+
+        float rw = redBird.getWidth();  //for changing the size of red bird.
+        float rh = redBird.getHeight();
+        float sf = 0.4f;
+        redBird.setSize(rw*sf, rh*sf);
+
+        float pw = portal_I1.getWidth();
+        float ph = portal_I1.getHeight();
+        float sf_p = 0.4f;
+        portal_I1.setSize(pw*sf_p,ph*sf_p);
+        portal_I2.setSize(pw*sf_p, ph*sf_p);
+        portal_I3.setSize(pw*sf_p, ph*sf_p);
 
         stage.addActor(background);
-        stage.addActor(test_image);
+        stage.addActor(launch2);
+        stage.addActor(redBird);
+        stage.addActor(launch1);
+        stage.addActor(portal_I1);
+        stage.addActor(portal_I2);
+        stage.addActor(portal_I3);
     }
 
 
@@ -118,6 +164,7 @@ public class Levels implements Screen {
         ground_shape.dispose();
         launcher1.dispose();
         launcher2.dispose();
+        portal_T.dispose();
     }
 }
 
