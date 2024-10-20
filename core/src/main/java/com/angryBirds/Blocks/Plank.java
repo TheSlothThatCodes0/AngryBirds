@@ -14,13 +14,13 @@ public class Plank extends Block {
     protected void loadTexture(String material) {
         switch (material.toLowerCase()) {
             case "stone":
-                blockTexture = game.assets.get("plank_stone.png", Texture.class);
+                blockTexture = game.assets.get("s_p.png", Texture.class);
                 break;
             case "wood":
-                blockTexture = game.assets.get("plank_wood.png", Texture.class);
+                blockTexture = game.assets.get("w_p.png", Texture.class);
                 break;
-            case "metal":
-                blockTexture = game.assets.get("plank_metal.png", Texture.class);
+            case "ice":
+                blockTexture = game.assets.get("g_p.png", Texture.class);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);

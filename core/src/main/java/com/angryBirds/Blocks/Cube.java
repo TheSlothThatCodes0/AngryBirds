@@ -15,13 +15,13 @@ public class Cube extends Block {
     protected void loadTexture(String material) {
         switch (material.toLowerCase()) {
             case "stone":
-                blockTexture = game.assets.get("cube_stone.png", Texture.class);
+                blockTexture = game.assets.get("s_b.png", Texture.class);
                 break;
             case "wood":
-                blockTexture = game.assets.get("cube_wood.png", Texture.class);
+                blockTexture = game.assets.get("w_b.png", Texture.class);
                 break;
-            case "metal":
-                blockTexture = game.assets.get("cube_metal.png", Texture.class);
+            case "ice":
+                blockTexture = game.assets.get("g_b.png", Texture.class);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);

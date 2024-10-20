@@ -14,13 +14,13 @@ public class Triangle extends Block {
     protected void loadTexture(String material) {
         switch (material.toLowerCase()) {
             case "stone":
-                blockTexture = game.assets.get("triangle_stone.png", Texture.class);
+                blockTexture = game.assets.get("s_t.png", Texture.class);
                 break;
             case "wood":
-                blockTexture = game.assets.get("triangle_wood.png", Texture.class);
+                blockTexture = game.assets.get("w_t.png", Texture.class);
                 break;
-            case "metal":
-                blockTexture = game.assets.get("triangle_metal.png", Texture.class);
+            case "ice":
+                blockTexture = game.assets.get("g_t.png", Texture.class);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);
