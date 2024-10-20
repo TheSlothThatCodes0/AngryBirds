@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Plank extends Block {
 
     public Plank(Main game, String material) {
-        super(game, 200, 50);
+        super(game, 300, 50);
         loadTexture(material);
     }
 

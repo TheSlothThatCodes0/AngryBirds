@@ -32,8 +32,18 @@ public class Level_1 extends BaseLevel {
         addBird(new BlueBird(game), 150, 100);
 
         // Adding blocks at specific positions
-        addBlock(new Cube(game, "stone"), 500, 200);
-        addBlock(new Triangle(game, "wood"), 600, 200);
+        addBlock(new Cube(game, "stone"), 1400, 200);
+        addBlock(new Cube(game, "stone"), 1600, 200);
+        addBlock(new Cube(game, "stone"), 1400, 200 + 100);
+        addBlock(new Cube(game, "stone"), 1600, 200 + 100);
+        addBlock(new Cube(game, "stone"), 1400, 200 + 100 + 100 + 22);
+        addBlock(new Cube(game, "stone"), 1600, 200 + 100 + 100 + 22);
+        addBlock(new Cube(game, "stone"), 1500, 200 + 100 + 100 + 100 + 22 + 22);
+        addBlock(new Triangle(game, "wood"), 1395, 200 + 100 + 100 + 100 + 22 + 22);
+        addBlock(new Triangle(game, "wood"), 1595, 200 + 100 + 100 + 100 + 22 + 22);
+        addBlock(new Triangle(game, "wood"), 1500, 200 + 100 + 100 + 100 + 100 + 22 + 22);
+        addBlock(new Plank(game,"wood"),1400,200+100+100);
+        addBlock(new Plank(game,"wood"),1400,200+100+100+100+22);
 //
 //        // Adding pigs at specific positions
 //        addPig(new NormalPig(game, "big"), 850, 350);

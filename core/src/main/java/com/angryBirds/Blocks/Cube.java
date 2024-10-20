@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Cube extends Block {
 
     public Cube(Main game, String material) {
-        super(game, 100, 100);  // Cube dimensions (100x100)
+        super(game, 140, 140);  // Cube dimensions (100x100)
         loadTexture(material);
     }
 

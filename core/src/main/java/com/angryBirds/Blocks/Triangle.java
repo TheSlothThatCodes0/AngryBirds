@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Triangle extends Block {
 
     public Triangle(Main game, String material) {
-        super(game, 120, 100);  // Triangle dimensions (can be adjusted)
+        super(game, 120, 120);  // Triangle dimensions (can be adjusted)
         loadTexture(material);
     }
 
