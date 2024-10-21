@@ -1,16 +1,17 @@
 package com.angryBirds.Levels;
 
+import com.angryBirds.Birds.Bird;
+import com.angryBirds.Blocks.Block;
 import com.angryBirds.Main;
+import com.angryBirds.Pigs.Pig;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.angryBirds.Birds.*;
-import com.angryBirds.Blocks.*;
-import com.angryBirds.Pigs.*;
 
 public abstract class BaseLevel implements Screen {
     protected Main game;
@@ -27,6 +28,12 @@ public abstract class BaseLevel implements Screen {
     protected final float WORLD_WIDTH = 1920;
     protected final float WORLD_HEIGHT = 1080;
 
+    // Launcher
+    protected Texture launcher1;
+    protected Texture launcher2;
+    protected Image launch1;
+    protected Image launch2;
+
     public BaseLevel(Main game) {
         this.game = game;
 
@@ -39,6 +46,27 @@ public abstract class BaseLevel implements Screen {
         birds = new Array<>();
         blocks = new Array<>();
         pigs = new Array<>();
+
+        // Load launcher textures and setup
+        loadLauncherTextures();
+        setupLauncher();
+    }
+
+    // Load launcher textures
+    private void loadLauncherTextures() {
+        launcher1 = new Texture("launcher_1.png");
+        launcher2 = new Texture("launcher_2.png");
+    }
+
+    // Setup launcher position and sizes
+    private void setupLauncher() {
+        launch1 = new Image(launcher1);
+        launch1.setPosition(240, 200);
+        launch1.setSize(100, 100);
+
+        launch2 = new Image(launcher2);
+        launch2.setPosition(327, 340);
+        launch2.setSize(100, 100);
     }
 
     // Abstract method for initializing game objects in specific levels
@@ -73,6 +101,11 @@ public abstract class BaseLevel implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(backgroundTexture, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+
+        // Draw launchers
+        game.batch.draw(launcher1, launch1.getX(), launch1.getY(), launch1.getWidth(), launch1.getHeight());
+        game.batch.draw(launcher2, launch2.getX(), launch2.getY(), launch2.getWidth(), launch2.getHeight());
+
         game.batch.end();
 
         // Render all game objects
@@ -105,6 +138,8 @@ public abstract class BaseLevel implements Screen {
     @Override
     public void dispose() {
         backgroundTexture.dispose();
+        launcher1.dispose();
+        launcher2.dispose();
 
         for (Bird bird : birds) {
             bird.dispose();
