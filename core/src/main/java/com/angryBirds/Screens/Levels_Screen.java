@@ -1,6 +1,7 @@
-package com.angryBirds;
+package com.angryBirds.Screens;
 
 import com.angryBirds.Levels.Level_1;
+import com.angryBirds.Main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -38,6 +39,7 @@ public class Levels_Screen implements Screen {
     private Image portal_I1;
     private Image portal_I2;
     private Image portal_I3;
+
 
     public Levels_Screen(Main game) {
         this.game = game;

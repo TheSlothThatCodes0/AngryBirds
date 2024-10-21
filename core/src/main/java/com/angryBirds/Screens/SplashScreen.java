@@ -1,5 +1,6 @@
-package com.angryBirds;
+package com.angryBirds.Screens;
 
+import com.angryBirds.Main;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;

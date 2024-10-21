@@ -4,10 +4,15 @@ import com.angryBirds.Birds.Bird;
 import com.angryBirds.Blocks.Block;
 import com.angryBirds.Main;
 import com.angryBirds.Pigs.Pig;
+import com.angryBirds.Screens.PauseScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -18,6 +23,7 @@ public abstract class BaseLevel implements Screen {
     protected OrthographicCamera camera;
     protected Viewport viewport;
     protected Texture backgroundTexture;
+    protected Stage stage;
 
     // Arrays to hold game objects
     protected Array<Bird> birds;
@@ -33,6 +39,12 @@ public abstract class BaseLevel implements Screen {
     protected Texture launcher2;
     protected Image launch1;
     protected Image launch2;
+    protected Texture pauseButtonTexture;
+    protected Image pauseButton;
+
+    // Pause screen
+    protected Screen pauseScreen = new PauseScreen(game);
+
 
     public BaseLevel(Main game) {
         this.game = game;
@@ -42,6 +54,11 @@ public abstract class BaseLevel implements Screen {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
 
+        // Setup stage
+        stage = new Stage(viewport, game.batch);
+
+        Gdx.input.setInputProcessor(stage);
+
         // Initialize arrays
         birds = new Array<>();
         blocks = new Array<>();
@@ -50,12 +67,17 @@ public abstract class BaseLevel implements Screen {
         // Load launcher textures and setup
         loadLauncherTextures();
         setupLauncher();
+        setupPauseButton();
     }
 
     // Load launcher textures
     private void loadLauncherTextures() {
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
+    }
+
+    private void loadPauseButtonTexture() {
+        pauseButtonTexture = new Texture("pauseButton.png");
     }
 
     // Setup launcher position and sizes
@@ -69,6 +91,25 @@ public abstract class BaseLevel implements Screen {
         launch2 = new Image(launcher2);
         launch2.setSize(launch2.getWidth()*sf, launch2.getHeight()*sf);
         launch2.setPosition(300, 285);
+    }
+
+    private void setupPauseButton() {
+        float buttonScaleFactor = 0.3f;
+
+        pauseButton = new Image(pauseButtonTexture);
+        pauseButton.setSize(pauseButton.getWidth() * buttonScaleFactor, pauseButton.getHeight() * buttonScaleFactor);
+        pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth() - 20, WORLD_HEIGHT - pauseButton.getHeight() - 20);
+
+        // Add click listener to switch to pause screen
+        pauseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                game.setScreen(pauseScreen);
+            }
+        });
+
+        stage.addActor(pauseButton);
     }
 
     // Abstract method for initializing game objects in specific levels
@@ -110,6 +151,9 @@ public abstract class BaseLevel implements Screen {
 
         game.batch.end();
 
+        stage.act(delta);
+        stage.draw();
+
         // Render all game objects
         renderGameObjects();
     }
@@ -142,6 +186,7 @@ public abstract class BaseLevel implements Screen {
         backgroundTexture.dispose();
         launcher1.dispose();
         launcher2.dispose();
+        pauseButtonTexture.dispose();
 
         for (Bird bird : birds) {
             bird.dispose();
