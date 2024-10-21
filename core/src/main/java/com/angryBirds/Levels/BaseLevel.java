@@ -60,13 +60,15 @@ public abstract class BaseLevel implements Screen {
 
     // Setup launcher position and sizes
     private void setupLauncher() {
+        float sf = 0.5f;
+
         launch1 = new Image(launcher1);
-        launch1.setPosition(240, 200);
-        launch1.setSize(100, 100);
+        launch1.setSize(launch1.getWidth()*sf, launch1.getHeight()*sf);
+        launch1.setPosition(255, 215);
 
         launch2 = new Image(launcher2);
-        launch2.setPosition(327, 340);
-        launch2.setSize(100, 100);
+        launch2.setSize(launch2.getWidth()*sf, launch2.getHeight()*sf);
+        launch2.setPosition(300, 285);
     }
 
     // Abstract method for initializing game objects in specific levels

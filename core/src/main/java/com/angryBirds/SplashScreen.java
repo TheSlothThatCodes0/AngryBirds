@@ -56,8 +56,6 @@ public class SplashScreen implements Screen {
         game.assets.load("pig2.png", Texture.class);
         game.assets.load("pig3.png", Texture.class);
 
-
-
     }
 
     @Override
@@ -121,4 +119,5 @@ public class SplashScreen implements Screen {
 
     @Override
     public void hide() {}
+
 }
