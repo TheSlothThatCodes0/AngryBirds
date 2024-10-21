@@ -4,16 +4,17 @@ import com.angryBirds.Main;
 
 public class NormalPig extends Pig {
 
-    public NormalPig(Main game, String type) {
-        super(game, getWidth(type), getHeight(type));  // Set size based on type
-        loadTexture(getTexture(type));  // Load texture based on type
+    public NormalPig(Main game, String type,float x,float y) {
+        super(game, getWidth(type), getHeight(type));
+        loadTexture(getTexture(type));
+        setPosition(x,y);
     }
 
     private static float getWidth(String type) {
         if (type.equalsIgnoreCase("big")) {
-            return 100;  // Big pig width
+            return 100;
         } else if (type.equalsIgnoreCase("small")) {
-            return 60;   // Small pig width
+            return 60;
         } else {
             throw new IllegalArgumentException("Invalid pig type: " + type);
         }
@@ -21,9 +22,9 @@ public class NormalPig extends Pig {
 
     private static float getHeight(String type) {
         if (type.equalsIgnoreCase("big")) {
-            return 100;  // Big pig height
+            return 100;
         } else if (type.equalsIgnoreCase("small")) {
-            return 60;   // Small pig height
+            return 60;
         } else {
             throw new IllegalArgumentException("Invalid pig type: " + type);
         }
@@ -31,9 +32,9 @@ public class NormalPig extends Pig {
 
     private static String getTexture(String type) {
         if (type.equalsIgnoreCase("big")) {
-            return "big_pig.png";  // Big pig texture
+            return "big_pig.png";
         } else if (type.equalsIgnoreCase("small")) {
-            return "small_pig.png";  // Small pig texture
+            return "small_pig.png";
         } else {
             throw new IllegalArgumentException("Invalid pig type: " + type);
         }

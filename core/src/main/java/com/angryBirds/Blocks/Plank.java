@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Plank extends Block {
 
-    public Plank(Main game, String material) {
+    public Plank(Main game, String material,float x, float y) {
         super(game, 300, 50);
         loadTexture(material);
+        setPosition(x, y);
     }
 
     @Override
@@ -25,5 +26,6 @@ public class Plank extends Block {
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);
         }
+        updateTexture();
     }
 }

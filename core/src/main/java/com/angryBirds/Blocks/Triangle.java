@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Triangle extends Block {
 
-    public Triangle(Main game, String material) {
+    public Triangle(Main game, String material,float x,float y) {
         super(game, 120, 120);  // Triangle dimensions (can be adjusted)
         loadTexture(material);
+        setPosition(x,y);
     }
 
     @Override
@@ -25,5 +26,6 @@ public class Triangle extends Block {
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);
         }
+        updateTexture();
     }
 }

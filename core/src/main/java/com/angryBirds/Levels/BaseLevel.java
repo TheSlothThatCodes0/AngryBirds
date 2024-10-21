@@ -26,9 +26,9 @@ public abstract class BaseLevel implements Screen {
     protected Stage stage;
 
     // Arrays to hold game objects
-    protected Array<Bird> birds;
-    protected Array<Block> blocks;
-    protected Array<Pig> pigs;
+    protected Array<Image> birds;
+    protected Array<Image> blocks;
+    protected Array<Image> pigs;
 
     // World dimensions
     protected final float WORLD_WIDTH = 1920;
@@ -39,11 +39,11 @@ public abstract class BaseLevel implements Screen {
     protected Texture launcher2;
     protected Image launch1;
     protected Image launch2;
-    protected Texture pauseButtonTexture;
-    protected Image pauseButton;
+//    protected Texture pauseButtonTexture;
+//    protected Image pauseButton;
 
     // Pause screen
-    protected Screen pauseScreen = new PauseScreen(game);
+//    protected Screen pauseScreen = new PauseScreen(game);
 
 
     public BaseLevel(Main game) {
@@ -76,9 +76,9 @@ public abstract class BaseLevel implements Screen {
         launcher2 = new Texture("launcher_2.png");
     }
 
-    private void loadPauseButtonTexture() {
-        pauseButtonTexture = new Texture("pauseButton.png");
-    }
+//    private void loadPauseButtonTexture() {
+//        pauseButtonTexture = new Texture("pauseButton.png");
+//    }
 
     // Setup launcher position and sizes
     private void setupLauncher() {
@@ -96,20 +96,20 @@ public abstract class BaseLevel implements Screen {
     private void setupPauseButton() {
         float buttonScaleFactor = 0.3f;
 
-        pauseButton = new Image(pauseButtonTexture);
-        pauseButton.setSize(pauseButton.getWidth() * buttonScaleFactor, pauseButton.getHeight() * buttonScaleFactor);
-        pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth() - 20, WORLD_HEIGHT - pauseButton.getHeight() - 20);
+//        pauseButton = new Image(pauseButtonTexture);
+//        pauseButton.setSize(pauseButton.getWidth() * buttonScaleFactor, pauseButton.getHeight() * buttonScaleFactor);
+//        pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth() - 20, WORLD_HEIGHT - pauseButton.getHeight() - 20);
 
         // Add click listener to switch to pause screen
-        pauseButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+//        pauseButton.addListener(new ClickListener() {///////////////////////////////////////
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//
+//                game.setScreen(pauseScreen);
+//            }
+//        });
 
-                game.setScreen(pauseScreen);
-            }
-        });
-
-        stage.addActor(pauseButton);
+//        stage.addActor(pauseButton);
     }
 
     // Abstract method for initializing game objects in specific levels
@@ -120,19 +120,19 @@ public abstract class BaseLevel implements Screen {
     }
 
     // Helper methods for adding objects
-    protected void addBird(Bird bird, float x, float y) {
-        bird.setPosition(x, y);
+    protected void addBird(Bird bird) {
         birds.add(bird);
+        stage.addActor(bird);
     }
 
-    protected void addBlock(Block block, float x, float y) {
-        block.setPosition(x, y);
+    protected void addBlock(Block block) {
         blocks.add(block);
+        stage.addActor(block);
     }
 
-    protected void addPig(Pig pig, float x, float y) {
-        pig.setPosition(x, y);
+    protected void addPig(Pig pig) {
         pigs.add(pig);
+        stage.addActor(pig);
     }
 
     @Override
@@ -155,25 +155,25 @@ public abstract class BaseLevel implements Screen {
         stage.draw();
 
         // Render all game objects
-        renderGameObjects();
+//        renderGameObjects();
     }
 
-    private void renderGameObjects() {
-        // Render birds
-        for (Bird bird : birds) {
-            bird.render();
-        }
-
-        // Render blocks
-        for (Block block : blocks) {
-            block.render();
-        }
-
-        // Render pigs
-        for (Pig pig : pigs) {
-            pig.render();
-        }
-    }
+//    private void renderGameObjects() {
+//        // Render birds
+//        for (Bird bird : birds) {
+//            bird.render();
+//        }
+//
+//        // Render blocks
+//        for (Block block : blocks) {
+//            block.render();
+//        }
+//
+//        // Render pigs
+//        for (Pig pig : pigs) {
+//            pig.render();
+//        }
+//    }
 
     @Override
     public void resize(int width, int height) {
@@ -186,18 +186,30 @@ public abstract class BaseLevel implements Screen {
         backgroundTexture.dispose();
         launcher1.dispose();
         launcher2.dispose();
-        pauseButtonTexture.dispose();
+//        pauseButtonTexture.dispose();
 
-        for (Bird bird : birds) {
-            bird.dispose();
+        stage.dispose();
+
+//        for (Bird bird : birds) {
+//            bird.dispose();
+//        }
+
+        for (Image bird : birds) {
+            if (bird instanceof Bird) {
+                ((Bird) bird).dispose();
+            }
         }
 
-        for (Block block : blocks) {
-            block.dispose();
+        for (Image block : blocks) {
+            if (block instanceof Block) {
+                ((Block) block).dispose();
+            }
         }
 
-        for (Pig pig : pigs) {
-            pig.dispose();
+        for (Image pig : pigs) {
+            if (pig instanceof Pig) {
+                ((Pig) pig).dispose();
+            }
         }
     }
 

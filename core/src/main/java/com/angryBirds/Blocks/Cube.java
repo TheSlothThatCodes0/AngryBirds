@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Cube extends Block {
 
-    public Cube(Main game, String material) {
+    public Cube(Main game, String material,float x,float y) {
         super(game, 140, 140);  // Cube dimensions (100x100)
         loadTexture(material);
+        setPosition(x,y);
     }
 
     @Override
@@ -26,5 +27,7 @@ public class Cube extends Block {
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);
         }
+        updateTexture();
     }
 }
+

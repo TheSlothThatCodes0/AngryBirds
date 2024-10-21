@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class KingPig extends Pig {
 
-    public KingPig(Main game) {
+    public KingPig(Main game,float x,float y) {
         super(game, 150, 150);  // King Pig size (adjust as needed)
         loadTexture();
     }
 
     protected void loadTexture() {
-        pigTexture = game.assets.get("king_pig.png", Texture.class);  // Load King Pig texture
+        super.loadTexture("king_pig.png");  // load King Pig texture
     }
 }
