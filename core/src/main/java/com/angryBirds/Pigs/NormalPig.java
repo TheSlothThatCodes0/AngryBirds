@@ -32,9 +32,9 @@ public class NormalPig extends Pig {
 
     private static String getTexture(String type) {
         if (type.equalsIgnoreCase("big")) {
-            return "big_pig.png";
+            return "pig1.png";
         } else if (type.equalsIgnoreCase("small")) {
-            return "small_pig.png";
+            return "pig2.png";
         } else {
             throw new IllegalArgumentException("Invalid pig type: " + type);
         }

@@ -39,6 +39,7 @@ public abstract class BaseLevel implements Screen {
     protected Texture launcher2;
     protected Image launch1;
     protected Image launch2;
+    Image level_bg;
 //    protected Texture pauseButtonTexture;
 //    protected Image pauseButton;
 
@@ -74,7 +75,7 @@ public abstract class BaseLevel implements Screen {
     private void loadLauncherTextures() {
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
-    }
+            }
 
 //    private void loadPauseButtonTexture() {
 //        pauseButtonTexture = new Texture("pauseButton.png");
@@ -116,7 +117,9 @@ public abstract class BaseLevel implements Screen {
     protected abstract void initializeGameObjects();
 
     protected void setBackground(String backgroundTexturePath) {
-        backgroundTexture = game.assets.get(backgroundTexturePath, Texture.class);
+        backgroundTexture = new Texture(Gdx.files.internal(backgroundTexturePath));
+        level_bg = new Image(backgroundTexture);
+        level_bg.setSize(WORLD_WIDTH, WORLD_HEIGHT);
     }
 
     // Helper methods for adding objects

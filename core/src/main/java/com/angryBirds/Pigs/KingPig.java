@@ -11,6 +11,6 @@ public class KingPig extends Pig {
     }
 
     protected void loadTexture() {
-        super.loadTexture("king_pig.png");  // load King Pig texture
+        super.loadTexture("pig3.png");  // load King Pig texture
     }
 }
