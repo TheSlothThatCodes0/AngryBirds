@@ -17,7 +17,7 @@ public class Level_1 extends BaseLevel {
 
     public Level_1(Main game) {
         super(game);
-        setBackground("level_background.png");
+        setBackground("level_background.gif");
         initializeGameObjects();
     }
 
