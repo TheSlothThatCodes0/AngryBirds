@@ -18,6 +18,10 @@ public class Main extends Game {
         setScreen(new SplashScreen(this));
     }
 
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
     @Override
     public void dispose() {
         batch.dispose();

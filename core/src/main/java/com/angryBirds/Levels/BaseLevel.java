@@ -39,13 +39,17 @@ public abstract class BaseLevel implements Screen {
     protected Texture launcher2;
     protected Image launch1;
     protected Image launch2;
-    Image level_bg;
-//    protected Texture pauseButtonTexture;
-//    protected Image pauseButton;
+    protected Image level_bg;
 
-    // Pause screen
-//    protected Screen pauseScreen = new PauseScreen(game);
+    // Background animation
+    protected Texture[] backgroundFrames;
+    protected int currentFrame;
+    protected float stateTime;
+    protected float frameDuration = 0.1f;
 
+    // Pause button
+    protected Texture pauseButtonTexture;
+    protected Image pauseButton;
 
     public BaseLevel(Main game) {
         this.game = game;
@@ -57,7 +61,6 @@ public abstract class BaseLevel implements Screen {
 
         // Setup stage
         stage = new Stage(viewport, game.batch);
-
         Gdx.input.setInputProcessor(stage);
 
         // Initialize arrays
@@ -65,52 +68,71 @@ public abstract class BaseLevel implements Screen {
         blocks = new Array<>();
         pigs = new Array<>();
 
-        // Load launcher textures and setup
+        // Load textures and setup UI elements
+        loadBackgroundTextures();
         loadLauncherTextures();
+        loadPauseButtonTexture();
         setupLauncher();
         setupPauseButton();
     }
 
-    // Load launcher textures
+    private void loadBackgroundTextures() {
+        backgroundFrames = new Texture[8];
+        try {
+            for (int i = 0; i < backgroundFrames.length; i++) {
+                String filename = "frame_" + i + "_delay-0.1s.png";
+                if (Gdx.files.internal(filename).exists()) {
+                    backgroundFrames[i] = new Texture(Gdx.files.internal(filename));
+                    Gdx.app.log("BaseLevel", "Loaded texture: " + filename);
+                } else {
+                    Gdx.app.error("BaseLevel", "Cannot find texture: " + filename);
+                }
+            }
+        } catch (Exception e) {
+            Gdx.app.error("BaseLevel", "Error loading textures", e);
+        }
+    }
+
     private void loadLauncherTextures() {
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
-            }
+    }
 
-//    private void loadPauseButtonTexture() {
-//        pauseButtonTexture = new Texture("pauseButton.png");
-//    }
+    private void loadPauseButtonTexture() {
+        pauseButtonTexture = new Texture("pauseButton.png");
+    }
 
-    // Setup launcher position and sizes
     private void setupLauncher() {
         float sf = 0.5f;
 
         launch1 = new Image(launcher1);
-        launch1.setSize(launch1.getWidth()*sf, launch1.getHeight()*sf);
-        launch1.setPosition(255, 215);
+        launch1.setSize(launch1.getWidth() * sf, launch1.getHeight() * sf);
+        launch1.setPosition(255, 35);
 
         launch2 = new Image(launcher2);
-        launch2.setSize(launch2.getWidth()*sf, launch2.getHeight()*sf);
-        launch2.setPosition(300, 285);
+        launch2.setSize(launch2.getWidth() * sf, launch2.getHeight() * sf);
+        launch2.setPosition(300, 105);
+
+        stage.addActor(launch1);
+        stage.addActor(launch2);
     }
 
     private void setupPauseButton() {
         float buttonScaleFactor = 0.3f;
 
-//        pauseButton = new Image(pauseButtonTexture);
-//        pauseButton.setSize(pauseButton.getWidth() * buttonScaleFactor, pauseButton.getHeight() * buttonScaleFactor);
-//        pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth() - 20, WORLD_HEIGHT - pauseButton.getHeight() - 20);
+        pauseButton = new Image(pauseButtonTexture);
+        pauseButton.setSize(pauseButton.getWidth() * buttonScaleFactor, pauseButton.getHeight() * buttonScaleFactor);
+        pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth() - 20, WORLD_HEIGHT - pauseButton.getHeight() - 20);
 
         // Add click listener to switch to pause screen
-//        pauseButton.addListener(new ClickListener() {///////////////////////////////////////
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//
-//                game.setScreen(pauseScreen);
-//            }
-//        });
+        pauseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PauseScreen(game, BaseLevel.this));
+            }
+        });
 
-//        stage.addActor(pauseButton);
+        stage.addActor(pauseButton);
     }
 
     // Abstract method for initializing game objects in specific levels
@@ -120,6 +142,8 @@ public abstract class BaseLevel implements Screen {
         backgroundTexture = new Texture(Gdx.files.internal(backgroundTexturePath));
         level_bg = new Image(backgroundTexture);
         level_bg.setSize(WORLD_WIDTH, WORLD_HEIGHT);
+        stage.addActor(level_bg);
+        level_bg.toBack(); // Ensure background is rendered behind other elements
     }
 
     // Helper methods for adding objects
@@ -143,40 +167,28 @@ public abstract class BaseLevel implements Screen {
         // Clear the screen
         ScreenUtils.clear(0, 0, 0, 1);
 
-        // Render background
+        // Update animation
+        stateTime += delta;
+        if (stateTime >= frameDuration) {
+            currentFrame = (currentFrame + 1) % backgroundFrames.length;
+            stateTime = 0;
+        }
+
+        // Update camera
+        camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        game.batch.draw(backgroundTexture, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-        // Draw launchers
-        game.batch.draw(launcher1, launch1.getX(), launch1.getY(), launch1.getWidth(), launch1.getHeight());
-        game.batch.draw(launcher2, launch2.getX(), launch2.getY(), launch2.getWidth(), launch2.getHeight());
+        // Render background animation
+        if (backgroundFrames != null && backgroundFrames[currentFrame] != null) {
+            game.batch.begin();
+            game.batch.draw(backgroundFrames[currentFrame], 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+            game.batch.end();
+        }
 
-        game.batch.end();
-
+        // Update and draw stage
         stage.act(delta);
         stage.draw();
-
-        // Render all game objects
-//        renderGameObjects();
     }
-
-//    private void renderGameObjects() {
-//        // Render birds
-//        for (Bird bird : birds) {
-//            bird.render();
-//        }
-//
-//        // Render blocks
-//        for (Block block : blocks) {
-//            block.render();
-//        }
-//
-//        // Render pigs
-//        for (Pig pig : pigs) {
-//            pig.render();
-//        }
-//    }
 
     @Override
     public void resize(int width, int height) {
@@ -186,17 +198,26 @@ public abstract class BaseLevel implements Screen {
 
     @Override
     public void dispose() {
-        backgroundTexture.dispose();
+        if (backgroundFrames != null) {
+            for (Texture frame : backgroundFrames) {
+                if (frame != null) {
+                    frame.dispose();
+                }
+            }
+        }
+
+        // Dispose of textures
         launcher1.dispose();
         launcher2.dispose();
-//        pauseButtonTexture.dispose();
+        if (backgroundTexture != null) {
+            backgroundTexture.dispose();
+        }
+        pauseButtonTexture.dispose();
 
+        // Dispose of stage
         stage.dispose();
 
-//        for (Bird bird : birds) {
-//            bird.dispose();
-//        }
-
+        // Dispose of game objects
         for (Image bird : birds) {
             if (bird instanceof Bird) {
                 ((Bird) bird).dispose();
@@ -217,7 +238,10 @@ public abstract class BaseLevel implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() {
+        // Set this stage as the input processor when the screen is shown
+        Gdx.input.setInputProcessor(stage);
+    }
 
     @Override
     public void hide() {}
