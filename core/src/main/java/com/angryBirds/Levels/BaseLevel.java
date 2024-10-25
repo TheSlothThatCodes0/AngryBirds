@@ -4,6 +4,7 @@ import com.angryBirds.Birds.Bird;
 import com.angryBirds.Blocks.Block;
 import com.angryBirds.Main;
 import com.angryBirds.Pigs.Pig;
+import com.angryBirds.Screens.LossScreen;
 import com.angryBirds.Screens.PauseScreen;
 import com.angryBirds.Screens.WinScreen;
 import com.badlogic.gdx.Gdx;
@@ -240,6 +241,9 @@ public abstract class BaseLevel implements Screen {
 
         if (levelSelectButton.isPressed()) {
             game.setScreen(new WinScreen(game));
+        }
+        if (restartButton.isPressed()) {
+            game.setScreen(new LossScreen(game));
         }
 //        if (restartButton.isPressed()) {
 //            try {
