@@ -57,6 +57,9 @@ public class SplashScreen implements Screen {
         game.assets.load("pig1.png", Texture.class);
         game.assets.load("pig2.png", Texture.class);
         game.assets.load("pig3.png", Texture.class);
+        game.assets.load("settingsScreenBG.jpg", Texture.class);
+        game.assets.load("exitButton.png", Texture.class);
+        game.assets.load("credits.png", Texture.class);
 
     }
 

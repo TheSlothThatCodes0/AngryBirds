@@ -89,8 +89,9 @@ public class MainMenu implements Screen {
                 Gdx.app.exit();
             } else if (settingsBounds.contains(touchPos.x, touchPos.y)) {
                 // Will be implemented later to switch to settings screen
+                Gdx.app.log("Main Menu", "Settings button clicked");
+                game.setScreen(new SettingsScreen(game));
             } else if (playBounds.contains(touchPos.x, touchPos.y)) {
-                // Will be implemented later to switch to game screen
                 game.setScreen(new Levels_Screen(game));
             }
         }
