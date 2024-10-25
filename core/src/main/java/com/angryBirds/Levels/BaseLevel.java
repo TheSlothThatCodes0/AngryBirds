@@ -5,14 +5,19 @@ import com.angryBirds.Blocks.Block;
 import com.angryBirds.Main;
 import com.angryBirds.Pigs.Pig;
 import com.angryBirds.Screens.PauseScreen;
+import com.angryBirds.Screens.WinScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -51,6 +56,12 @@ public abstract class BaseLevel implements Screen {
     protected Texture pauseButtonTexture;
     protected Image pauseButton;
 
+    protected Texture levelSelectTexture;
+    protected Texture restartTexture;
+    protected ImageButton levelSelectButton;
+    protected ImageButton restartButton;
+    protected Skin skin;
+
     public BaseLevel(Main game) {
         this.game = game;
 
@@ -74,6 +85,9 @@ public abstract class BaseLevel implements Screen {
         loadPauseButtonTexture();
         setupLauncher();
         setupPauseButton();
+
+        loadNavigationButtonTextures();
+        setupNavigationButtons();
     }
 
     private void loadBackgroundTextures() {
@@ -162,6 +176,45 @@ public abstract class BaseLevel implements Screen {
         stage.addActor(pig);
     }
 
+    private void loadNavigationButtonTextures() {
+        try {
+            levelSelectTexture = new Texture("button_square_depth_gradient.png");
+            restartTexture = new Texture("button_square_gradient.png");
+        } catch (Exception e) {
+            Gdx.app.error("BaseLevel", "Error loading navigation button textures", e);
+        }
+    }
+
+    private void setupNavigationButtons() {
+        float padding = 20f;
+
+        // Create ImageButton styles
+        ImageButton.ImageButtonStyle levelSelectStyle = new ImageButton.ImageButtonStyle();
+        levelSelectStyle.imageUp = new TextureRegionDrawable(new TextureRegion(levelSelectTexture));
+
+        ImageButton.ImageButtonStyle restartStyle = new ImageButton.ImageButtonStyle();
+        restartStyle.imageUp = new TextureRegionDrawable(new TextureRegion(restartTexture));
+
+        // Create buttons
+        levelSelectButton = new ImageButton(levelSelectStyle);
+        restartButton = new ImageButton(restartStyle);
+
+        // Scale buttons if needed
+        float buttonScale = 0.3f;
+        levelSelectButton.setSize(levelSelectTexture.getWidth() * buttonScale,
+            levelSelectTexture.getHeight() * buttonScale);
+        restartButton.setSize(restartTexture.getWidth() * buttonScale,
+            restartTexture.getHeight() * buttonScale);
+
+        // Position buttons
+        levelSelectButton.setPosition(padding, WORLD_HEIGHT - levelSelectButton.getHeight() - padding);
+        restartButton.setPosition(levelSelectButton.getX() + levelSelectButton.getWidth() + padding,
+            levelSelectButton.getY());
+
+        stage.addActor(levelSelectButton);
+        stage.addActor(restartButton);
+    }
+
     @Override
     public void render(float delta) {
         // Clear the screen
@@ -184,6 +237,18 @@ public abstract class BaseLevel implements Screen {
             game.batch.draw(backgroundFrames[currentFrame], 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
             game.batch.end();
         }
+
+        if (levelSelectButton.isPressed()) {
+            game.setScreen(new WinScreen(game));
+        }
+//        if (restartButton.isPressed()) {
+//            try {
+//                Screen newLevel = getClass().getConstructor(Main.class).newInstance(game);
+//                game.setScreen(newLevel);
+//            } catch (Exception e) {
+//                Gdx.app.error("BaseLevel", "Error restarting level", e);
+//            }
+//        }
 
         // Update and draw stage
         stage.act(delta);
@@ -216,6 +281,10 @@ public abstract class BaseLevel implements Screen {
 
         // Dispose of stage
         stage.dispose();
+
+        //buttons dispose
+        if (levelSelectTexture != null) levelSelectTexture.dispose();
+        if (restartTexture != null) restartTexture.dispose();
 
         // Dispose of game objects
         for (Image bird : birds) {
