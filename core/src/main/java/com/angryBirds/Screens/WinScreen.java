@@ -6,10 +6,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -25,6 +28,9 @@ public class WinScreen implements Screen{
     private Texture backgroundTexture;
     private Image background;
 
+    protected Texture levelSelectTexture;
+    protected ImageButton levelSelectButton;
+
     public WinScreen(Main game) {
         this.game = game;
 
@@ -35,6 +41,8 @@ public class WinScreen implements Screen{
         camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
         loadTextures();
         setupStage();
+        loadNavigationButtonTextures();
+        setupNavigationButtons();
     }
 
     private void loadTextures() {
@@ -48,6 +56,39 @@ public class WinScreen implements Screen{
         stage.addActor(background);
     }
 
+    private void loadNavigationButtonTextures() {
+        try {
+//            levelSelectTexture = new Texture("check_square_color_cross.png");
+            levelSelectTexture = new Texture("check_square_color_cross.png");
+
+        } catch (Exception e) {
+            Gdx.app.error("BaseLevel", "Error loading navigation button textures", e);
+        }
+    }
+
+    private void setupNavigationButtons() {
+        float padding = 20f;
+
+        // Create ImageButton styles
+        ImageButton.ImageButtonStyle levelSelectStyle = new ImageButton.ImageButtonStyle();
+        levelSelectStyle.imageUp = new TextureRegionDrawable(new TextureRegion(levelSelectTexture));
+
+
+        // Create buttons
+        levelSelectButton = new ImageButton(levelSelectStyle);
+
+        // Scale buttons if needed
+        float buttonScale = 1f;
+        levelSelectButton.setSize(levelSelectTexture.getWidth() * buttonScale,
+            levelSelectTexture.getHeight() * buttonScale);
+
+        // Position buttons
+        levelSelectButton.setPosition(WORLD_WIDTH-2*padding, WORLD_HEIGHT - levelSelectButton.getHeight() - padding);
+
+        stage.addActor(levelSelectButton);
+
+    }
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -59,6 +100,9 @@ public class WinScreen implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(v);
         stage.draw();
+        if (levelSelectButton.isPressed()) {
+            game.setScreen(new MainMenu(game));
+        }
     }
 
     @Override
