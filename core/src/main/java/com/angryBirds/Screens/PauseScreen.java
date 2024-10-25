@@ -44,73 +44,136 @@ public class PauseScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         // Load textures
-        backgroundTexture = new Texture("pauseScreenBG.jpg");
-        resumeButtonTexture = new Texture("Resume.png");
-        saveButtonTexture = new Texture("Save.png");
-        exitButtonTexture = new Texture("Exit.png");
+        backgroundTexture = new Texture("settBack.png");
+        resumeButtonTexture = new Texture("button_square_depth_flat.png");
+        saveButtonTexture = new Texture("button_square_depth_flat.png");
+        exitButtonTexture = new Texture("button_square_depth_flat.png");
 
         // Setup UI elements
         setupUI();
     }
 
-    private void setupUI() {
-        // Background
-        Image background = new Image(backgroundTexture);
-        background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
-        stage.addActor(background);
+//    private void setupUI() {
+//        // Background
+//        Image background = new Image(backgroundTexture);
+//        background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
+//        stage.addActor(background);
+//
+//        // Button scaling and positioning
+//        float buttonScale = 2f;
+//        float buttonSpacing = 50f;
+//        float startY = WORLD_HEIGHT / 2 + 300;
+//
+//        // Resume button
+//        Image resumeButton = new Image(resumeButtonTexture);
+//        resumeButton.setSize(resumeButton.getWidth() * buttonScale, resumeButton.getHeight() * buttonScale);
+////        resumeButton.setPosition(
+////            (WORLD_WIDTH - resumeButton.getWidth()) / 2,
+////            startY
+////        );
+//        resumeButton.setPosition(
+//            (WORLD_WIDTH /10),
+//            startY
+//        );
+//        resumeButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(previousScreen);
+//            }
+//        });
+//
+//        // Save button (functionality to be added later)
+//        Image saveButton = new Image(saveButtonTexture);
+//        saveButton.setSize(saveButton.getWidth() * buttonScale, saveButton.getHeight() * buttonScale);
+//        saveButton.setPosition(
+//            (WORLD_WIDTH /10),
+//            startY - (resumeButton.getHeight() + buttonSpacing)
+//        );
+//        saveButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                // Save functionality to be implemented
+//            }
+//        });
+//
+//        // Exit button
+//        Image exitButton = new Image(exitButtonTexture);
+//        exitButton.setSize(exitButton.getWidth() * buttonScale, exitButton.getHeight() * buttonScale);
+//        exitButton.setPosition(
+//            WORLD_WIDTH /10,
+//            startY - 2 * (exitButton.getHeight() + buttonSpacing)
+//        );
+//        exitButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(new MainMenu(game));
+//            }
+//        });
+//
+//        // Add buttons to stage
+//        stage.addActor(resumeButton);
+//        stage.addActor(saveButton);
+//        stage.addActor(exitButton);
+//    }
+private void setupUI() {
+    // Background
+    Image background = new Image(backgroundTexture);
+    background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
+    stage.addActor(background);
 
-        // Button scaling and positioning
-        float buttonScale = 0.8f;
-        float buttonSpacing = 50f;
-        float startY = WORLD_HEIGHT / 2 + 100;
+    // Button scaling and spacing
+    float buttonScale = 2.5f; // Increase button scale for larger size
+    float buttonSpacing = 80f; // Increase spacing between buttons
+    float buttonY = (WORLD_HEIGHT / 2) - 100; // Slightly below center
 
-        // Resume button
-        Image resumeButton = new Image(resumeButtonTexture);
-        resumeButton.setSize(resumeButton.getWidth() * buttonScale, resumeButton.getHeight() * buttonScale);
-        resumeButton.setPosition(
-            (WORLD_WIDTH - resumeButton.getWidth()) / 2,
-            startY
-        );
-        resumeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(previousScreen);
-            }
-        });
+    // Resume button
+    Image resumeButton = new Image(resumeButtonTexture);
+    resumeButton.setSize(resumeButton.getWidth() * buttonScale, resumeButton.getHeight() * buttonScale);
+    resumeButton.setPosition(
+        (WORLD_WIDTH - (3 * resumeButton.getWidth() + 2 * buttonSpacing)) / 2,
+        buttonY
+    );
+    resumeButton.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            game.setScreen(previousScreen);
+        }
+    });
 
-        // Save button (functionality to be added later)
-        Image saveButton = new Image(saveButtonTexture);
-        saveButton.setSize(saveButton.getWidth() * buttonScale, saveButton.getHeight() * buttonScale);
-        saveButton.setPosition(
-            (WORLD_WIDTH - saveButton.getWidth()) / 2,
-            startY - (resumeButton.getHeight() + buttonSpacing)
-        );
-        saveButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Save functionality to be implemented
-            }
-        });
+    // Save button
+    Image saveButton = new Image(saveButtonTexture);
+    saveButton.setSize(saveButton.getWidth() * buttonScale, saveButton.getHeight() * buttonScale);
+    saveButton.setPosition(
+        resumeButton.getX() + resumeButton.getWidth() + buttonSpacing,
+        buttonY
+    );
+    saveButton.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            // Save functionality to be implemented
+        }
+    });
 
-        // Exit button
-        Image exitButton = new Image(exitButtonTexture);
-        exitButton.setSize(exitButton.getWidth() * buttonScale, exitButton.getHeight() * buttonScale);
-        exitButton.setPosition(
-            (WORLD_WIDTH - exitButton.getWidth()) / 2,
-            startY - 2 * (exitButton.getHeight() + buttonSpacing)
-        );
-        exitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenu(game));
-            }
-        });
+    // Exit button
+    Image exitButton = new Image(exitButtonTexture);
+    exitButton.setSize(exitButton.getWidth() * buttonScale, exitButton.getHeight() * buttonScale);
+    exitButton.setPosition(
+        saveButton.getX() + saveButton.getWidth() + buttonSpacing,
+        buttonY
+    );
+    exitButton.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            game.setScreen(new MainMenu(game));
+        }
+    });
 
-        // Add buttons to stage
-        stage.addActor(resumeButton);
-        stage.addActor(saveButton);
-        stage.addActor(exitButton);
-    }
+    // Add buttons to stage
+    stage.addActor(resumeButton);
+    stage.addActor(saveButton);
+    stage.addActor(exitButton);
+}
+
 
     @Override
     public void render(float delta) {

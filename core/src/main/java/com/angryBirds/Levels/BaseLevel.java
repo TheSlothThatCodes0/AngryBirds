@@ -4,9 +4,8 @@ import com.angryBirds.Birds.Bird;
 import com.angryBirds.Blocks.Block;
 import com.angryBirds.Main;
 import com.angryBirds.Pigs.Pig;
-import com.angryBirds.Screens.LossScreen;
-import com.angryBirds.Screens.PauseScreen;
-import com.angryBirds.Screens.WinScreen;
+import com.angryBirds.Screens.*;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -219,7 +218,7 @@ public abstract class BaseLevel implements Screen {
     @Override
     public void render(float delta) {
         // Clear the screen
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(1, 1, 1, 1);
 
         // Update animation
         stateTime += delta;
