@@ -24,7 +24,6 @@ public class Levels_Screen implements Screen {
     private float WORLD_WIDTH = 1920;
     private float WORLD_HEIGHT = 1080;
 
-    // textures
     private Texture backgroundTexture;
     private Texture ground_shape;
     private Texture launcher1;
@@ -55,22 +54,10 @@ public class Levels_Screen implements Screen {
 
     private void loadTextures() {
         backgroundTexture = new Texture("level_background1.jpg");
-//        ground_shape = new Texture("ground_shape.png");
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
         portal_T = new Texture("portal.png");
         rbird = new Texture("red_bird.png");
-//        backgroundTexture = new Texture("game_background.png");
-//        background = new Image(backgroundTexture);
-//        background.setSize(800, 480);
-//
-//        launch1 = new Image(launcher1);
-////        launch1.setSize(100,100);
-//        launch1.setPosition(50,50);
-//        launch1.setScaling(Scaling.fit);
-//
-//        stage.addActor(background);
-//        stage.addActor(launch1);
     }
 
     private void setupStage(){
@@ -108,7 +95,7 @@ public class Levels_Screen implements Screen {
         portal_I3.setPosition(600, 300 + launch1.getHeight() + 125);
         portal_I3.setScaling(Scaling.fit);
 
-        float rw = redBird.getWidth();  //for changing the size of red bird.
+        float rw = redBird.getWidth();
         float rh = redBird.getHeight();
         float sf = 0.4f;
         redBird.setSize(rw*sf, rh*sf);
@@ -137,15 +124,9 @@ public class Levels_Screen implements Screen {
 
     @Override
     public void render(float delta) {
-        // clear the screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//        game.batch.setProjectionMatrix(camera.combined);
-//        game.batch.begin();
-//        game.batch.draw(backgroundTexture, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-////        game.batch.draw(launcher1,20,20,WORLD_WIDTH/10,WORLD_HEIGHT/9);
-//        game.batch.end();
         stage.act(delta);
         stage.draw();
     }

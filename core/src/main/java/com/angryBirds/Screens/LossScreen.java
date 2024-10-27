@@ -68,20 +68,15 @@ public class LossScreen implements Screen{
     private void setupNavigationButtons() {
         float padding = 20f;
 
-        // Create ImageButton styles
         ImageButton.ImageButtonStyle levelSelectStyle = new ImageButton.ImageButtonStyle();
         levelSelectStyle.imageUp = new TextureRegionDrawable(new TextureRegion(levelSelectTexture));
 
-
-        // Create buttons
         levelSelectButton = new ImageButton(levelSelectStyle);
 
-        // Scale buttons if needed
         float buttonScale = 1f;
         levelSelectButton.setSize(levelSelectTexture.getWidth() * buttonScale,
             levelSelectTexture.getHeight() * buttonScale);
 
-        // Position buttons
         levelSelectButton.setPosition(WORLD_WIDTH-2*padding, WORLD_HEIGHT - levelSelectButton.getHeight() - padding);
 
         stage.addActor(levelSelectButton);

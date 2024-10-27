@@ -80,7 +80,6 @@ public class PauseScreen implements Screen {
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Save functionality to be implemented
             }
         });
 
