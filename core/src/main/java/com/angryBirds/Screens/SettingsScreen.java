@@ -31,7 +31,7 @@ public class SettingsScreen implements Screen {
     private Rectangle creditsBounds;
     private Rectangle sliderBar;
     private Rectangle sliderKnob;
-    private final float SLIDER_ROTATION = 3.8f; // 4 degrees counterclockwise
+    private final float SLIDER_ROTATION = 0;
     private Vector2 sliderCenter;
     private float volume = 1.0f;
     private boolean isDraggingSlider = false;

@@ -35,6 +35,6 @@ public class Level_1 extends BaseLevel {
         addBlock(new Plank(game,"wood",1400,ground_height+100+100));
         addBlock(new Plank(game,"wood",1400,ground_height+100+100+100+22));
 
-        addPig(new NormalPig(this.game, "big", 850, ground_height));
+        addPig(new NormalPig(this.game, "big", 1500, ground_height));
     }
 }
