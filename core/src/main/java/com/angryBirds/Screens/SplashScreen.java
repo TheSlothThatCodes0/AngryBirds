@@ -17,7 +17,7 @@ public class SplashScreen implements Screen {
     private float WORLD_WIDTH = 1920;
     private float WORLD_HEIGHT = 1080;
     private float elapsed = 0f;
-    private static final float MINIMUM_SPLASH_TIME = 5f; // Minimum time to show splash screen
+    private static final float MINIMUM_SPLASH_TIME = 5f;
     private boolean assetsLoaded = false;
 
     public SplashScreen(Main game) {
@@ -27,11 +27,8 @@ public class SplashScreen implements Screen {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
 
-        // Load splash image immediately
         splashImage = new Texture("splashScreen.png");
         loadingBird = new Texture("loading.png");
-
-        // Queue all other assets
         queueAssets();
     }
 
@@ -70,36 +67,29 @@ public class SplashScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Update timer
         elapsed += delta;
 
-        // Update asset loading
-        assetsLoaded = game.assets.update(); // Returns true when all assets are loaded
 
-        // Only proceed to main menu if both conditions are met:
-        // 1. Minimum splash time has elapsed
-        // 2. All assets are loaded
+        assetsLoaded = game.assets.update();
+
         if (elapsed >= MINIMUM_SPLASH_TIME && assetsLoaded) {
             game.setScreen(new MainMenu(game));
             return;
         }
 
-        // Clear screen
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        // Draw splash screen
+
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(splashImage, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-        // draw loading bird in bottom center
         float birdWidth = 200;
         float birdHeight = 100;
         float birdX = (WORLD_WIDTH - birdWidth) / 2;
-        float birdY = 50; // Distance from bottom
+        float birdY = 50;
         game.batch.draw(loadingBird, birdX, birdY, birdWidth, birdHeight);
 
-        // loading progress
         float progress = game.assets.getProgress();
 
         game.batch.end();
@@ -117,7 +107,6 @@ public class SplashScreen implements Screen {
         loadingBird.dispose();
     }
 
-    // Other required Screen interface methods
     @Override
     public void show() {}
 
