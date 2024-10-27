@@ -45,9 +45,9 @@ public class PauseScreen implements Screen {
 
         // Load textures
         backgroundTexture = new Texture("settBack1.png");
-        resumeButtonTexture = new Texture("button_square_depth_flat.png");
-        saveButtonTexture = new Texture("button_square_depth_flat.png");
-        exitButtonTexture = new Texture("button_square_depth_flat.png");
+        resumeButtonTexture = new Texture("resumeButtonPS.png");
+        saveButtonTexture = new Texture("saveButtonPS.png");
+        exitButtonTexture = new Texture("exitButtonPS.png");
 
         // Setup UI elements
         setupUI();
@@ -122,7 +122,7 @@ public class PauseScreen implements Screen {
         stage.addActor(background);
 
         // Button scaling and spacing
-        float buttonScale = 2.5f; // Increase button scale for larger size
+        float buttonScale = 0.75f; // Increase button scale for larger size
         float buttonSpacing = 80f; // Increase spacing between buttons
         float buttonY = (WORLD_HEIGHT / 2) - 100; // Slightly below center
 
