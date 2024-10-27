@@ -30,9 +30,9 @@ public abstract class BaseLevel implements Screen {
     protected Texture backgroundTexture;
     protected Stage stage;
 
-    protected Array<Image> birds;
-    protected Array<Image> blocks;
-    protected Array<Image> pigs;
+    protected Array<Image> birds; // array for all the bird images
+    protected Array<Image> blocks;  // array for all the block images
+    protected Array<Image> pigs; // array for all the pigs images
 
     protected final float WORLD_WIDTH = 1920;
     protected final float WORLD_HEIGHT = 1080;
@@ -57,7 +57,7 @@ public abstract class BaseLevel implements Screen {
     protected ImageButton restartButton;
     protected Skin skin;
 
-    public BaseLevel(Main game) {
+    public BaseLevel(Main game) { // constructor
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -78,7 +78,7 @@ public abstract class BaseLevel implements Screen {
         setupNavigationButtons();
     }
 
-    private void loadBackgroundTextures() {
+    private void loadBackgroundTextures() { // loading background texture
         backgroundFrames = new Texture[8];
         try {
             for (int i = 0; i < backgroundFrames.length; i++) {
@@ -95,7 +95,7 @@ public abstract class BaseLevel implements Screen {
         }
     }
 
-    private void loadLauncherTextures() {
+    private void loadLauncherTextures() {  // setting up the launcher
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
     }
@@ -104,7 +104,7 @@ public abstract class BaseLevel implements Screen {
         pauseButtonTexture = new Texture("pauseButton.png");
     }
 
-    private void setupLauncher() {
+    private void setupLauncher() {  // function for setting up launcher
         float sf = 0.5f;
 
         launch1 = new Image(launcher1);
@@ -145,17 +145,17 @@ public abstract class BaseLevel implements Screen {
         level_bg.toBack();
     }
 
-    protected void addBird(Bird bird) {
+    protected void addBird(Bird bird) { // function for adding bird object
         birds.add(bird);
         stage.addActor(bird);
     }
 
-    protected void addBlock(Block block) {
+    protected void addBlock(Block block) { // function for adding block object
         blocks.add(block);
         stage.addActor(block);
     }
 
-    protected void addPig(Pig pig) {
+    protected void addPig(Pig pig) { // function for adding pig object
         pigs.add(pig);
         stage.addActor(pig);
     }

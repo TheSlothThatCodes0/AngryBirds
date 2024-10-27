@@ -40,7 +40,7 @@ public class Levels_Screen implements Screen {
     private Image portal_I3;
 
 
-    public Levels_Screen(Main game) {
+    public Levels_Screen(Main game) { //constructor
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -52,7 +52,7 @@ public class Levels_Screen implements Screen {
         setupStage();
     }
 
-    private void loadTextures() {
+    private void loadTextures() { //loading texture files
         backgroundTexture = new Texture("level_background1.jpg");
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
@@ -60,7 +60,7 @@ public class Levels_Screen implements Screen {
         rbird = new Texture("red_bird.png");
     }
 
-    private void setupStage(){
+    private void setupStage(){    //wrapping textures to images and setting up images
         background = new Image(backgroundTexture);
         background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
 
@@ -82,7 +82,7 @@ public class Levels_Screen implements Screen {
 
         portal_I1.addListener(new ClickListener(){
             @Override
-            public void clicked(InputEvent event, float x, float y){
+            public void clicked(InputEvent event, float x, float y){//event listner for button
                 createLevel1();
             }
         });
@@ -124,7 +124,7 @@ public class Levels_Screen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);  // for clearing up the previous stage
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
@@ -132,7 +132,7 @@ public class Levels_Screen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int width, int height) {  // full screen
         viewport.update(width, height, true);
         camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
     }
@@ -151,10 +151,10 @@ public class Levels_Screen implements Screen {
 
     private void createLevel1() {
         game.setScreen(new Level_1(game));
-    }
+    }  // function for creating the new level
 
     @Override
-    public void dispose() {
+    public void dispose() {  // disposing  thr textures and stage
         stage.dispose();
         backgroundTexture.dispose();
         ground_shape.dispose();

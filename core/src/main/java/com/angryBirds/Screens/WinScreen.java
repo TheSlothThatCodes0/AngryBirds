@@ -28,7 +28,7 @@ public class WinScreen implements Screen{
     protected Texture levelSelectTexture;
     protected ImageButton levelSelectButton;
 
-    public WinScreen(Main game) {
+    public WinScreen(Main game) { // constructor
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -42,7 +42,7 @@ public class WinScreen implements Screen{
         setupNavigationButtons();
     }
 
-    private void loadTextures() {
+    private void loadTextures() { // texture loading
         backgroundTexture = new Texture("winScreen.png");
 
     }
@@ -57,12 +57,12 @@ public class WinScreen implements Screen{
         try {
             levelSelectTexture = new Texture("check_square_color_cross.png");
 
-        } catch (Exception e) {
+        } catch (Exception e) { //     ERROR HANDLING
             Gdx.app.error("BaseLevel", "Error loading navigation button textures", e);
         }
     }
 
-    private void setupNavigationButtons() {
+    private void setupNavigationButtons() { // button setup
         float padding = 20f;
 
         ImageButton.ImageButtonStyle levelSelectStyle = new ImageButton.ImageButtonStyle();

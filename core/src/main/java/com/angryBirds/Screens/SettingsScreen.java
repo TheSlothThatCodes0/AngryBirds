@@ -42,7 +42,7 @@ public class SettingsScreen implements Screen {
     private final float CREDITS_BUTTON_WIDTH = 300;
     private final float CREDITS_BUTTON_HEIGHT = 100;
 
-    public SettingsScreen(Main game) {
+    public SettingsScreen(Main game) { //  constructor
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -56,18 +56,18 @@ public class SettingsScreen implements Screen {
         backButton = game.assets.get("backArrow.png", Texture.class);
         creditsButton = game.assets.get("credits.png", Texture.class);
 
-        backBounds = new Rectangle(10, WORLD_HEIGHT - BUTTON_SIZE - 10,
+        backBounds = new Rectangle(10, WORLD_HEIGHT - BUTTON_SIZE - 10,  // setting the area for click detection
             BUTTON_SIZE, BUTTON_SIZE);
-        creditsBounds = new Rectangle((WORLD_WIDTH - CREDITS_BUTTON_WIDTH) / 2,
+        creditsBounds = new Rectangle((WORLD_WIDTH - CREDITS_BUTTON_WIDTH) / 2,  // setting the area for click detection
             WORLD_HEIGHT * 0.3f, CREDITS_BUTTON_WIDTH, CREDITS_BUTTON_HEIGHT);
 
         float sliderX = (WORLD_WIDTH - SLIDER_WIDTH) / 2;
         float sliderY = WORLD_HEIGHT * 0.6f;
-        sliderBar = new Rectangle(sliderX, sliderY, SLIDER_WIDTH, SLIDER_HEIGHT);
-        sliderKnob = new Rectangle(sliderX + (SLIDER_WIDTH * volume) - (KNOB_SIZE/2),
+        sliderBar = new Rectangle(sliderX, sliderY, SLIDER_WIDTH, SLIDER_HEIGHT); // setting the area for click detection
+        sliderKnob = new Rectangle(sliderX + (SLIDER_WIDTH * volume) - (KNOB_SIZE/2), // setting the area for click detection
             sliderY - (KNOB_SIZE - SLIDER_HEIGHT)/2, KNOB_SIZE, KNOB_SIZE);
 
-        sliderCenter = new Vector2(sliderX + SLIDER_WIDTH/2, sliderY + SLIDER_HEIGHT/2);
+        sliderCenter = new Vector2(sliderX + SLIDER_WIDTH/2, sliderY + SLIDER_HEIGHT/2);  // vloume slider
     }
 
     @Override
@@ -86,7 +86,7 @@ public class SettingsScreen implements Screen {
         game.batch.draw(creditsButton, creditsBounds.x, creditsBounds.y,
             creditsBounds.width, creditsBounds.height);
 
-        font.draw(game.batch, "Volume: " + (int)(volume * 100) + "%",
+        font.draw(game.batch, "Volume: " + (int)(volume * 100) + "%", // vloume slider bar
             sliderBar.x, sliderBar.y + 70);
 
         game.batch.end();
@@ -95,7 +95,7 @@ public class SettingsScreen implements Screen {
 
         shapeRenderer.setColor(new Color(0.4f, 0.2f, 0.1f, 1)); // Dark brown
         shapeRenderer.translate(sliderCenter.x, sliderCenter.y, 0);
-        shapeRenderer.rotate(0, 0, 1, SLIDER_ROTATION);
+        shapeRenderer.rotate(0, 0, 1, SLIDER_ROTATION);  // roatting the slider if neccesary( depends upon the asset)
         shapeRenderer.rect(-SLIDER_WIDTH/2, -SLIDER_HEIGHT/2, SLIDER_WIDTH, SLIDER_HEIGHT);
 
         shapeRenderer.setColor(new Color(0.6f, 0.3f, 0.1f, 1)); // Lighter brown
@@ -109,7 +109,7 @@ public class SettingsScreen implements Screen {
         handleInput();
     }
 
-    private void handleInput() {
+    private void handleInput() { // for handling clicks and drag
         if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);

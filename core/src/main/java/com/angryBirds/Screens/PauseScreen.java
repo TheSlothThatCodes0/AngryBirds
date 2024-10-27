@@ -29,7 +29,7 @@ public class PauseScreen implements Screen {
     private static final float WORLD_WIDTH = 1920;
     private static final float WORLD_HEIGHT = 1080;
 
-    public PauseScreen(Main game, Screen previousScreen) {
+    public PauseScreen(Main game, Screen previousScreen) { //constructor
         this.game = game;
         this.previousScreen = previousScreen;
 
@@ -48,7 +48,7 @@ public class PauseScreen implements Screen {
         setupUI();
     }
 
-    private void setupUI() {
+    private void setupUI() {  // loading and setting up all the assets
         Image background = new Image(backgroundTexture);
         background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
         stage.addActor(background);
@@ -119,7 +119,7 @@ public class PauseScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
+    public void dispose() { //disposing of the assets
         stage.dispose();
         backgroundTexture.dispose();
         resumeButtonTexture.dispose();
