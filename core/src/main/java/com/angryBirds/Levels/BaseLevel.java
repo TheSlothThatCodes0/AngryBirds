@@ -30,29 +30,24 @@ public abstract class BaseLevel implements Screen {
     protected Texture backgroundTexture;
     protected Stage stage;
 
-    // Arrays to hold game objects
     protected Array<Image> birds;
     protected Array<Image> blocks;
     protected Array<Image> pigs;
 
-    // World dimensions
     protected final float WORLD_WIDTH = 1920;
     protected final float WORLD_HEIGHT = 1080;
 
-    // Launcher
     protected Texture launcher1;
     protected Texture launcher2;
     protected Image launch1;
     protected Image launch2;
     protected Image level_bg;
 
-    // Background animation
     protected Texture[] backgroundFrames;
     protected int currentFrame;
     protected float stateTime;
     protected float frameDuration = 0.1f;
 
-    // Pause button
     protected Texture pauseButtonTexture;
     protected Image pauseButton;
 
@@ -65,21 +60,14 @@ public abstract class BaseLevel implements Screen {
     public BaseLevel(Main game) {
         this.game = game;
 
-        // Setup camera and viewport
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
-
-        // Setup stage
         stage = new Stage(viewport, game.batch);
         Gdx.input.setInputProcessor(stage);
-
-        // Initialize arrays
         birds = new Array<>();
         blocks = new Array<>();
         pigs = new Array<>();
-
-        // Load textures and setup UI elements
         loadBackgroundTextures();
         loadLauncherTextures();
         loadPauseButtonTexture();
@@ -137,8 +125,6 @@ public abstract class BaseLevel implements Screen {
         pauseButton = new Image(pauseButtonTexture);
         pauseButton.setSize(pauseButton.getWidth() * buttonScaleFactor, pauseButton.getHeight() * buttonScaleFactor);
         pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth() - 20, WORLD_HEIGHT - pauseButton.getHeight() - 20);
-
-        // Add click listener to switch to pause screen
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -149,7 +135,6 @@ public abstract class BaseLevel implements Screen {
         stage.addActor(pauseButton);
     }
 
-    // Abstract method for initializing game objects in specific levels
     protected abstract void initializeGameObjects();
 
     protected void setBackground(String backgroundTexturePath) {
@@ -157,10 +142,9 @@ public abstract class BaseLevel implements Screen {
         level_bg = new Image(backgroundTexture);
         level_bg.setSize(WORLD_WIDTH, WORLD_HEIGHT);
         stage.addActor(level_bg);
-        level_bg.toBack(); // Ensure background is rendered behind other elements
+        level_bg.toBack();
     }
 
-    // Helper methods for adding objects
     protected void addBird(Bird bird) {
         birds.add(bird);
         stage.addActor(bird);
@@ -188,25 +172,21 @@ public abstract class BaseLevel implements Screen {
     private void setupNavigationButtons() {
         float padding = 20f;
 
-        // Create ImageButton styles
         ImageButton.ImageButtonStyle levelSelectStyle = new ImageButton.ImageButtonStyle();
         levelSelectStyle.imageUp = new TextureRegionDrawable(new TextureRegion(levelSelectTexture));
 
         ImageButton.ImageButtonStyle restartStyle = new ImageButton.ImageButtonStyle();
         restartStyle.imageUp = new TextureRegionDrawable(new TextureRegion(restartTexture));
 
-        // Create buttons
         levelSelectButton = new ImageButton(levelSelectStyle);
         restartButton = new ImageButton(restartStyle);
 
-        // Scale buttons if needed
         float buttonScale = 0.3f;
         levelSelectButton.setSize(levelSelectTexture.getWidth() * buttonScale,
             levelSelectTexture.getHeight() * buttonScale);
         restartButton.setSize(restartTexture.getWidth() * buttonScale,
             restartTexture.getHeight() * buttonScale);
 
-        // Position buttons
         levelSelectButton.setPosition(padding, WORLD_HEIGHT - levelSelectButton.getHeight() - padding);
         restartButton.setPosition(levelSelectButton.getX() + levelSelectButton.getWidth() + padding,
             levelSelectButton.getY());
@@ -217,21 +197,17 @@ public abstract class BaseLevel implements Screen {
 
     @Override
     public void render(float delta) {
-        // Clear the screen
         ScreenUtils.clear(1, 1, 1, 1);
 
-        // Update animation
         stateTime += delta;
         if (stateTime >= frameDuration) {
             currentFrame = (currentFrame + 1) % backgroundFrames.length;
             stateTime = 0;
         }
 
-        // Update camera
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
-        // Render background animation
         if (backgroundFrames != null && backgroundFrames[currentFrame] != null) {
             game.batch.begin();
             game.batch.draw(backgroundFrames[currentFrame], 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
@@ -244,16 +220,7 @@ public abstract class BaseLevel implements Screen {
         if (restartButton.isPressed()) {
             game.setScreen(new LossScreen(game));
         }
-//        if (restartButton.isPressed()) {
-//            try {
-//                Screen newLevel = getClass().getConstructor(Main.class).newInstance(game);
-//                game.setScreen(newLevel);
-//            } catch (Exception e) {
-//                Gdx.app.error("BaseLevel", "Error restarting level", e);
-//            }
-//        }
 
-        // Update and draw stage
         stage.act(delta);
         stage.draw();
     }
@@ -274,7 +241,6 @@ public abstract class BaseLevel implements Screen {
             }
         }
 
-        // Dispose of textures
         launcher1.dispose();
         launcher2.dispose();
         if (backgroundTexture != null) {
@@ -282,14 +248,11 @@ public abstract class BaseLevel implements Screen {
         }
         pauseButtonTexture.dispose();
 
-        // Dispose of stage
         stage.dispose();
 
-        //buttons dispose
         if (levelSelectTexture != null) levelSelectTexture.dispose();
         if (restartTexture != null) restartTexture.dispose();
 
-        // Dispose of game objects
         for (Image bird : birds) {
             if (bird instanceof Bird) {
                 ((Bird) bird).dispose();
@@ -311,7 +274,6 @@ public abstract class BaseLevel implements Screen {
 
     @Override
     public void show() {
-        // Set this stage as the input processor when the screen is shown
         Gdx.input.setInputProcessor(stage);
     }
 
