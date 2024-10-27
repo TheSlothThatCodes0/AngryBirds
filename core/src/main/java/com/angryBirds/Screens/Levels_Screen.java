@@ -54,7 +54,7 @@ public class Levels_Screen implements Screen {
     }
 
     private void loadTextures() {
-        backgroundTexture = new Texture("level_background.png");
+        backgroundTexture = new Texture("level_background1.jpg");
 //        ground_shape = new Texture("ground_shape.png");
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
