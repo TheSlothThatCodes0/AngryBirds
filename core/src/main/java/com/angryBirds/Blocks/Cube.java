@@ -1,6 +1,4 @@
 package com.angryBirds.Blocks;
-
-import com.angryBirds.Blocks.Block;
 import com.angryBirds.Main;
 import com.badlogic.gdx.graphics.Texture;
 

@@ -19,7 +19,6 @@ public abstract class Block extends Image {
         setSize(blockWidth, blockHeight);
     }
 
-    // abstract method to load textures based on material
     protected abstract void loadTexture(String material);
 
     protected void updateTexture() {
