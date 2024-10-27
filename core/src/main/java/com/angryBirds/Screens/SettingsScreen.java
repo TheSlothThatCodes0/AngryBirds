@@ -67,8 +67,8 @@ public class SettingsScreen implements Screen {
         font.getData().setScale(2);
 
         // Load textures
-        woodBoardTexture = game.assets.get("settingsScreenBG.jpg", Texture.class);
-        backButton = game.assets.get("exitButton.png", Texture.class);
+        woodBoardTexture = game.assets.get("settingsScreenBG1.jpg", Texture.class);
+        backButton = game.assets.get("backArrow.png", Texture.class);
         creditsButton = game.assets.get("credits.png", Texture.class);
 
         // Initialize bounds

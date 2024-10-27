@@ -32,7 +32,7 @@ public class MainMenu implements Screen {
     // Button dimensions
     private final float SETTINGS_SIZE = 100;
     private final float EXIT_SIZE = 100;
-    private final float PLAY_WIDTH = 400;
+    private final float PLAY_WIDTH = 500;// Earlier it was 400
     private final float PLAY_HEIGHT = 200;
 
     public MainMenu(Main game) {
@@ -44,10 +44,10 @@ public class MainMenu implements Screen {
         camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
 
         // Load textures
-        backgroundTexture = game.assets.get("MainMenuBG.jpg", Texture.class);
+        backgroundTexture = game.assets.get("MainMenuBG1.jpg", Texture.class);
         settingsButton = game.assets.get("settings.png", Texture.class);
-        exitButton = game.assets.get("exitButton.png", Texture.class);
-        playButton = game.assets.get("playButton.png", Texture.class);
+        exitButton = game.assets.get("exitButton1.png", Texture.class);
+        playButton = game.assets.get("playButton1.png", Texture.class);
 
         // Initialize button bounds
         settingsBounds = new Rectangle(WORLD_WIDTH - SETTINGS_SIZE - 10, WORLD_HEIGHT - SETTINGS_SIZE - 10,
@@ -55,7 +55,7 @@ public class MainMenu implements Screen {
         exitBounds = new Rectangle(10, WORLD_HEIGHT - EXIT_SIZE - 10,
             EXIT_SIZE, EXIT_SIZE);
         playBounds = new Rectangle((WORLD_WIDTH - PLAY_WIDTH) / 2,
-            (WORLD_HEIGHT - PLAY_HEIGHT) / 2,
+            (WORLD_HEIGHT - PLAY_HEIGHT) / 10, // Modifiying the 2
             PLAY_WIDTH, PLAY_HEIGHT);
     }
 
