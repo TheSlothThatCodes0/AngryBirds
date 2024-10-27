@@ -1,4 +1,7 @@
-# How to run the project
+Shaman Ranjan(2023498) 
+Siddharth Yadav(2023498)
+
+## How to run the project
 
 1) Clone the repository
 2) Locate the project folder
@@ -6,7 +9,7 @@
 ``` ./gradlew lwjgl3:run ```
 4) Enjoy the game!
 
-# About the Game
+## About the Game
 
 1) the game contains a main menu with 3 options: Play, Settings, Exit
 2) The play button takes you to the level selector where you can choose the level you want to play (for now there is just one level and you have to click the portal to enter the level)
