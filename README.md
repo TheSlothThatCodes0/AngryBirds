@@ -1,33 +1,16 @@
-# angry-birds
+# How to run the project
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+1) Clone the repository
+2) Locate the project folder
+3) Run the following command in the terminal
+``` ./gradlew lwjgl3:run ```
+4) Enjoy the game!
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+# About the Game
 
-## Platforms
-
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
-
-## Gradle
-
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
-
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+1) the game contains a main menu with 3 options: Play, Settings, Exit
+2) The play button takes you to the level selector where you can choose the level you want to play (for now there is just one level and you have to click the portal to enter the level)
+3) The settings button takes you to the settings menu where you can change the volume of the game
+4) The exit button closes the game
+5) Inside the game there are two buttons on the top left, one green and one red. The green button takes you to the win screen and the red button takes you to the lose screen
+6) There is also a pause button inside the level screen that pauses the game and takes you to the pause menu where you can resume the game, go to the main menu or save the game.
