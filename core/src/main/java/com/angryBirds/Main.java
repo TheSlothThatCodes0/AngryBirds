@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Main extends Game {
+    public static final float PPM = 5;
     public SpriteBatch batch;
     public AssetManager assets;
 
