@@ -32,7 +32,7 @@ public class MainMenu implements Screen {
     private final float PLAY_WIDTH = 500;// Earlier it was 400
     private final float PLAY_HEIGHT = 200;
 
-    public MainMenu(Main game) {
+    public MainMenu(Main game) { // comnstructor
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -71,7 +71,7 @@ public class MainMenu implements Screen {
 
         game.batch.end();
 
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched()) {  //button equivalent setup
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
