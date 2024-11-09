@@ -11,6 +11,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,6 +27,18 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class BaseLevel implements Screen {
+
+    protected static final short CATEGORY_GROUND = 0x0001;  // 1 in binary
+    protected static final short CATEGORY_BLOCKS = 0x0002;  // 2 in binary
+    protected static final short CATEGORY_BIRDS = 0x0004;   // 4 in binary
+    protected static final short CATEGORY_PIGS = 0x0008;    // 8 in binary
+
+//    protected static final short MASK_GROUND = -1; // Collide with everything
+//    protected static final short MASK_BLOCKS = -1; // Collide with everything
+//    protected static final short MASK_BIRDS = -1;  // Collide with everything
+//    protected static final short MASK_PIGS = -1;   // Collide with everything
+
+
     protected Main game;
     protected OrthographicCamera camera;
     protected Viewport viewport;
@@ -59,19 +72,12 @@ public abstract class BaseLevel implements Screen {
     protected ImageButton restartButton;
     protected Skin skin;
 
-    private World world;
-    private Array<Body> birdBodies;
-    private Array<Body> blockBodies;
-    private Array<Body> pigBodies;
+    protected World world;
+    protected Box2DDebugRenderer debugRenderer;
+    protected static final float PPM = 100f;
 
     public BaseLevel(Main game) {
         this.game = game;
-
-        world = new World(new Vector2(0, -9.8f), true);
-        birdBodies = new Array<>();
-        blockBodies = new Array<>();
-        pigBodies = new Array<>();
-
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
@@ -81,15 +87,38 @@ public abstract class BaseLevel implements Screen {
         birds = new Array<>();
         blocks = new Array<>();
         pigs = new Array<>();
-
         loadBackgroundTextures();
         loadLauncherTextures();
         loadPauseButtonTexture();
         setupLauncher();
         setupPauseButton();
 
+        world = new World(new Vector2(0,-0.98f), true);
+        debugRenderer = new Box2DDebugRenderer();
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                // Log contacts for debugging
+                Body bodyA = contact.getFixtureA().getBody();
+                Body bodyB = contact.getFixtureB().getBody();
+                Gdx.app.log("Contact", "Collision between bodies: " +
+                    bodyA.getUserData() + " and " + bodyB.getUserData());
+            }
+
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
+
         loadNavigationButtonTextures();
         setupNavigationButtons();
+        createGround();
     }
 
     private void loadBackgroundTextures() {
@@ -117,6 +146,35 @@ public abstract class BaseLevel implements Screen {
     private void loadPauseButtonTexture() {
         pauseButtonTexture = new Texture("pauseButton.png");
     }
+
+    private void createGround() {
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;
+        // Place ground at bottom of screen
+        groundBodyDef.position.set((WORLD_WIDTH/2)/PPM, (35/2)/PPM);
+
+        Body groundBody = world.createBody(groundBodyDef);
+        groundBody.setUserData("ground");
+
+        PolygonShape groundBox = new PolygonShape();
+        // Make ground span entire width
+        groundBox.setAsBox(WORLD_WIDTH/(2*PPM), 35/(2*PPM));
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = groundBox;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0.1f;
+        fixtureDef.filter.categoryBits = CATEGORY_GROUND;
+        fixtureDef.filter.maskBits = CATEGORY_BLOCKS | CATEGORY_BIRDS | CATEGORY_PIGS;
+
+        groundBody.createFixture(fixtureDef);
+        groundBox.dispose();
+
+        // Debug output
+        System.out.println("Ground created at y:" + (35/2)/PPM);
+    }
+
 
     private void setupLauncher() {
         float sf = 0.5f;
@@ -162,82 +220,16 @@ public abstract class BaseLevel implements Screen {
     protected void addBird(Bird bird) {
         birds.add(bird);
         stage.addActor(bird);
-        createBirdBody(bird);
     }
 
     protected void addBlock(Block block) {
         blocks.add(block);
         stage.addActor(block);
-        createBlockBody(block);
     }
 
     protected void addPig(Pig pig) {
         pigs.add(pig);
         stage.addActor(pig);
-        createPigBody(pig);
-    }
-
-    private void createBirdBody(Bird bird) {
-        BodyDef bdef = new BodyDef();
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(bird.getX() / game.PPM, bird.getY() / game.PPM);
-
-        Body body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(bird.getBirdWidth() / 2 / game.PPM, bird.getBirdHeight() / 2 / game.PPM);
-
-        fdef.shape = shape;
-        fdef.density = 1f;
-        fdef.restitution = 0.5f;
-        fdef.friction = 0.3f;
-
-        body.createFixture(fdef).setUserData(bird);
-        birdBodies.add(body);
-        bird.setBody(body);
-    }
-
-    private void createBlockBody(Block block) {
-        BodyDef bdef = new BodyDef();
-        bdef.type = BodyDef.BodyType.StaticBody;
-        bdef.position.set(block.getX() / game.PPM, block.getY() / game.PPM);
-
-        Body body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(block.getBlockWidth() / 2 / game.PPM, block.getBlockHeight() / 2 / game.PPM);
-
-        fdef.shape = shape;
-        fdef.density = 1f;
-        fdef.restitution = 0.5f;
-        fdef.friction = 0.3f;
-
-        body.createFixture(fdef).setUserData(block);
-        blockBodies.add(body);
-        block.setBody(body);
-    }
-
-    private void createPigBody(Pig pig) {
-        BodyDef bdef = new BodyDef();
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(pig.getX() / game.PPM, pig.getY() / game.PPM);
-
-        Body body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(pig.getPigWidth() / 2 / game.PPM, pig.getPigHeight() / 2 / game.PPM);
-
-        fdef.shape = shape;
-        fdef.density = 1f;
-        fdef.restitution = 0.5f;
-        fdef.friction = 0.3f;
-
-        body.createFixture(fdef).setUserData(pig);
-        pigBodies.add(body);
-        pig.setBody(body);
     }
 
     private void loadNavigationButtonTextures() {
@@ -274,10 +266,13 @@ public abstract class BaseLevel implements Screen {
         stage.addActor(levelSelectButton);
         stage.addActor(restartButton);
     }
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
+
+        world.step(1/60f, 6, 2);
+
+        debugRenderer.render(world, camera.combined.cpy().scl(PPM));
 
         stateTime += delta;
         if (stateTime >= frameDuration) {
@@ -294,34 +289,15 @@ public abstract class BaseLevel implements Screen {
             game.batch.end();
         }
 
+        Matrix4 debugMatrix = camera.combined.cpy();
+        debugMatrix.scale(PPM, PPM, 1);
+        debugRenderer.render(world, debugMatrix);
+
         if (levelSelectButton.isPressed()) {
             game.setScreen(new WinScreen(game));
         }
         if (restartButton.isPressed()) {
             game.setScreen(new LossScreen(game));
-        }
-
-        world.step(delta, 6, 2);
-
-        for (Body body : birdBodies) {
-            Bird bird = (Bird) body.getUserData();
-            bird.setPosition((body.getPosition().x * game.PPM) - bird.getBirdWidth() / 2,
-                (body.getPosition().y * game.PPM) - bird.getBirdHeight() / 2);
-            bird.setRotation((float) Math.toDegrees(body.getAngle()));
-        }
-
-        for (Body body : blockBodies) {
-            Block block = (Block) body.getUserData();
-            block.setPosition((body.getPosition().x * game.PPM) - block.getBlockWidth() / 2,
-                (body.getPosition().y * game.PPM) - block.getBlockHeight() / 2);
-            block.setRotation((float) Math.toDegrees(body.getAngle()));
-        }
-
-        for (Body body : pigBodies) {
-            Pig pig = (Pig) body.getUserData();
-            pig.setPosition((body.getPosition().x * game.PPM) - pig.getPigWidth() / 2,
-                (body.getPosition().y * game.PPM) - pig.getPigHeight() / 2);
-            pig.setRotation((float) Math.toDegrees(body.getAngle()));
         }
 
         stage.act(delta);
@@ -336,6 +312,15 @@ public abstract class BaseLevel implements Screen {
 
     @Override
     public void dispose() {
+
+        if (world != null) {
+            world.dispose();
+        }
+        if (debugRenderer != null) {
+            debugRenderer.dispose();
+        }
+
+
         if (backgroundFrames != null) {
             for (Texture frame : backgroundFrames) {
                 if (frame != null) {
@@ -374,7 +359,7 @@ public abstract class BaseLevel implements Screen {
             }
         }
 
-        world.dispose();
+
     }
 
     @Override
