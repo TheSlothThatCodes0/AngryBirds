@@ -33,9 +33,9 @@ public abstract class BaseLevel implements Screen {
     protected static final short CATEGORY_BIRDS = 0x0004;   // 4 in binary
     protected static final short CATEGORY_PIGS = 0x0008;    // 8 in binary
 
-//    protected static final short MASK_GROUND = -1; // Collide with everything
-//    protected static final short MASK_BLOCKS = -1; // Collide with everything
-//    protected static final short MASK_BIRDS = -1;  // Collide with everything
+    protected static final short MASK_GROUND = -1; // Collide with everything
+    protected static final short MASK_BLOCKS = -1; // Collide with everything
+    protected static final short MASK_BIRDS = -1;  // Collide with everything
 //    protected static final short MASK_PIGS = -1;   // Collide with everything
 
 
@@ -78,7 +78,7 @@ public abstract class BaseLevel implements Screen {
 
     public BaseLevel(Main game) {
         this.game = game;
-
+        int ground_height = 35;
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
@@ -93,7 +93,8 @@ public abstract class BaseLevel implements Screen {
         setupLauncher();
         setupPauseButton();
 
-        world = new World(new Vector2(0,-0.98f), true);
+        world = new World(new Vector2(0,-10f), true);
+//        createGround(ground_height);
         debugRenderer = new Box2DDebugRenderer();
 
         world.setContactListener(new ContactListener() {
@@ -102,8 +103,14 @@ public abstract class BaseLevel implements Screen {
                 // Log contacts for debugging
                 Body bodyA = contact.getFixtureA().getBody();
                 Body bodyB = contact.getFixtureB().getBody();
-                Gdx.app.log("Contact", "Collision between bodies: " +
-                    bodyA.getUserData() + " and " + bodyB.getUserData());
+
+                short catA = contact.getFixtureA().getFilterData().categoryBits;
+                short catB = contact.getFixtureB().getFilterData().categoryBits;
+
+                Gdx.app.log("Contact", String.format(
+                    "Collision between %s (category: %d) and %s (category: %d)",
+                    bodyA.getUserData(), catA, bodyB.getUserData(), catB
+                ));
             }
 
             @Override
@@ -118,8 +125,9 @@ public abstract class BaseLevel implements Screen {
 
         loadNavigationButtonTextures();
         setupNavigationButtons();
-        createGround();
+
     }
+
 
     private void loadBackgroundTextures() {
         backgroundFrames = new Texture[8];
@@ -147,33 +155,74 @@ public abstract class BaseLevel implements Screen {
         pauseButtonTexture = new Texture("pauseButton.png");
     }
 
-    private void createGround() {
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-        // Place ground at bottom of screen
-        groundBodyDef.position.set((WORLD_WIDTH/2)/PPM, (35/2)/PPM);
+//    protected void createGround(float height) {
+//        // First, check if ground already exists and remove it
+//        Array<Body> bodies = new Array<>();
+//        world.getBodies(bodies);
+//        for(Body body : bodies) {
+//            if("ground".equals(body.getUserData())) {
+//                world.destroyBody(body);
+//            }
+//        }
+//
+//        // Create ground body definition
+//        BodyDef groundBodyDef = new BodyDef();
+//        groundBodyDef.type = BodyDef.BodyType.StaticBody;
+//        // Position the ground at the specified height
+//        groundBodyDef.position.set(WORLD_WIDTH / (2 * PPM), height / PPM);
+//
+//        // Create the ground body
+//        Body groundBody = world.createBody(groundBodyDef);
+//        groundBody.setUserData("ground");
+//
+//        // Create ground shape
+//        PolygonShape groundBox = new PolygonShape();
+//        // Make the ground span the entire width and have substantial height
+//        float groundWidth = (WORLD_WIDTH / PPM);
+//        float groundThickness = (height / PPM);
+//        groundBox.setAsBox(groundWidth / 2, groundThickness);
+//
+//        // Create ground fixture with modified properties
+//        FixtureDef groundFixtureDef = new FixtureDef();
+//        groundFixtureDef.shape = groundBox;
+//        groundFixtureDef.density = 0.0f;
+//        groundFixtureDef.friction = 0.4f;
+//        groundFixtureDef.restitution = 0.1f;
+//
+//        // Make sure ground collides with everything
+//        groundFixtureDef.filter.categoryBits = CATEGORY_GROUND;
+//        groundFixtureDef.filter.maskBits = -1;
+//
+//        // Add fixture to body
+//        groundBody.createFixture(groundFixtureDef);
+//
+//        // Dispose of the shape
+//        groundBox.dispose();
+//
+//        System.out.println("Ground recreated at y=" + (height/PPM) + " world units");
+//        System.out.println("Ground width=" + groundWidth + " world units");
+//        System.out.println("Ground thickness=" + groundThickness + " world units");
+//    }
 
-        Body groundBody = world.createBody(groundBodyDef);
-        groundBody.setUserData("ground");
+    protected void debugPhysicsBodies() {
+        StringBuilder debug = new StringBuilder("Physics World Bodies:\n");
 
-        PolygonShape groundBox = new PolygonShape();
-        // Make ground span entire width
-        groundBox.setAsBox(WORLD_WIDTH/(2*PPM), 35/(2*PPM));
+        Array<Body> bodies = new Array<>();  // Create an Array to store bodies
+        world.getBodies(bodies);  // Pass the array to getBodies()
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = groundBox;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.1f;
-        fixtureDef.filter.categoryBits = CATEGORY_GROUND;
-        fixtureDef.filter.maskBits = CATEGORY_BLOCKS | CATEGORY_BIRDS | CATEGORY_PIGS;
+        for (Body body : bodies) {
+            debug.append(String.format(
+                "Body: %s, Position: (%.2f, %.2f), Active: %b\n",
+                body.getUserData(),
+                body.getPosition().x,
+                body.getPosition().y,
+                body.isActive()
+            ));
+        }
 
-        groundBody.createFixture(fixtureDef);
-        groundBox.dispose();
-
-        // Debug output
-        System.out.println("Ground created at y:" + (35/2)/PPM);
+        System.out.println(debug.toString());
     }
+
 
 
     private void setupLauncher() {
@@ -271,8 +320,7 @@ public abstract class BaseLevel implements Screen {
         ScreenUtils.clear(1, 1, 1, 1);
 
         world.step(1/60f, 6, 2);
-
-        debugRenderer.render(world, camera.combined.cpy().scl(PPM));
+        debugRenderer.render(world, camera.combined.scl(PPM));
 
         stateTime += delta;
         if (stateTime >= frameDuration) {

@@ -32,7 +32,7 @@ public class Plank extends Block {
                 break;
         }
 
-        createPhysicsBody(x, y, density, friction, restitution);
+        createPhysicsBody(x, y, density, friction, restitution,false);
     }
 
     @Override

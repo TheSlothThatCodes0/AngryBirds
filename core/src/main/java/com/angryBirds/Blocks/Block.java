@@ -38,22 +38,25 @@ public abstract class Block extends Image {
         setSize(blockWidth, blockHeight);
     }
 
-    protected void createPhysicsBody(float x, float y, float density, float friction, float restitution) {
+
+
+    protected void createPhysicsBody(float x, float y, float density, float friction, float restitution, boolean isGround) {
         System.out.println("Creating physics body at x:" + x + " y:" + y);
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        // No PPM scaling in position since the coordinates are already in pixels
-        bodyDef.position.set(x/PPM, y/PPM);
-        bodyDef.bullet = true;
+        if(!isGround) {
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+        } else {
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+        }
+        bodyDef.position.set((x + blockWidth/2) / PPM, (y + blockHeight/2) / PPM);
+        bodyDef.fixedRotation = false; // Allow rotation
+        bodyDef.bullet = true; // Enable continuous collision detection
 
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        // Make physics body match visual size
-        float halfWidth = blockWidth / (2 * PPM);
-        float halfHeight = blockHeight / (2 * PPM);
-        shape.setAsBox(halfWidth, halfHeight);
+        shape.setAsBox(blockWidth / (2 * PPM), blockHeight / (2 * PPM));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -61,15 +64,17 @@ public abstract class Block extends Image {
         fixtureDef.friction = friction;
         fixtureDef.restitution = restitution;
         fixtureDef.filter.categoryBits = CATEGORY_BLOCKS;
-        // Make sure blocks collide with ground
-        fixtureDef.filter.maskBits = CATEGORY_GROUND | CATEGORY_BLOCKS;
+        fixtureDef.filter.maskBits = -1; // Collide with everything
 
         body.createFixture(fixtureDef);
         shape.dispose();
         body.setUserData(this);
 
-        // Debug output
-        System.out.println("Physics body created with width:" + blockWidth + " height:" + blockHeight);
+        System.out.println("Block physics body created at: " +
+            "x=" + body.getPosition().x + " " +
+            "y=" + body.getPosition().y + " " +
+            "width=" + (blockWidth/PPM) + " " +
+            "height=" + (blockHeight/PPM));
     }
 
     @Override
@@ -85,6 +90,11 @@ public abstract class Block extends Image {
             // Debug output
             if (y < 0) {
                 System.out.println("Block at position below ground! y:" + y);
+//                body.setLinearVelocity(body.getPosition().x * PPM - blockWidth/2,body.getPosition().y * PPM - blockHeight/2);
+//                float x1 = body.getPosition().x * PPM - blockWidth/2;
+//                float y1 = body.getPosition().y * PPM - blockHeight/2;
+//                setPosition(x1, y1);
+//                setRotation((float) Math.toDegrees(body.getAngle()));
             }
         }
     }
