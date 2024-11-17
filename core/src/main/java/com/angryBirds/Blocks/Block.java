@@ -2,6 +2,7 @@ package com.angryBirds.Blocks;
 
 import com.angryBirds.Main;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -51,10 +52,19 @@ public abstract class Block extends Image {
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(
+        if(type.equalsIgnoreCase("triangle")){
+            Vector2[] triangleVertices = new Vector2[3];
+            triangleVertices[0] = new Vector2(-blockWidth/(2*PPM), -blockHeight/(2*PPM));  // bottom left
+             triangleVertices[1] = new Vector2(blockWidth/(2*PPM), -blockHeight/(2*PPM));   // bottom right
+             triangleVertices[2] = new Vector2(0, blockHeight/(2*PPM));
+            shape.set(triangleVertices);
+        }
+        else{
+            shape.setAsBox(
                 blockWidth / (2 * PPM), // half-width
                 blockHeight / (2 * PPM) // half-height
-        );
+            );
+        }
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
