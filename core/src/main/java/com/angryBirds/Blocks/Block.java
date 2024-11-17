@@ -40,23 +40,28 @@ public abstract class Block extends Image {
 
 
 
-    protected void createPhysicsBody(float x, float y, float density, float friction, float restitution, boolean isGround) {
+    protected void createPhysicsBody(float x, float y, float density, float friction, float restitution, String type) {
         System.out.println("Creating physics body at x:" + x + " y:" + y);
 
         BodyDef bodyDef = new BodyDef();
-        if(!isGround) {
+        if(!type.equals("ground")) {
             bodyDef.type = BodyDef.BodyType.DynamicBody;
         } else {
             bodyDef.type = BodyDef.BodyType.StaticBody;
         }
         bodyDef.position.set((x + blockWidth/2) / PPM, (y + blockHeight/2) / PPM);
         bodyDef.fixedRotation = false; // Allow rotation
-        bodyDef.bullet = true; // Enable continuous collision detection
+//        bodyDef.bullet = true; // Enable continuous collision detection
 
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(blockWidth / (2 * PPM), blockHeight / (2 * PPM));
+        if(!type.equals("ground")){
+            shape.setAsBox(blockWidth / (2 * PPM), blockHeight / (2 * PPM));
+        }
+        else{
+            shape.setAsBox(1920, blockHeight / (2 * PPM));
+        }
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;

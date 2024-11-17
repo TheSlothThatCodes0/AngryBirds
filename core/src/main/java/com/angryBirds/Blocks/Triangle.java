@@ -32,7 +32,7 @@ public class Triangle extends Block {
                 break;
         }
 
-        createPhysicsBody(x, y, density, friction, restitution,false);
+        createPhysicsBody(x, y, density, friction, restitution,"triangle");
     }
 
     @Override

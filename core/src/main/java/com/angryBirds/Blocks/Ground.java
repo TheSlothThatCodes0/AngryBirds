@@ -14,7 +14,7 @@ public class Ground extends Block {
         float density = 100000.0f;
         float friction = 0.3f;
         float restitution = 0.1f;
-        createPhysicsBody(width, height, density, friction, restitution,true);
+        createPhysicsBody(width, height, density, friction, restitution,"ground");
         loadTexture(material);
     }
 

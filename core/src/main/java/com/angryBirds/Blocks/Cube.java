@@ -32,7 +32,7 @@ public class Cube extends Block {
                 break;
         }
 
-        createPhysicsBody(x, y, density, friction, restitution,false);
+        createPhysicsBody(x, y, density, friction, restitution,"cube");
     }
 
     @Override

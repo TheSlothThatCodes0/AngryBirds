@@ -57,9 +57,10 @@ public class Level_1 extends BaseLevel {
 //        createGround(ground_height);
 
         // Add test blocks higher up
-        addBlock(new Cube(game, "stone", 800, 600, world));
+        addBlock(new Cube(game, "stone", 1500, 600, world));
         addBlock(new Cube(game, "ice", 800, 800, world));
-        addBlock(new Ground(game, "stone", 780, 10, world));
+        addBlock(new Cube(game, "wood", 800, 1000, world));
+        addBlock(new Ground(game, "stone", 780, 0, world));
 
         System.out.println("Level 1 initialized");
     }
