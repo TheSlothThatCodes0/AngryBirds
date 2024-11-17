@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import static com.angryBirds.Main.PPM;
 
-
+import java.lang.reflect.Array;
 
 public abstract class Block extends Image {
     protected Main game;
@@ -26,7 +26,7 @@ public abstract class Block extends Image {
 
     protected static final short MASK_GROUND = -1; // Collide with everything
     protected static final short MASK_BLOCKS = -1; // Collide with everything
-    protected static final short MASK_BIRDS = -1;  // Collide with everything
+    protected static final short MASK_BIRDS = -1; // Collide with everything
     protected static final short MASK_PIGS = -1;
 
     public Block(Main game, float width, float height, World world) {
@@ -38,68 +38,60 @@ public abstract class Block extends Image {
         setSize(blockWidth, blockHeight);
     }
 
-
-
     protected void createPhysicsBody(float x, float y, float density, float friction, float restitution, String type) {
-        System.out.println("Creating physics body at x:" + x + " y:" + y);
-
         BodyDef bodyDef = new BodyDef();
-        if(!type.equals("ground")) {
-            bodyDef.type = BodyDef.BodyType.DynamicBody;
-        } else {
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-        }
-        bodyDef.position.set((x + blockWidth/2) / PPM, (y + blockHeight/2) / PPM);
-        bodyDef.fixedRotation = false; // Allow rotation
-//        bodyDef.bullet = true; // Enable continuous collision detection
+        bodyDef.type = type.equals("ground") ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody;
+
+        // Convert screen coordinates to physics world coordinates
+        // Add half the width/height to center the body on the sprite
+        bodyDef.position.set(
+                (x + blockWidth / 2) / PPM,
+                (y + blockHeight / 2) / PPM);
 
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        if(!type.equals("ground")){
-            shape.setAsBox(blockWidth / (2 * PPM), blockHeight / (2 * PPM));
-        }
-        else{
-            shape.setAsBox(1920, blockHeight / (2 * PPM));
-        }
+        shape.setAsBox(
+                blockWidth / (2 * PPM), // half-width
+                blockHeight / (2 * PPM) // half-height
+        );
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = density;
         fixtureDef.friction = friction;
         fixtureDef.restitution = restitution;
-        fixtureDef.filter.categoryBits = CATEGORY_BLOCKS;
-        fixtureDef.filter.maskBits = -1; // Collide with everything
+        fixtureDef.filter.categoryBits = type.equals("ground") ? CATEGORY_GROUND : CATEGORY_BLOCKS;
+        fixtureDef.filter.maskBits = -1;
 
         body.createFixture(fixtureDef);
-        shape.dispose();
         body.setUserData(this);
-
-        System.out.println("Block physics body created at: " +
-            "x=" + body.getPosition().x + " " +
-            "y=" + body.getPosition().y + " " +
-            "width=" + (blockWidth/PPM) + " " +
-            "height=" + (blockHeight/PPM));
+        shape.dispose();
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
         if (body != null) {
-            // Update visual position based on physics body
-            float x = body.getPosition().x * PPM - blockWidth/2;
-            float y = body.getPosition().y * PPM - blockHeight/2;
-            setPosition(x, y);
-            setRotation((float) Math.toDegrees(body.getAngle()));
+            // Get the center position from physics body
+            float centerX = body.getPosition().x * PPM;
+            float centerY = body.getPosition().y * PPM;
 
-            // Debug output
+            // Calculate the position to center the texture on the physics body
+            float x = centerX - (getWidth() / 2); // Subtract half width to center horizontally
+            float y = centerY - (getHeight() / 2); // Subtract half height to center vertically
+
+            // Update visual position
+            setPosition(x, y);
+
+            // Update rotation around the center
+            setRotation((float) Math.toDegrees(body.getAngle()));
+            setOrigin(getWidth() / 2, getHeight() / 2); // Set rotation origin to center
+
+            // Debug output for positions below ground
             if (y < 0) {
-                System.out.println("Block at position below ground! y:" + y);
-//                body.setLinearVelocity(body.getPosition().x * PPM - blockWidth/2,body.getPosition().y * PPM - blockHeight/2);
-//                float x1 = body.getPosition().x * PPM - blockWidth/2;
-//                float y1 = body.getPosition().y * PPM - blockHeight/2;
-//                setPosition(x1, y1);
-//                setRotation((float) Math.toDegrees(body.getAngle()));
+                System.out.println("Warning: Block position below ground! Physics pos: " +
+                        body.getPosition().y + ", Screen pos: " + y);
             }
         }
     }
@@ -113,9 +105,12 @@ public abstract class Block extends Image {
     public void dispose() {
         if (body != null) {
             world.destroyBody(body);
+            body = null;
         }
+
         if (blockTexture != null) {
             blockTexture.dispose();
+            blockTexture = null;
         }
     }
 }

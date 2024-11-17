@@ -28,16 +28,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class BaseLevel implements Screen {
 
-    protected static final short CATEGORY_GROUND = 0x0001;  // 1 in binary
-    protected static final short CATEGORY_BLOCKS = 0x0002;  // 2 in binary
-    protected static final short CATEGORY_BIRDS = 0x0004;   // 4 in binary
-    protected static final short CATEGORY_PIGS = 0x0008;    // 8 in binary
+    protected static final short CATEGORY_GROUND = 0x0001; // 1 in binary
+    protected static final short CATEGORY_BLOCKS = 0x0002; // 2 in binary
+    protected static final short CATEGORY_BIRDS = 0x0004; // 4 in binary
+    protected static final short CATEGORY_PIGS = 0x0008; // 8 in binary
 
     protected static final short MASK_GROUND = -1; // Collide with everything
     protected static final short MASK_BLOCKS = -1; // Collide with everything
-    protected static final short MASK_BIRDS = -1;  // Collide with everything
-//    protected static final short MASK_PIGS = -1;   // Collide with everything
-
+    protected static final short MASK_BIRDS = -1; // Collide with everything
+    // protected static final short MASK_PIGS = -1; // Collide with everything
 
     protected Main game;
     protected OrthographicCamera camera;
@@ -74,7 +73,8 @@ public abstract class BaseLevel implements Screen {
 
     protected World world;
     protected Box2DDebugRenderer debugRenderer;
-    protected static final float PPM = 100f;
+    protected static final float PPM = 5;
+    protected Matrix4 debugMatrix; // Add this as class field
 
     public BaseLevel(Main game) {
         this.game = game;
@@ -93,9 +93,10 @@ public abstract class BaseLevel implements Screen {
         setupLauncher();
         setupPauseButton();
 
-        world = new World(new Vector2(0,-10f), true);
-//        createGround(ground_height);
-        debugRenderer = new Box2DDebugRenderer();
+        world = new World(new Vector2(0, -10f), true);
+        // createGround(ground_height);
+        debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
+        debugMatrix = new Matrix4(camera.combined.cpy().scl(PPM));
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -108,26 +109,27 @@ public abstract class BaseLevel implements Screen {
                 short catB = contact.getFixtureB().getFilterData().categoryBits;
 
                 Gdx.app.log("Contact", String.format(
-                    "Collision between %s (category: %d) and %s (category: %d)",
-                    bodyA.getUserData(), catA, bodyB.getUserData(), catB
-                ));
+                        "Collision between %s (category: %d) and %s (category: %d)",
+                        bodyA.getUserData(), catA, bodyB.getUserData(), catB));
             }
 
             @Override
-            public void endContact(Contact contact) {}
+            public void endContact(Contact contact) {
+            }
 
             @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
+            public void preSolve(Contact contact, Manifold oldManifold) {
+            }
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {}
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+            }
         });
 
         loadNavigationButtonTextures();
         setupNavigationButtons();
 
     }
-
 
     private void loadBackgroundTextures() {
         backgroundFrames = new Texture[8];
@@ -155,75 +157,72 @@ public abstract class BaseLevel implements Screen {
         pauseButtonTexture = new Texture("pauseButton.png");
     }
 
-//    protected void createGround(float height) {
-//        // First, check if ground already exists and remove it
-//        Array<Body> bodies = new Array<>();
-//        world.getBodies(bodies);
-//        for(Body body : bodies) {
-//            if("ground".equals(body.getUserData())) {
-//                world.destroyBody(body);
-//            }
-//        }
-//
-//        // Create ground body definition
-//        BodyDef groundBodyDef = new BodyDef();
-//        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-//        // Position the ground at the specified height
-//        groundBodyDef.position.set(WORLD_WIDTH / (2 * PPM), height / PPM);
-//
-//        // Create the ground body
-//        Body groundBody = world.createBody(groundBodyDef);
-//        groundBody.setUserData("ground");
-//
-//        // Create ground shape
-//        PolygonShape groundBox = new PolygonShape();
-//        // Make the ground span the entire width and have substantial height
-//        float groundWidth = (WORLD_WIDTH / PPM);
-//        float groundThickness = (height / PPM);
-//        groundBox.setAsBox(groundWidth / 2, groundThickness);
-//
-//        // Create ground fixture with modified properties
-//        FixtureDef groundFixtureDef = new FixtureDef();
-//        groundFixtureDef.shape = groundBox;
-//        groundFixtureDef.density = 0.0f;
-//        groundFixtureDef.friction = 0.4f;
-//        groundFixtureDef.restitution = 0.1f;
-//
-//        // Make sure ground collides with everything
-//        groundFixtureDef.filter.categoryBits = CATEGORY_GROUND;
-//        groundFixtureDef.filter.maskBits = -1;
-//
-//        // Add fixture to body
-//        groundBody.createFixture(groundFixtureDef);
-//
-//        // Dispose of the shape
-//        groundBox.dispose();
-//
-//        System.out.println("Ground recreated at y=" + (height/PPM) + " world units");
-//        System.out.println("Ground width=" + groundWidth + " world units");
-//        System.out.println("Ground thickness=" + groundThickness + " world units");
-//    }
+    // protected void createGround(float height) {
+    // // First, check if ground already exists and remove it
+    // Array<Body> bodies = new Array<>();
+    // world.getBodies(bodies);
+    // for(Body body : bodies) {
+    // if("ground".equals(body.getUserData())) {
+    // world.destroyBody(body);
+    // }
+    // }
+    //
+    // // Create ground body definition
+    // BodyDef groundBodyDef = new BodyDef();
+    // groundBodyDef.type = BodyDef.BodyType.StaticBody;
+    // // Position the ground at the specified height
+    // groundBodyDef.position.set(WORLD_WIDTH / (2 * PPM), height / PPM);
+    //
+    // // Create the ground body
+    // Body groundBody = world.createBody(groundBodyDef);
+    // groundBody.setUserData("ground");
+    //
+    // // Create ground shape
+    // PolygonShape groundBox = new PolygonShape();
+    // // Make the ground span the entire width and have substantial height
+    // float groundWidth = (WORLD_WIDTH / PPM);
+    // float groundThickness = (height / PPM);
+    // groundBox.setAsBox(groundWidth / 2, groundThickness);
+    //
+    // // Create ground fixture with modified properties
+    // FixtureDef groundFixtureDef = new FixtureDef();
+    // groundFixtureDef.shape = groundBox;
+    // groundFixtureDef.density = 0.0f;
+    // groundFixtureDef.friction = 0.4f;
+    // groundFixtureDef.restitution = 0.1f;
+    //
+    // // Make sure ground collides with everything
+    // groundFixtureDef.filter.categoryBits = CATEGORY_GROUND;
+    // groundFixtureDef.filter.maskBits = -1;
+    //
+    // // Add fixture to body
+    // groundBody.createFixture(groundFixtureDef);
+    //
+    // // Dispose of the shape
+    // groundBox.dispose();
+    //
+    // System.out.println("Ground recreated at y=" + (height/PPM) + " world units");
+    // System.out.println("Ground width=" + groundWidth + " world units");
+    // System.out.println("Ground thickness=" + groundThickness + " world units");
+    // }
 
     protected void debugPhysicsBodies() {
         StringBuilder debug = new StringBuilder("Physics World Bodies:\n");
 
-        Array<Body> bodies = new Array<>();  // Create an Array to store bodies
-        world.getBodies(bodies);  // Pass the array to getBodies()
+        Array<Body> bodies = new Array<>(); // Create an Array to store bodies
+        world.getBodies(bodies); // Pass the array to getBodies()
 
         for (Body body : bodies) {
             debug.append(String.format(
-                "Body: %s, Position: (%.2f, %.2f), Active: %b\n",
-                body.getUserData(),
-                body.getPosition().x,
-                body.getPosition().y,
-                body.isActive()
-            ));
+                    "Body: %s, Position: (%.2f, %.2f), Active: %b\n",
+                    body.getUserData(),
+                    body.getPosition().x,
+                    body.getPosition().y,
+                    body.isActive()));
         }
 
         System.out.println(debug.toString());
     }
-
-
 
     private void setupLauncher() {
         float sf = 0.5f;
@@ -304,22 +303,23 @@ public abstract class BaseLevel implements Screen {
 
         float buttonScale = 0.3f;
         levelSelectButton.setSize(levelSelectTexture.getWidth() * buttonScale,
-            levelSelectTexture.getHeight() * buttonScale);
+                levelSelectTexture.getHeight() * buttonScale);
         restartButton.setSize(restartTexture.getWidth() * buttonScale,
-            restartTexture.getHeight() * buttonScale);
+                restartTexture.getHeight() * buttonScale);
 
         levelSelectButton.setPosition(padding, WORLD_HEIGHT - levelSelectButton.getHeight() - padding);
         restartButton.setPosition(levelSelectButton.getX() + levelSelectButton.getWidth() + padding,
-            levelSelectButton.getY());
+                levelSelectButton.getY());
 
         stage.addActor(levelSelectButton);
         stage.addActor(restartButton);
     }
+
     @Override
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
 
-        world.step(1/60f, 6, 2);
+        world.step(1 / 60f, 6, 2);
         debugRenderer.render(world, camera.combined.scl(PPM));
 
         stateTime += delta;
@@ -329,27 +329,22 @@ public abstract class BaseLevel implements Screen {
         }
 
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
 
         if (backgroundFrames != null && backgroundFrames[currentFrame] != null) {
             game.batch.begin();
+            game.batch.setProjectionMatrix(camera.combined);
             game.batch.draw(backgroundFrames[currentFrame], 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
             game.batch.end();
         }
-
-        Matrix4 debugMatrix = camera.combined.cpy();
-        debugMatrix.scale(PPM, PPM, 1);
-        debugRenderer.render(world, debugMatrix);
-
-        if (levelSelectButton.isPressed()) {
-            game.setScreen(new WinScreen(game));
-        }
-        if (restartButton.isPressed()) {
-            game.setScreen(new LossScreen(game));
-        }
-
+        
+        // Draw the stage (game objects)
         stage.act(delta);
         stage.draw();
+        
+        // Debug rendering - only do this once with correct scaling
+        debugMatrix = camera.combined.cpy();
+        debugMatrix.scl(PPM);
+        debugRenderer.render(world, debugMatrix);
     }
 
     @Override
@@ -358,17 +353,43 @@ public abstract class BaseLevel implements Screen {
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
     }
 
-    @Override
+        @Override
     public void dispose() {
-
+        // First dispose of all physics bodies
         if (world != null) {
+            // Remove all bodies first
+            Array<Body> bodies = new Array<>();
+            world.getBodies(bodies);
+            for (Body body : bodies) {
+                world.destroyBody(body);
+            }
             world.dispose();
         }
+        
         if (debugRenderer != null) {
             debugRenderer.dispose();
         }
-
-
+    
+        // Then dispose of game objects
+        for (Image block : blocks) {
+            if (block instanceof Block) {
+                ((Block) block).dispose();
+            }
+        }
+        
+        for (Image bird : birds) {
+            if (bird instanceof Bird) {
+                ((Bird) bird).dispose();
+            }
+        }
+        
+        for (Image pig : pigs) {
+            if (pig instanceof Pig) {
+                ((Pig) pig).dispose();
+            }
+        }
+    
+        // Finally dispose of textures and stage
         if (backgroundFrames != null) {
             for (Texture frame : backgroundFrames) {
                 if (frame != null) {
@@ -376,38 +397,17 @@ public abstract class BaseLevel implements Screen {
                 }
             }
         }
-
-        launcher1.dispose();
-        launcher2.dispose();
-        if (backgroundTexture != null) {
-            backgroundTexture.dispose();
-        }
-        pauseButtonTexture.dispose();
-
-        stage.dispose();
-
+    
+        if (launcher1 != null) launcher1.dispose();
+        if (launcher2 != null) launcher2.dispose();
+        if (backgroundTexture != null) backgroundTexture.dispose();
+        if (pauseButtonTexture != null) pauseButtonTexture.dispose();
         if (levelSelectTexture != null) levelSelectTexture.dispose();
         if (restartTexture != null) restartTexture.dispose();
-
-        for (Image bird : birds) {
-            if (bird instanceof Bird) {
-                ((Bird) bird).dispose();
-            }
+        
+        if (stage != null) {
+            stage.dispose();
         }
-
-        for (Image block : blocks) {
-            if (block instanceof Block) {
-                ((Block) block).dispose();
-            }
-        }
-
-        for (Image pig : pigs) {
-            if (pig instanceof Pig) {
-                ((Pig) pig).dispose();
-            }
-        }
-
-
     }
 
     @Override
@@ -416,11 +416,14 @@ public abstract class BaseLevel implements Screen {
     }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 }
