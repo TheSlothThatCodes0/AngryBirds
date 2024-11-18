@@ -75,6 +75,7 @@ public abstract class BaseLevel implements Screen {
     protected Box2DDebugRenderer debugRenderer;
     protected static final float PPM = 5;
     protected Matrix4 debugMatrix; // Add this as class field
+    protected Launcher launcher;
 
     public BaseLevel(Main game) {
         this.game = game;
@@ -225,18 +226,10 @@ public abstract class BaseLevel implements Screen {
     }
 
     private void setupLauncher() {
-        float sf = 0.5f;
-
-        launch1 = new Image(launcher1);
-        launch1.setSize(launch1.getWidth() * sf, launch1.getHeight() * sf);
-        launch1.setPosition(255, 35);
-
-        launch2 = new Image(launcher2);
-        launch2.setSize(launch2.getWidth() * sf, launch2.getHeight() * sf);
-        launch2.setPosition(300, 105);
-
-        stage.addActor(launch1);
-        stage.addActor(launch2);
+        launcher = new Launcher(world, stage,
+                new Vector2(300, 105), // Launch point coordinates
+                launcher1, launcher2 // Pass existing launcher textures
+        );
     }
 
     private void setupPauseButton() {
@@ -336,11 +329,11 @@ public abstract class BaseLevel implements Screen {
             game.batch.draw(backgroundFrames[currentFrame], 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
             game.batch.end();
         }
-        
+
         // Draw the stage (game objects)
         stage.act(delta);
         stage.draw();
-        
+
         // Debug rendering - only do this once with correct scaling
         debugMatrix = camera.combined.cpy();
         debugMatrix.scl(PPM);
@@ -353,7 +346,7 @@ public abstract class BaseLevel implements Screen {
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
     }
 
-        @Override
+    @Override
     public void dispose() {
         // First dispose of all physics bodies
         if (world != null) {
@@ -365,30 +358,30 @@ public abstract class BaseLevel implements Screen {
             }
             world.dispose();
         }
-        
+
         if (debugRenderer != null) {
             debugRenderer.dispose();
         }
-    
+
         // Then dispose of game objects
         for (Image block : blocks) {
             if (block instanceof Block) {
                 ((Block) block).dispose();
             }
         }
-        
+
         for (Image bird : birds) {
             if (bird instanceof Bird) {
                 ((Bird) bird).dispose();
             }
         }
-        
+
         for (Image pig : pigs) {
             if (pig instanceof Pig) {
                 ((Pig) pig).dispose();
             }
         }
-    
+
         // Finally dispose of textures and stage
         if (backgroundFrames != null) {
             for (Texture frame : backgroundFrames) {
@@ -397,14 +390,20 @@ public abstract class BaseLevel implements Screen {
                 }
             }
         }
-    
-        if (launcher1 != null) launcher1.dispose();
-        if (launcher2 != null) launcher2.dispose();
-        if (backgroundTexture != null) backgroundTexture.dispose();
-        if (pauseButtonTexture != null) pauseButtonTexture.dispose();
-        if (levelSelectTexture != null) levelSelectTexture.dispose();
-        if (restartTexture != null) restartTexture.dispose();
-        
+
+        if (launcher1 != null)
+            launcher1.dispose();
+        if (launcher2 != null)
+            launcher2.dispose();
+        if (backgroundTexture != null)
+            backgroundTexture.dispose();
+        if (pauseButtonTexture != null)
+            pauseButtonTexture.dispose();
+        if (levelSelectTexture != null)
+            levelSelectTexture.dispose();
+        if (restartTexture != null)
+            restartTexture.dispose();
+
         if (stage != null) {
             stage.dispose();
         }

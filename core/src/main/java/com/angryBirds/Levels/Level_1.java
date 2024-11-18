@@ -2,6 +2,7 @@ package com.angryBirds.Levels;
 
 import com.angryBirds.Birds.BlueBird;
 import com.angryBirds.Birds.RedBird;
+import com.angryBirds.Birds.YellowBird;
 import com.angryBirds.Blocks.Block;
 import com.angryBirds.Blocks.Cube;
 import com.angryBirds.Blocks.Ground;
@@ -60,11 +61,16 @@ public class Level_1 extends BaseLevel {
     protected void initializeGameObjects() {
         float ground_height = 35f;
 
+        addBird(new RedBird(game, 100, ground_height, world));
+        addBird(new BlueBird(game, 150, ground_height, world));
+        addBird(new YellowBird(game, 200, ground_height, world));
+
+
         // Block sizes
         float cube_size = 140f;    // Cube is 140x140
         float plank_height = 50f;  // Plank is 300x50
         float triangle_size = 120f; // Triangle is 120x120
-
+        
         // Create ground
         addBlock(new Ground(game, "stone", 0, 0, world));
 
@@ -117,14 +123,5 @@ public void render(float delta) {
     // Your existing rendering code
     game.batch.end();
 
-    // Debug physics body positions if needed
-    for (Image block : blocks) {
-        if (block instanceof Block) {
-            Block b = (Block) block;
-            if (b.getY() < 0) {
-                System.out.println("Block below ground: " + b.getY());
-            }
-        }
-    }
 }
 }
