@@ -19,6 +19,9 @@ public abstract class Bird extends Image {
     public boolean isLaunched = false;
     public boolean isDragging = false;
 
+    private static final float DISAPPEAR_TIME = 5.0f; // 7 seconds
+    private float timeSinceLaunch = 0f;
+
     protected static final short CATEGORY_GROUND = 0x0001;
     protected static final short CATEGORY_BLOCKS = 0x0002;
     protected static final short CATEGORY_BIRDS = 0x0004;
@@ -90,11 +93,23 @@ public abstract class Bird extends Image {
         body.setFixedRotation(false);
         body.setLinearVelocity(velocityX, velocityY);
         body.setGravityScale(1); // Enable gravity after launch
+        timeSinceLaunch = 0f; // Reset timer on launch
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+        
+        // Update disappear timer if launched
+        if (isLaunched) {
+            timeSinceLaunch += delta;
+            if (timeSinceLaunch >= DISAPPEAR_TIME) {
+                dispose();
+                remove(); // Remove from stage
+                return;
+            }
+        }
+
         if (body != null) {
             if (!body.isActive()) {
                 // Keep bird fixed at current visual position when physics are disabled

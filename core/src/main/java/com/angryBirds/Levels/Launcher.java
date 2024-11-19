@@ -154,6 +154,7 @@ public class Launcher {
         float velocityX = force * MathUtils.cosDeg(angle) / PPM;
         float velocityY = force * MathUtils.sinDeg(angle) / PPM;
         
+        CollisionHandler.enableDamage();
         selectedBird.launch(velocityX, velocityY);
         
         Gdx.app.log("Launcher", String.format("Bird launched with velocity (%.2f, %.2f)", 

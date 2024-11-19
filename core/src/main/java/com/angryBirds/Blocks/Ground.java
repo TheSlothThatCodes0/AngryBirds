@@ -8,13 +8,13 @@ import static com.angryBirds.Main.PPM;
 
 public class Ground extends Block {
     public Ground(Main game, String material, float x, float y, World world) {
-        super(game, 1920, 60, world);
+        super(game, 4000, 60, world);
         setPosition(x, y);
-        
+
         float density = 1f;
         float friction = 0.4f;
         float restitution = 0.1f;
-        
+
         createPhysicsBody(x, y, density, friction, restitution, "ground");
         // Remove loadTexture call
         setVisible(false); // Make the actor invisible

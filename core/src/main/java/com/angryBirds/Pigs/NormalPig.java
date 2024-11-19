@@ -1,13 +1,27 @@
 package com.angryBirds.Pigs;
 
 import com.angryBirds.Main;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class NormalPig extends Pig {
 
-    public NormalPig(Main game, String type,float x,float y) {
-        super(game, getWidth(type), getHeight(type));
+    private static final float BIG_PIG_HEALTH = 200f;
+    private static final float SMALL_PIG_HEALTH = 100f;
+
+    public NormalPig(Main game, String type, float x, float y, World world) {
+        super(game, getWidth(type), getHeight(type), world, x, y);
+
+        if (type.equalsIgnoreCase("big")) {
+            this.health = BIG_PIG_HEALTH;
+            this.maxHealth = BIG_PIG_HEALTH;
+        } else if (type.equalsIgnoreCase("small")) {
+            this.health = SMALL_PIG_HEALTH;
+            this.maxHealth = SMALL_PIG_HEALTH;
+        } else {
+            throw new IllegalArgumentException("Invalid pig type: " + type);
+        }
+
         loadTexture(getTexture(type));
-        setPosition(x,y);
     }
 
     private static float getWidth(String type) {

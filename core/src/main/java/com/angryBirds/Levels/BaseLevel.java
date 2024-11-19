@@ -94,38 +94,11 @@ public abstract class BaseLevel implements Screen {
         setupLauncher();
         setupPauseButton();
 
-        world = new World(new Vector2(0, -10f), true);
+        world = new World(new Vector2(0, -20f), true);
+        world.setContactListener(new CollisionHandler());
         // createGround(ground_height);
         debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
         debugMatrix = new Matrix4(camera.combined.cpy().scl(PPM));
-
-        world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                // Log contacts for debugging
-                Body bodyA = contact.getFixtureA().getBody();
-                Body bodyB = contact.getFixtureB().getBody();
-
-                short catA = contact.getFixtureA().getFilterData().categoryBits;
-                short catB = contact.getFixtureB().getFilterData().categoryBits;
-
-                Gdx.app.log("Contact", String.format(
-                        "Collision between %s (category: %d) and %s (category: %d)",
-                        bodyA.getUserData(), catA, bodyB.getUserData(), catB));
-            }
-
-            @Override
-            public void endContact(Contact contact) {
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-            }
-        });
 
         loadNavigationButtonTextures();
         setupNavigationButtons();
