@@ -25,6 +25,7 @@ public class MainMenu implements Screen {
     private Texture exitButtonTexture;
     private Texture playButtonTexture;
     private Texture exitButtonTexture_Clicked;
+    private Texture playButtonTexture_clicked;
 
     private Rectangle settingsBounds;
     private Rectangle exitBounds;
@@ -56,8 +57,8 @@ public class MainMenu implements Screen {
         settingsButtonTexture = game.assets.get("settings.png", Texture.class);
         exitButtonTexture = game.assets.get("exitButton1.png", Texture.class);
         exitButtonTexture_Clicked = game.assets.get("exitButton1_pressed.png", Texture.class);
-
         playButtonTexture = game.assets.get("playButton1.png", Texture.class);
+        playButtonTexture_clicked = game.assets.get("playButton1_clicked.png", Texture.class);
 
 
 
@@ -69,7 +70,7 @@ public class MainMenu implements Screen {
             (WORLD_HEIGHT - PLAY_HEIGHT) / 10,
             PLAY_WIDTH, PLAY_HEIGHT);//////////////////////////////////////////////////////////////////////////////
 
-        playButton = new CustomButton(game,playBounds, playButtonTexture, playButtonTexture,playButtonTexture, () -> {
+        playButton = new CustomButton(game,playBounds, playButtonTexture, playButtonTexture_clicked,playButtonTexture, () -> {
             game.setScreen(new Levels_Screen(game));
         });
 
