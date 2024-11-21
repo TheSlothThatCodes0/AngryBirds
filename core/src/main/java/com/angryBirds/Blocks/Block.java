@@ -17,7 +17,7 @@ public abstract class Block extends Image {
     protected float blockWidth;
     protected float blockHeight;
 
-    protected Body body;
+    public Body body;
     protected World world;
 
     protected static final short CATEGORY_GROUND = 0x0001;
@@ -106,7 +106,7 @@ public abstract class Block extends Image {
         }
     }
 
-    protected abstract void loadTexture(String material);
+    public abstract void loadTexture(String material);
 
     protected void updateTexture() {
         setDrawable(new TextureRegionDrawable(blockTexture));

@@ -1,6 +1,7 @@
 package com.angryBirds.Screens;
 
 import com.angryBirds.Main;
+import com.angryBirds.Levels.BaseLevel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,7 +21,6 @@ public class PauseScreen implements Screen {
     private final Viewport viewport;
     private final Stage stage;
 
-
     private final Texture backgroundTexture;
     private final Texture resumeButtonTexture;
     private final Texture saveButtonTexture;
@@ -29,7 +29,7 @@ public class PauseScreen implements Screen {
     private static final float WORLD_WIDTH = 1920;
     private static final float WORLD_HEIGHT = 1080;
 
-    public PauseScreen(Main game, Screen previousScreen) { //constructor
+    public PauseScreen(Main game, Screen previousScreen) { // constructor
         this.game = game;
         this.previousScreen = previousScreen;
 
@@ -48,7 +48,7 @@ public class PauseScreen implements Screen {
         setupUI();
     }
 
-    private void setupUI() {  // loading and setting up all the assets
+    private void setupUI() { // loading and setting up all the assets
         Image background = new Image(backgroundTexture);
         background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
         stage.addActor(background);
@@ -60,9 +60,8 @@ public class PauseScreen implements Screen {
         Image resumeButton = new Image(resumeButtonTexture);
         resumeButton.setSize(resumeButton.getWidth() * buttonScale, resumeButton.getHeight() * buttonScale);
         resumeButton.setPosition(
-            (WORLD_WIDTH - (3 * resumeButton.getWidth() + 2 * buttonSpacing)) / 2,
-            buttonY
-        );
+                (WORLD_WIDTH - (3 * resumeButton.getWidth() + 2 * buttonSpacing)) / 2,
+                buttonY);
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -74,12 +73,17 @@ public class PauseScreen implements Screen {
         Image saveButton = new Image(saveButtonTexture);
         saveButton.setSize(saveButton.getWidth() * buttonScale, saveButton.getHeight() * buttonScale);
         saveButton.setPosition(
-            resumeButton.getX() + resumeButton.getWidth() + buttonSpacing,
-            buttonY
-        );
+                resumeButton.getX() + resumeButton.getWidth() + buttonSpacing,
+                buttonY);
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                // Get the current game state from BaseLevel
+                if (previousScreen instanceof BaseLevel) {
+                    BaseLevel level = (BaseLevel) previousScreen;
+                    level.saveGameState();
+                }
+                game.setScreen(new Levels_Screen(game));
             }
         });
 
@@ -87,9 +91,8 @@ public class PauseScreen implements Screen {
         Image exitButton = new Image(exitButtonTexture);
         exitButton.setSize(exitButton.getWidth() * buttonScale, exitButton.getHeight() * buttonScale);
         exitButton.setPosition(
-            saveButton.getX() + saveButton.getWidth() + buttonSpacing,
-            buttonY
-        );
+                saveButton.getX() + saveButton.getWidth() + buttonSpacing,
+                buttonY);
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -101,7 +104,6 @@ public class PauseScreen implements Screen {
         stage.addActor(saveButton);
         stage.addActor(exitButton);
     }
-
 
     @Override
     public void render(float delta) {
@@ -119,7 +121,7 @@ public class PauseScreen implements Screen {
     }
 
     @Override
-    public void dispose() { //disposing of the assets
+    public void dispose() { // disposing of the assets
         stage.dispose();
         backgroundTexture.dispose();
         resumeButtonTexture.dispose();
@@ -128,14 +130,18 @@ public class PauseScreen implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() {
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 }

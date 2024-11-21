@@ -36,7 +36,7 @@ public class Plank extends Block {
     }
 
     @Override
-    protected void loadTexture(String material) {
+    public void loadTexture(String material) {
         switch (material.toLowerCase()) {
             case "stone":
                 blockTexture = game.assets.get("s_p.png", Texture.class);

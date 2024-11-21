@@ -1,13 +1,20 @@
 package com.angryBirds.Levels;
 
 import com.angryBirds.Birds.Bird;
-import com.angryBirds.Blocks.Block;
+import com.angryBirds.Birds.BlueBird;
+import com.angryBirds.Birds.RedBird;
+import com.angryBirds.Birds.YellowBird;
+import com.angryBirds.Blocks.*;
 import com.angryBirds.Main;
+import com.angryBirds.Pigs.KingPig;
+import com.angryBirds.Pigs.NormalPig;
 import com.angryBirds.Pigs.Pig;
 import com.angryBirds.Screens.*;
+import com.angryBirds.Utils.SaveData;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -22,9 +29,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.lang.reflect.Constructor;
 
 public abstract class BaseLevel implements Screen {
 
@@ -36,6 +46,7 @@ public abstract class BaseLevel implements Screen {
     protected static final short MASK_GROUND = -1; // Collide with everything
     protected static final short MASK_BLOCKS = -1; // Collide with everything
     protected static final short MASK_BIRDS = -1; // Collide with everything
+    public boolean loadingFromSave = false;
     // protected static final short MASK_PIGS = -1; // Collide with everything
 
     protected Main game;
@@ -77,7 +88,8 @@ public abstract class BaseLevel implements Screen {
     protected Matrix4 debugMatrix; // Add this as class field
     protected Launcher launcher;
 
-    public BaseLevel(Main game) {
+    public BaseLevel(Main game, boolean loadFromSave) {
+        this.loadingFromSave = loadFromSave;
         this.game = game;
         int ground_height = 35;
         camera = new OrthographicCamera();
@@ -96,7 +108,6 @@ public abstract class BaseLevel implements Screen {
 
         world = new World(new Vector2(0, -20f), true);
         world.setContactListener(new CollisionHandler());
-        // createGround(ground_height);
         debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
         debugMatrix = new Matrix4(camera.combined.cpy().scl(PPM));
 
@@ -130,55 +141,6 @@ public abstract class BaseLevel implements Screen {
     private void loadPauseButtonTexture() {
         pauseButtonTexture = new Texture("pauseButton.png");
     }
-
-    // protected void createGround(float height) {
-    // // First, check if ground already exists and remove it
-    // Array<Body> bodies = new Array<>();
-    // world.getBodies(bodies);
-    // for(Body body : bodies) {
-    // if("ground".equals(body.getUserData())) {
-    // world.destroyBody(body);
-    // }
-    // }
-    //
-    // // Create ground body definition
-    // BodyDef groundBodyDef = new BodyDef();
-    // groundBodyDef.type = BodyDef.BodyType.StaticBody;
-    // // Position the ground at the specified height
-    // groundBodyDef.position.set(WORLD_WIDTH / (2 * PPM), height / PPM);
-    //
-    // // Create the ground body
-    // Body groundBody = world.createBody(groundBodyDef);
-    // groundBody.setUserData("ground");
-    //
-    // // Create ground shape
-    // PolygonShape groundBox = new PolygonShape();
-    // // Make the ground span the entire width and have substantial height
-    // float groundWidth = (WORLD_WIDTH / PPM);
-    // float groundThickness = (height / PPM);
-    // groundBox.setAsBox(groundWidth / 2, groundThickness);
-    //
-    // // Create ground fixture with modified properties
-    // FixtureDef groundFixtureDef = new FixtureDef();
-    // groundFixtureDef.shape = groundBox;
-    // groundFixtureDef.density = 0.0f;
-    // groundFixtureDef.friction = 0.4f;
-    // groundFixtureDef.restitution = 0.1f;
-    //
-    // // Make sure ground collides with everything
-    // groundFixtureDef.filter.categoryBits = CATEGORY_GROUND;
-    // groundFixtureDef.filter.maskBits = -1;
-    //
-    // // Add fixture to body
-    // groundBody.createFixture(groundFixtureDef);
-    //
-    // // Dispose of the shape
-    // groundBox.dispose();
-    //
-    // System.out.println("Ground recreated at y=" + (height/PPM) + " world units");
-    // System.out.println("Ground width=" + groundWidth + " world units");
-    // System.out.println("Ground thickness=" + groundThickness + " world units");
-    // }
 
     protected void debugPhysicsBodies() {
         StringBuilder debug = new StringBuilder("Physics World Bodies:\n");
@@ -279,6 +241,159 @@ public abstract class BaseLevel implements Screen {
 
         stage.addActor(levelSelectButton);
         stage.addActor(restartButton);
+    }
+
+    // _____________________________ game saving ___________________________
+
+    public static void clearSavedGame() {
+        try {
+            FileHandle file = Gdx.files.local("save.json");
+            if (file.exists()) {
+                file.delete();
+                System.out.println("Previous save file deleted");
+            }
+        } catch (Exception e) {
+            System.out.println("Error deleting save file: " + e.getMessage());
+        }
+    }
+
+    public void saveGameState() {
+        // Clear any existing saves first
+        clearSavedGame();
+
+        SaveData saveData = new SaveData();
+        saveData.levelName = this.getClass().getSimpleName();
+
+        // Save birds
+        for (Image image : birds) {
+            if (image instanceof Bird) {
+                Bird bird = (Bird) image;
+                Body body = bird.getBody();
+                if (body != null) {
+                    saveData.birds.add(new SaveData.GameObjectData(
+                        bird.getClass().getSimpleName(),
+                        body.getPosition().x * PPM,
+                        body.getPosition().y * PPM,
+                        body.getAngle()));
+                }
+            }
+        }
+
+        for (Image image : blocks) {
+            if (image instanceof Block) {
+                Block block = (Block) image;
+                Body body = block.body;
+                if (body != null) {
+                    saveData.blocks.add(new SaveData.GameObjectData(
+                            block.getClass().getSimpleName(),
+                            body.getPosition().x * PPM,
+                            body.getPosition().y * PPM,
+                            body.getAngle()));
+                }
+            }
+        }
+
+        // Save pigs
+        for (Image image : pigs) {
+            if (image instanceof Pig) {
+                Pig pig = (Pig) image;
+                Body body = pig.getBody();
+                if (body != null) {
+                    saveData.pigs.add(new SaveData.GameObjectData(
+                            pig.getClass().getSimpleName(),
+                            body.getPosition().x * PPM,
+                            body.getPosition().y * PPM,
+                            body.getAngle()));
+                }
+            }
+        }
+
+        try {
+            FileHandle file = Gdx.files.local("save.json");
+            String json = new Json().toJson(saveData);
+            file.writeString(json, false);
+        } catch (Exception e) {
+            System.out.println("Error saving game: " + e.getMessage());
+        }
+    }
+
+    public static SaveData loadSavedGameFile() {
+        try {
+            FileHandle file = Gdx.files.local("save.json");
+            if (file.exists()) {
+                String json = file.readString();
+                return new Json().fromJson(SaveData.class, json);
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading save: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void loadFromSaveData(SaveData saveData) {
+        this.loadingFromSave = true;
+        // Load the background
+        setBackground("frame_0_delay-0.1s.png");
+        // Load ground
+        addBlock(new Ground(game, "stone", 0, 0, world));
+        // Load birds
+        for (SaveData.GameObjectData birdData : saveData.birds) {
+            Bird bird = createBirdFromData(birdData);
+            if (bird != null) {
+                addBird(bird);
+            }
+        }
+        // Load blocks
+        for (SaveData.GameObjectData blockData : saveData.blocks) {
+            Block block = createBlockFromData(blockData);
+            if (block != null) {
+                addBlock(block);
+            }
+        }
+        // Load pigs
+        for (SaveData.GameObjectData pigData : saveData.pigs) {
+            Pig pig = createPigFromData(pigData);
+            if (pig != null) {
+                addPig(pig);
+            }
+        }
+    }
+
+    private Bird createBirdFromData(SaveData.GameObjectData data) {
+        switch (data.type) {
+            case "RedBird":
+                return new RedBird(game, data.x, data.y, world);
+            case "BlueBird":
+                return new BlueBird(game, data.x, data.y, world);
+            case "YellowBird":
+                return new YellowBird(game, data.x, data.y, world);
+            default:
+                return null;
+        }
+    }
+
+    private Block createBlockFromData(SaveData.GameObjectData data) {
+        switch (data.type) {
+            case "Cube":
+                return new Cube(game, "stone", data.x, data.y, world);
+            case "Plank":
+                return new Plank(game, "wood", data.x, data.y, world);
+            case "Triangle":
+                return new Triangle(game, "wood", data.x, data.y, world);
+            default:
+                return null;
+        }
+    }
+
+    private Pig createPigFromData(SaveData.GameObjectData data) {
+        switch (data.type) {
+            case "NormalPig":
+                return new NormalPig(game, "small", data.x, data.y, world);
+            case "KingPig":
+                return new KingPig(game, data.x, data.y, world);
+            default:
+                return null;
+        }
     }
 
     @Override

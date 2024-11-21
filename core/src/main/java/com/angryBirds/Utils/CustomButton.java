@@ -1,4 +1,4 @@
-package com.angryBirds.Screens;
+package com.angryBirds.Utils;
 import com.angryBirds.Main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

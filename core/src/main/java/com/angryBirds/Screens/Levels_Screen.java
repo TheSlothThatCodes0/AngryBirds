@@ -1,7 +1,9 @@
 package com.angryBirds.Screens;
 
+import com.angryBirds.Levels.BaseLevel;
 import com.angryBirds.Levels.Level_1;
 import com.angryBirds.Main;
+import com.angryBirds.Utils.SaveData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,6 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.lang.reflect.Constructor;
+
+import static com.angryBirds.Levels.BaseLevel.loadSavedGameFile;
 
 public class Levels_Screen implements Screen {
     private Main game;
@@ -39,20 +45,19 @@ public class Levels_Screen implements Screen {
     private Image portal_I2;
     private Image portal_I3;
 
-
-    public Levels_Screen(Main game) { //constructor
+    public Levels_Screen(Main game) { // constructor
         this.game = game;
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         stage = new Stage(viewport, game.batch);
 
-        camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
+        camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
         loadTextures();
         setupStage();
     }
 
-    private void loadTextures() { //loading texture files
+    private void loadTextures() { // loading texture files
         backgroundTexture = new Texture("level_background1.jpg");
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
@@ -60,7 +65,7 @@ public class Levels_Screen implements Screen {
         rbird = new Texture("red_bird.png");
     }
 
-    private void setupStage(){    //wrapping textures to images and setting up images
+    private void setupStage() { // wrapping textures to images and setting up images
         background = new Image(backgroundTexture);
         background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
 
@@ -77,12 +82,12 @@ public class Levels_Screen implements Screen {
         redBird.setScaling(Scaling.fit);
 
         portal_I1 = new Image(portal_T);
-        portal_I1.setPosition(1500,250);
+        portal_I1.setPosition(1500, 250);
         portal_I1.setScaling(Scaling.fit);
 
-        portal_I1.addListener(new ClickListener(){
+        portal_I1.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y){//event listner for button
+            public void clicked(InputEvent event, float x, float y) {// event listner for button
                 createLevel1();
             }
         });
@@ -98,14 +103,14 @@ public class Levels_Screen implements Screen {
         float rw = redBird.getWidth();
         float rh = redBird.getHeight();
         float sf = 0.4f;
-        redBird.setSize(rw*sf, rh*sf);
+        redBird.setSize(rw * sf, rh * sf);
 
         float pw = portal_I1.getWidth();
         float ph = portal_I1.getHeight();
         float sf_p = 0.4f;
-        portal_I1.setSize(pw*sf_p,ph*sf_p);
-        portal_I2.setSize(pw*sf_p, ph*sf_p);
-        portal_I3.setSize(pw*sf_p, ph*sf_p);
+        portal_I1.setSize(pw * sf_p, ph * sf_p);
+        portal_I2.setSize(pw * sf_p, ph * sf_p);
+        portal_I3.setSize(pw * sf_p, ph * sf_p);
 
         stage.addActor(background);
         stage.addActor(launch2);
@@ -114,8 +119,47 @@ public class Levels_Screen implements Screen {
         stage.addActor(portal_I1);
         stage.addActor(portal_I2);
         stage.addActor(portal_I3);
+
+        // Add saved game portal if save exists
+        SaveData savedGame = loadSavedGameFile();
+        if (savedGame != null) {
+            Image savedGamePortal = new Image(portal_T);
+            savedGamePortal.setPosition(900, 250);
+            savedGamePortal.setScaling(Scaling.fit);
+
+            savedGamePortal.setSize(pw * sf_p, ph * sf_p);
+
+            savedGamePortal.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    loadSavedGame();
+                }
+            });
+
+            stage.addActor(savedGamePortal);
+        }
+        else {
+            System.out.println("No saved game found");
+        }
+
     }
 
+        // In Levels_Screen.java
+    private void loadSavedGame() {
+        SaveData savedGame = BaseLevel.loadSavedGameFile();
+        if (savedGame != null) {
+            try {
+                // Create the level instance with loadingFromSave = true
+                Class<?> levelClass = Class.forName("com.angryBirds.Levels." + savedGame.levelName);
+                Constructor<?> constructor = levelClass.getConstructor(Main.class, boolean.class);
+                BaseLevel level = (BaseLevel) constructor.newInstance(game, true);
+                level.loadFromSaveData(savedGame);
+                game.setScreen(level);
+            } catch (Exception e) {
+                System.out.println("Error loading level: " + e.getMessage());
+            }
+        }
+    }
 
     @Override
     public void show() {
@@ -124,7 +168,7 @@ public class Levels_Screen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);  // for clearing up the previous stage
+        Gdx.gl.glClearColor(0, 0, 0, 1); // for clearing up the previous stage
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
@@ -132,9 +176,9 @@ public class Levels_Screen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {  // full screen
+    public void resize(int width, int height) { // full screen
         viewport.update(width, height, true);
-        camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
+        camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
     }
 
     @Override
@@ -150,11 +194,11 @@ public class Levels_Screen implements Screen {
     }
 
     private void createLevel1() {
-        game.setScreen(new Level_1(game));
-    }  // function for creating the new level
+        game.setScreen(new Level_1(game, false));
+    } // function for creating the new level
 
     @Override
-    public void dispose() {  // disposing  thr textures and stage
+    public void dispose() { // disposing thr textures and stage
         stage.dispose();
         backgroundTexture.dispose();
         ground_shape.dispose();
@@ -163,5 +207,3 @@ public class Levels_Screen implements Screen {
         portal_T.dispose();
     }
 }
-
-

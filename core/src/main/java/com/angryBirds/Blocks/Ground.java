@@ -21,7 +21,7 @@ public class Ground extends Block {
     }
 
     @Override
-    protected void loadTexture(String material) {
+    public void loadTexture(String material) {
         // Empty implementation - no texture needed
     }
 }

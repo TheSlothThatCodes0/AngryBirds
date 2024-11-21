@@ -10,7 +10,7 @@ public class YellowBird extends Bird {
     }
 
     @Override
-    protected void loadTexture() {
+    public void loadTexture() {
         birdTexture = game.assets.get("yellow_bird.png", Texture.class);
         updateTexture();
     }

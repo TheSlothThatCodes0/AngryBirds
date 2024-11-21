@@ -1,5 +1,6 @@
 package com.angryBirds;
 
+import com.angryBirds.Levels.BaseLevel;
 import com.angryBirds.Screens.SplashScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -17,7 +18,9 @@ public class Main extends Game {
         batch = new SpriteBatch();
         assets = new AssetManager();
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        BaseLevel.clearSavedGame();
         setScreen(new SplashScreen(this));
+
     }
 
     public SpriteBatch getBatch() {

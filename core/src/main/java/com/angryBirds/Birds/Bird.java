@@ -99,7 +99,7 @@ public abstract class Bird extends Image {
     @Override
     public void act(float delta) {
         super.act(delta);
-        
+
         // Update disappear timer if launched
         if (isLaunched) {
             timeSinceLaunch += delta;
@@ -131,7 +131,7 @@ public abstract class Bird extends Image {
         }
     }
 
-    protected abstract void loadTexture();
+    public abstract void loadTexture();
 
     protected void updateTexture() {
         setDrawable(new TextureRegionDrawable(birdTexture));
