@@ -2,6 +2,7 @@ package com.angryBirds.Birds;
 
 import com.angryBirds.Main;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class YellowBird extends Bird {
@@ -13,5 +14,14 @@ public class YellowBird extends Bird {
     public void loadTexture() {
         birdTexture = game.assets.get("yellow_bird.png", Texture.class);
         updateTexture();
+    }
+
+    @Override
+    public void triggerSpecialAbility() {
+        if (body != null && isLaunched && !specialAbilityUsed) {
+            // Double current velocity
+            Vector2 vel = body.getLinearVelocity();
+            body.setLinearVelocity(vel.x * SPEED_MULTIPLIER, vel.y * SPEED_MULTIPLIER);
+        }
     }
 }

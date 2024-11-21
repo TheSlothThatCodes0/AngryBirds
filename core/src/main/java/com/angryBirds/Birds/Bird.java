@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import static com.angryBirds.Main.PPM;
 
@@ -19,13 +21,19 @@ public abstract class Bird extends Image {
     public boolean isLaunched = false;
     public boolean isDragging = false;
 
-    private static final float DISAPPEAR_TIME = 5.0f; // 7 seconds
+    private static final float DISAPPEAR_TIME = 5.0f;
     private float timeSinceLaunch = 0f;
 
     protected static final short CATEGORY_GROUND = 0x0001;
     protected static final short CATEGORY_BLOCKS = 0x0002;
     protected static final short CATEGORY_BIRDS = 0x0004;
     protected static final short CATEGORY_PIGS = 0x0008;
+
+    protected boolean specialAbilityUsed = false;
+    protected float lastTapTime = 0;
+    protected static final float DOUBLE_TAP_TIME = 0.3f;
+    protected static final float DAMAGE_MULTIPLIER = 2.0f;
+    protected static final float SPEED_MULTIPLIER = 2.0f;
 
     public Bird(Main game, float x, float y, World world) {
         super();
@@ -100,6 +108,17 @@ public abstract class Bird extends Image {
     public void act(float delta) {
         super.act(delta);
 
+        if (isLaunched && !specialAbilityUsed) {
+            if (Gdx.input.justTouched()) {
+                float currentTime = TimeUtils.nanoTime() / 1000000000.0f;
+                if (currentTime - lastTapTime <= DOUBLE_TAP_TIME) {
+                    triggerSpecialAbility();
+                    specialAbilityUsed = true;
+                }
+                lastTapTime = currentTime;
+            }
+        }
+
         // Update disappear timer if launched
         if (isLaunched) {
             timeSinceLaunch += delta;
@@ -133,6 +152,8 @@ public abstract class Bird extends Image {
 
     public abstract void loadTexture();
 
+    public abstract void triggerSpecialAbility();
+
     protected void updateTexture() {
         setDrawable(new TextureRegionDrawable(birdTexture));
     }
@@ -141,9 +162,6 @@ public abstract class Bird extends Image {
         if (body != null) {
             world.destroyBody(body);
             body = null;
-        }
-        if (birdTexture != null) {
-            birdTexture.dispose();
         }
     }
 
