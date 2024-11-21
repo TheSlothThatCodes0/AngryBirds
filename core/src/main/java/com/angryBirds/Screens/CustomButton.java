@@ -1,13 +1,10 @@
-package com.angryBirds;
+package com.angryBirds.Screens;
 import com.angryBirds.Main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 
 
@@ -53,10 +50,10 @@ public class CustomButton extends Image {
             x.batch.draw(defaultTexture,bounds.x - ((bounds.width*HOVER_SCALE - bounds.width)/2) , bounds.y - ((bounds.height*HOVER_SCALE - bounds.height)/2),bounds.width*HOVER_SCALE,bounds.height*HOVER_SCALE);
         }
         else{
-            x.batch.draw(hoverTexture,bounds.x,bounds.y,bounds.width,bounds.height);   
+            x.batch.draw(hoverTexture,bounds.x,bounds.y,bounds.width,bounds.height);
         }
 
-        
+
     }
 
     public void workClick(Main x, Vector3 vec) {

@@ -1,6 +1,5 @@
 package com.angryBirds.Screens;
 
-import com.angryBirds.CustomButton;
 import com.angryBirds.Main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.Timer;
 
 public class MainMenu implements Screen {
     private Main game;
