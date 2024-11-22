@@ -21,6 +21,7 @@ public class MainMenu implements Screen {
 
     private Texture backgroundTexture;
     private Texture settingsButtonTexture;
+    private Texture settingsButtonClickedTexture;
     private Texture exitButtonTexture;
     private Texture playButtonTexture;
     private Texture exitButtonTexture_Clicked;
@@ -30,7 +31,7 @@ public class MainMenu implements Screen {
     private Rectangle exitBounds;
     private Rectangle playBounds;
 
-    private final float SETTINGS_SIZE = 100;
+    private final float SETTINGS_SIZE = 70;
     private final float EXIT_SIZE = 100;
     private final float PLAY_WIDTH = 500;
     private final float PLAY_HEIGHT = 200;
@@ -53,7 +54,8 @@ public class MainMenu implements Screen {
         camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
 
         backgroundTexture = game.assets.get("MainMenuBG1.jpg", Texture.class);
-        settingsButtonTexture = game.assets.get("settings.png", Texture.class);
+        settingsButtonTexture = game.assets.get("Settings_1.png", Texture.class);
+        settingsButtonClickedTexture = game.assets.get("Settings_1_clicked.png", Texture.class);
         exitButtonTexture = game.assets.get("exitButton1.png", Texture.class);
         exitButtonTexture_Clicked = game.assets.get("exitButton1_pressed.png", Texture.class);
         playButtonTexture = game.assets.get("playButton1.png", Texture.class);
@@ -77,7 +79,7 @@ public class MainMenu implements Screen {
             Gdx.app.exit();
         });
 
-        settingsButton = new CustomButton(game,settingsBounds, settingsButtonTexture, settingsButtonTexture,settingsButtonTexture, () -> {
+        settingsButton = new CustomButton(game,settingsBounds, settingsButtonTexture, settingsButtonClickedTexture,settingsButtonTexture, () -> {
             game.setScreen(new SettingsScreen(game));
         });
 
@@ -146,9 +148,9 @@ public class MainMenu implements Screen {
 //                }, 0.3f);
 //            }
 
-        if (settingsBounds.contains(touchPos.x, touchPos.y)) {
-                game.setScreen(new SettingsScreen(game));
-            }
+//        if (settingsBounds.contains(touchPos.x, touchPos.y)) {
+//                game.setScreen(new SettingsScreen(game));
+//            }
         }
     }
 
