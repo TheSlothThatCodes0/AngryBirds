@@ -14,8 +14,8 @@ import static com.angryBirds.Main.PPM;
 public abstract class Bird extends Image {
     protected Main game;
     protected Texture birdTexture;
-    protected float birdWidth = 100;
-    protected float birdHeight = 100;
+    protected float birdWidth = 60; //100
+    protected float birdHeight = 60; // 100
     protected Body body;
     protected World world;
     public boolean isLaunched = false;

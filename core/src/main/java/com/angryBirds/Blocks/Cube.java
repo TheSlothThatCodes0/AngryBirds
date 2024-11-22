@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Cube extends Block {
     public Cube(Main game, String material, float x, float y, World world) {
-        super(game, 140, 140, world);
+        super(game, 80, 80, world); // was 140
         loadTexture(material);
         setPosition(x, y);
 

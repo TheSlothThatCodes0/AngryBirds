@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Plank extends Block {
 
     public Plank(Main game, String material,float x, float y, World world) {
-        super(game, 300, 50,world);
+        super(game, 200, 25,world); // 300 and 50
         loadTexture(material);
         setPosition(x, y);
         float density = 1.0f;

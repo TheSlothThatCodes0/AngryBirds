@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Triangle extends Block {
 
     public Triangle(Main game, String material,float x,float y, World world) {
-        super(game, 120, 120, world);
+        super(game, 80, 80, world); // 120 120
         loadTexture(material);
         setPosition(x,y);
         float density = 1.0f;

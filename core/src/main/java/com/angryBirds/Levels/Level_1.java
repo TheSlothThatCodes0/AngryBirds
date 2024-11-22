@@ -3,11 +3,7 @@ package com.angryBirds.Levels;
 import com.angryBirds.Birds.BlueBird;
 import com.angryBirds.Birds.RedBird;
 import com.angryBirds.Birds.YellowBird;
-import com.angryBirds.Blocks.Block;
-import com.angryBirds.Blocks.Cube;
-import com.angryBirds.Blocks.Ground;
-import com.angryBirds.Blocks.Plank;
-import com.angryBirds.Blocks.Triangle;
+import com.angryBirds.Blocks.*;
 import com.angryBirds.Levels.BaseLevel;
 import com.angryBirds.Main;
 import com.angryBirds.Pigs.KingPig;
@@ -36,47 +32,41 @@ public class Level_1 extends BaseLevel {
         addBird(new YellowBird(game, 200, ground_height, world));
 
         // Block sizes
-        float cube_size = 140f;
-        float plank_height = 50f;
-        float triangle_size = 120f;
+        float cube_size = 80f;
+        float plank_height = 25f;
+        float triangle_size = 80f;
+        float column_height = 200f;
+        float buffer_size = 10f;
 
         // Ground
         addBlock(new Ground(game, "stone", 0, 0, world));
 
         // Base layer
-        addBlock(new Cube(game, "stone", 1400 - xOffset, ground_height, world));
-        addBlock(new Cube(game, "stone", 1600 - xOffset, ground_height, world));
-        // Add small pig in middle of base
-        addPig(new NormalPig(game, "small", 1500 - xOffset, ground_height + 30, world));
+//        addBlock(new Cube(game, "stone", 1400 - xOffset, ground_height, world));
 
-        // Second layer
-        float second_layer = ground_height + cube_size;
-        addBlock(new Cube(game, "stone", 1400 - xOffset, second_layer, world));
-        addBlock(new Cube(game, "stone", 1600 - xOffset, second_layer, world));
+        addBlock(new Column(game, "stone", 1400 - xOffset, ground_height, world));
+        addBlock(new Cube(game, "stone", 1430 - xOffset, ground_height, world));
+        addBlock(new Column(game, "stone", 1515 - xOffset, ground_height, world));
+        addBlock(new Plank(game, "wood", 1370 - xOffset, ground_height + column_height + buffer_size, world));
+        addBlock(new Column(game, "wood", 1377 - xOffset, ground_height + column_height + plank_height + buffer_size, world));
+        addBlock(new Column(game, "wood", 1540 - xOffset, ground_height + column_height + plank_height + buffer_size, world));
+        addBlock(new Plank(game, "wood", 1370 - xOffset, ground_height + 2*column_height + plank_height +buffer_size, world));
+        addBlock(new Triangle(game, "wood", 1370 - xOffset, ground_height + 2*column_height + 2*plank_height + buffer_size, world));
+        addBlock(new Triangle(game, "wood", 1490 - xOffset, ground_height + 2*column_height + 2*plank_height + buffer_size, world));
 
-        // First plank
-        float first_plank = second_layer + cube_size;
-        addBlock(new Plank(game, "wood", 1400 - xOffset, first_plank, world));
+        for(int i = 0; i < 5; i++){
+            addBlock(new Cube(game, "ice", 1600 - xOffset, ground_height + (i)*cube_size, world));
+            addBlock(new Cube(game, "ice", 1260 - xOffset, ground_height + (i)*cube_size, world));
+        }
+        addBlock(new Triangle(game, "wood", 1260 - xOffset, ground_height + 5*cube_size + buffer_size, world));
+        addBlock(new Triangle(game, "wood", 1600 - xOffset, ground_height + 5*cube_size + buffer_size, world));
 
-        // Third layer
-        float third_layer = first_plank + plank_height;
-        addBlock(new Cube(game, "stone", 1400 - xOffset, third_layer, world));
-        addBlock(new Cube(game, "stone", 1600 - xOffset, third_layer, world));
-        // Add small pig on top of plank
-        addPig(new NormalPig(game, "small", 1500 - xOffset, third_layer + 30, world));
-
-        // Second plank
-        float second_plank = third_layer + cube_size;
-        addBlock(new Plank(game, "wood", 1400 - xOffset, second_plank, world));
-
-        // Top center cube and king pig
-        float top_cube = second_plank + plank_height;
-        addBlock(new Cube(game, "stone", 1500 - xOffset, top_cube, world));
-        addPig(new KingPig(game, 1500 - xOffset, top_cube + cube_size + 30, world));
-
-        // Triangle decorations
-        addBlock(new Triangle(game, "wood", 1395 - xOffset, top_cube, world));
-        addBlock(new Triangle(game, "wood", 1595 - xOffset, top_cube, world));
+        //Adding pig
+        addPig(new NormalPig(game, "big", 1430 - xOffset, ground_height + cube_size + buffer_size, world));
+        addPig(new NormalPig(game, "small", 1450 - xOffset, ground_height + 2*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", 1410 - xOffset, ground_height + plank_height + column_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", 1450 - xOffset, ground_height + plank_height + column_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", 1490 - xOffset, ground_height + plank_height + column_height + buffer_size, world));
 
         System.out.println("Level 1 initialized with blocks and pigs");
     }

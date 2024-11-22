@@ -26,9 +26,9 @@ public class NormalPig extends Pig {
 
     private static float getWidth(String type) {
         if (type.equalsIgnoreCase("big")) {
-            return 100;
+            return 80;  //100
         } else if (type.equalsIgnoreCase("small")) {
-            return 60;
+            return 40;   //60
         } else {
             throw new IllegalArgumentException("Invalid pig type: " + type);
         }
@@ -36,9 +36,9 @@ public class NormalPig extends Pig {
 
     private static float getHeight(String type) {
         if (type.equalsIgnoreCase("big")) {
-            return 100;
+            return 80;  //100
         } else if (type.equalsIgnoreCase("small")) {
-            return 60;
+            return 40;   //60
         } else {
             throw new IllegalArgumentException("Invalid pig type: " + type);
         }
