@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import static java.lang.Float.max;
+import static java.lang.Float.min;
+
 public class Launcher {
     private static final float MAX_DRAG_DISTANCE = 50f;
     private static final float FORCE_MULTIPLIER = 50f;
@@ -53,6 +56,8 @@ public class Launcher {
         setupInputListener();
     }
 
+    float temp_x,temp_y;
+
     private void setupInputListener() {
         stage.addListener(new InputListener() {
             @Override
@@ -75,6 +80,9 @@ public class Launcher {
                         selectedBird.setPosition(
                                 initialX - selectedBird.getWidth() / 2,
                                 initialY - selectedBird.getHeight() / 2);
+
+                        temp_x = initialX - selectedBird.getWidth() / 2;
+                        temp_y = initialY - selectedBird.getHeight() / 2;
 
                         // Disable physics completely
                         selectedBird.getBody().setActive(false);
@@ -102,8 +110,25 @@ public class Launcher {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 if (isDragging && selectedBird != null) {
-                    dragCurrent = new Vector2(x, y);
-                    updateBirdPosition();
+                    if((((x-temp_x)*(x-temp_x) + (y-temp_y)*(y-temp_y))<160000) && y>80){
+                        dragCurrent = new Vector2(x, y);
+                        updateBirdPosition();
+                    }
+                    else {
+                        // Calculate the closest point on the boundary
+                        float angle = MathUtils.atan2(y - temp_y, x - temp_x);
+                        float boundaryX = temp_x + 400 * MathUtils.cos(angle);
+                        float boundaryY = temp_y + 400 * MathUtils.sin(angle);
+
+                        // Ensure the bird stays above the minimum y boundary
+                        if (boundaryY < 80) {
+                            boundaryY = 80;
+                        }
+
+                        dragCurrent = new Vector2(boundaryX, boundaryY);
+                        updateBirdPosition();
+
+                    }
                 }
             }
 
@@ -141,23 +166,23 @@ public class Launcher {
 
         private void launchBird() {
         if (selectedBird == null) return;
-    
+
         // Calculate launch vector from current position to launch point
         Vector2 launchVector = new Vector2(
             launcherBase.getX() + launcherBase.getWidth()/2 + BIRD_OFFSET_X,
             launcherBase.getY() + BIRD_OFFSET_Y
         ).sub(dragCurrent);
-        
+
         float force = Math.min(launchVector.len(), MAX_DRAG_DISTANCE) * FORCE_MULTIPLIER;
         float angle = launchVector.angle();
-        
+
         float velocityX = force * MathUtils.cosDeg(angle) / PPM;
         float velocityY = force * MathUtils.sinDeg(angle) / PPM;
-        
+
         CollisionHandler.enableDamage();
         selectedBird.launch(velocityX, velocityY);
-        
-        Gdx.app.log("Launcher", String.format("Bird launched with velocity (%.2f, %.2f)", 
+
+        Gdx.app.log("Launcher", String.format("Bird launched with velocity (%.2f, %.2f)",
                    velocityX, velocityY));
     }
 }
