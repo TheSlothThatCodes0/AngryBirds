@@ -2,6 +2,7 @@ package com.angryBirds.Levels;
 
 import com.angryBirds.Birds.Bird;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -34,6 +35,8 @@ public class Launcher {
     private Vector2 dragCurrent;
     private boolean isDragging;
 
+    private Sound catap;
+
     public Launcher(World world, Stage stage, Vector2 launchPoint, Texture launcher1, Texture launcher2) {
         this.world = world;
         this.stage = stage;
@@ -54,6 +57,7 @@ public class Launcher {
         stage.addActor(launcherTop);
 
         setupInputListener();
+        catap = Gdx.audio.newSound(Gdx.files.internal("audio/launch_sound.mp3"));
     }
 
     float temp_x,temp_y;
@@ -180,6 +184,7 @@ public class Launcher {
         float velocityY = force * MathUtils.sinDeg(angle) / PPM;
 
         CollisionHandler.enableDamage();
+        catap.play(20.0f);
         selectedBird.launch(velocityX, velocityY);
 
         Gdx.app.log("Launcher", String.format("Bird launched with velocity (%.2f, %.2f)",

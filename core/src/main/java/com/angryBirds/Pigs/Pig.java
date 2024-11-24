@@ -111,7 +111,7 @@ public abstract class Pig extends Image {
         // Handle queued destruction
         if (markedForDestruction && body != null) {
 
-            deathSound.play(20.0f);
+            deathSound.play(1.0f);
             dispose();
             return;
         }

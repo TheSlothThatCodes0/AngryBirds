@@ -123,6 +123,19 @@ public abstract class BaseLevel implements Screen {
 
     }
 
+    protected void checkWinCondition() {
+    boolean allPigsDead = true;
+    for (Image x : pigs) {
+        if (((Pig)x).health > 0) {
+            allPigsDead = false;
+            break;
+        }
+    }
+    if (allPigsDead) {
+        game.setScreen(new WinScreen(game));
+    }
+}
+
     private void loadBackgroundTextures() {
         backgroundFrames = new Texture[8];
         try {
@@ -407,6 +420,7 @@ public abstract class BaseLevel implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
 
+
         world.step(1 / 60f, 6, 2);
         debugRenderer.render(world, camera.combined.scl(PPM));
 
@@ -425,9 +439,12 @@ public abstract class BaseLevel implements Screen {
             game.batch.end();
         }
 
+
+
         // Draw the stage (game objects)
         stage.act(delta);
         stage.draw();
+        checkWinCondition();
 
         // Debug rendering - only do this once with correct scaling
         debugMatrix = camera.combined.cpy();
