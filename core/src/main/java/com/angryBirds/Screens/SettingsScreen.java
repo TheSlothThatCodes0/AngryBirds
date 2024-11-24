@@ -1,6 +1,7 @@
 package com.angryBirds.Screens;
 
 import com.angryBirds.Main;
+import com.angryBirds.Utils.musicControl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -42,8 +43,12 @@ public class SettingsScreen implements Screen {
     private final float CREDITS_BUTTON_WIDTH = 300;
     private final float CREDITS_BUTTON_HEIGHT = 100;
 
+    private musicControl mc;
+
     public SettingsScreen(Main game) { //  constructor
         this.game = game;
+
+        this.mc = musicControl.getInstance();
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
@@ -147,6 +152,11 @@ public class SettingsScreen implements Screen {
 
             volume = (sliderKnob.x - sliderBar.x) / (sliderBar.width - sliderKnob.width);
             volume = Math.max(0, Math.min(1, volume));
+
+            volume = (sliderKnob.x - sliderBar.x) / (sliderBar.width - sliderKnob.width);
+            volume = Math.max(0, Math.min(1, volume));
+            mc.setVolume(volume);
+            Gdx.app.getPreferences("GamePrefs").putFloat("masterVolume", volume).flush();
 
             Gdx.app.getPreferences("GamePrefs").putFloat("masterVolume", volume).flush();
         }

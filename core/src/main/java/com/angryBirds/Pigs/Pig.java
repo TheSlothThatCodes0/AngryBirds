@@ -1,6 +1,8 @@
 package com.angryBirds.Pigs;
 
 import com.angryBirds.Main;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -19,6 +21,7 @@ public abstract class Pig extends Image {
     protected float maxHealth;
     protected com.badlogic.gdx.graphics.g2d.BitmapFont healthFont;
     protected static final float DAMAGE_MULTIPLIER = 0.1f;
+    public boolean winc = false;
 
     // Physics categories
     protected static final short CATEGORY_GROUND = 0x0001;
@@ -28,6 +31,8 @@ public abstract class Pig extends Image {
 
     // Add field for marking destruction
     private boolean markedForDestruction = false;
+
+    private Sound deathSound;
 
     public Pig(Main game, float width, float height, World world, float x, float y) {
         super();
@@ -41,6 +46,16 @@ public abstract class Pig extends Image {
         healthFont = new com.badlogic.gdx.graphics.g2d.BitmapFont();
         healthFont.setColor(1, 0, 0, 1); // Red color
 
+        loadAudio();
+
+    }
+
+    private void loadAudio() {
+        try {
+            deathSound = Gdx.audio.newSound(Gdx.files.internal("audio/pig_1.mp3"));
+        } catch (Exception e) {
+            Gdx.app.error("WinScreen", "Error loading audio files", e);
+        }
     }
 
     public void takeDamage(float damage) {
@@ -53,6 +68,7 @@ public abstract class Pig extends Image {
             if (health <= 0) {
                 System.out.println("Pig marked for destruction!");
                 markedForDestruction = true; // Mark for destruction instead of immediate dispose
+                winc = true;
             }
         }
     }
@@ -91,9 +107,11 @@ public abstract class Pig extends Image {
     @Override
     public void act(float delta) {
         super.act(delta);
-        
+
         // Handle queued destruction
         if (markedForDestruction && body != null) {
+
+            deathSound.play(20.0f);
             dispose();
             return;
         }

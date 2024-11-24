@@ -33,7 +33,7 @@ public abstract class Bird extends Image {
     protected float lastTapTime = 0;
     protected static final float DOUBLE_TAP_TIME = 0.3f;
     protected static final float DAMAGE_MULTIPLIER = 2.0f;
-    protected static final float SPEED_MULTIPLIER = 2.0f;
+    protected static final float SPEED_MULTIPLIER = 10.0f;
 
     public Bird(Main game, float x, float y, World world) {
         super();
@@ -105,51 +105,50 @@ public abstract class Bird extends Image {
     }
 
     @Override
-    public void act(float delta) {
-        super.act(delta);
+public void act(float delta) {
+    super.act(delta);
 
-        if (isLaunched && !specialAbilityUsed) {
-            if (Gdx.input.justTouched()) {
-                float currentTime = TimeUtils.nanoTime() / 1000000000.0f;
-                if (currentTime - lastTapTime <= DOUBLE_TAP_TIME) {
-                    triggerSpecialAbility();
-                    specialAbilityUsed = true;
-                }
-                lastTapTime = currentTime;
+    if (isLaunched && !specialAbilityUsed) {
+        if (Gdx.input.justTouched()) {
+            float currentTime = TimeUtils.nanoTime() / 1000000000.0f;
+            if (currentTime - lastTapTime <= DOUBLE_TAP_TIME) {
+                triggerSpecialAbility();
+                specialAbilityUsed = true;
             }
-        }
-
-        // Update disappear timer if launched
-        if (isLaunched) {
-            timeSinceLaunch += delta;
-            if (timeSinceLaunch >= DISAPPEAR_TIME) {
-                dispose();
-                remove(); // Remove from stage
-                return;
-            }
-        }
-
-        if (body != null) {
-            if (!body.isActive()) {
-                // Keep bird fixed at current visual position when physics are disabled
-                Vector2 position = new Vector2(
-                    (getX() + getWidth()/2) / PPM,
-                    (getY() + getHeight()/2) / PPM
-                );
-                body.setTransform(position, 0);
-            } else if (!isDragging) {
-                // Update visual position from physics body
-                float centerX = body.getPosition().x * PPM;
-                float centerY = body.getPosition().y * PPM;
-                float x = centerX - (getWidth() / 2);
-                float y = centerY - (getHeight() / 2);
-                setPosition(x, y);
-                setRotation((float) Math.toDegrees(body.getAngle()));
-            }
-            setOrigin(getWidth() / 2, getHeight() / 2);
+            lastTapTime = currentTime;
         }
     }
 
+    // Update disappear timer if launched
+    if (isLaunched) {
+        timeSinceLaunch += delta;
+        if (timeSinceLaunch >= DISAPPEAR_TIME) {
+            dispose();
+            remove(); // Remove from stage
+            return;
+        }
+    }
+
+    if (body != null) {
+        if (!body.isActive()) {
+            // Keep bird fixed at current visual position when physics are disabled
+            Vector2 position = new Vector2(
+                (getX() + getWidth()/2) / PPM,
+                (getY() + getHeight()/2) / PPM
+            );
+            body.setTransform(position, 0);
+        } else if (!isDragging) {
+            // Update visual position from physics body
+            float centerX = body.getPosition().x * PPM;
+            float centerY = body.getPosition().y * PPM;
+            float x = centerX - (getWidth() / 2);
+            float y = centerY - (getHeight() / 2);
+            setPosition(x, y);
+            setRotation((float) Math.toDegrees(body.getAngle()));
+        }
+        setOrigin(getWidth() / 2, getHeight() / 2);
+    }
+}
     public abstract void loadTexture();
 
     public abstract void triggerSpecialAbility();

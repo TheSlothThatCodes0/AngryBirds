@@ -22,6 +22,8 @@ public class YellowBird extends Bird {
             // Double current velocity
             Vector2 vel = body.getLinearVelocity();
             body.setLinearVelocity(vel.x * SPEED_MULTIPLIER, vel.y * SPEED_MULTIPLIER);
+            specialAbilityUsed = true; // Ensure the ability is marked as used
+            System.out.println("YellowBird special ability triggered: " + vel + " -> " + body.getLinearVelocity());
         }
     }
 }

@@ -40,6 +40,8 @@ public class Level_1 extends BaseLevel {
 
         // Ground
         addBlock(new Ground(game, "stone", 0, 0, world));
+        addBlock(new Wall(game, WORLD_WIDTH, buffer_size, world));
+        addBlock(new Wall(game, -90, buffer_size, world));
 
         // Base layer
 //        addBlock(new Cube(game, "stone", 1400 - xOffset, ground_height, world));
@@ -75,6 +77,7 @@ public class Level_1 extends BaseLevel {
     public void render(float delta) {
         // Call parent render which handles debug rendering
         super.render(delta);
+
 
         // Add any Level_1 specific rendering here
         // Your existing rendering code without the debug renders

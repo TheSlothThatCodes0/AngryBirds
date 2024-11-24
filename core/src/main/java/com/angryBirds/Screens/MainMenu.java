@@ -2,8 +2,10 @@ package com.angryBirds.Screens;
 
 import com.angryBirds.Main;
 import com.angryBirds.Utils.CustomButton;
+import com.angryBirds.Utils.musicControl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainMenu implements Screen {
+//    private Music backGroundMusic;
     private Main game;
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -22,8 +25,8 @@ public class MainMenu implements Screen {
     private Texture backgroundTexture;
     private Texture settingsButtonTexture;
     private Texture settingsButtonClickedTexture;
-    private Texture exitButtonTexture;
     private Texture playButtonTexture;
+    private Texture exitButtonTexture;
     private Texture exitButtonTexture_Clicked;
     private Texture playButtonTexture_clicked;
 
@@ -45,6 +48,7 @@ public class MainMenu implements Screen {
     private CustomButton playButton;
     private CustomButton exitButton;
     private CustomButton settingsButton;
+
 
     public MainMenu(Main game) {
         this.game = game;
@@ -72,7 +76,7 @@ public class MainMenu implements Screen {
             PLAY_WIDTH, PLAY_HEIGHT);//////////////////////////////////////////////////////////////////////////////
 
         playButton = new CustomButton(game,playBounds, playButtonTexture, playButtonTexture_clicked,playButtonTexture, () -> {
-            game.setScreen(new Levels_Screen(game));
+            game.setScreen(new Levels_Screen(game,this));
         });
 
         exitButton = new CustomButton(game, exitBounds, exitButtonTexture, exitButtonTexture_Clicked, exitButtonTexture, () -> {
@@ -154,6 +158,7 @@ public class MainMenu implements Screen {
         }
     }
 
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
@@ -161,14 +166,17 @@ public class MainMenu implements Screen {
     }
 
     @Override
+    public void show() {
+    }
+
+    @Override
     public void dispose() {
     }
 
     @Override
-    public void show() {}
-
-    @Override
-    public void hide() {}
+    public void hide() {
+        
+    }
 
     @Override
     public void pause() {}

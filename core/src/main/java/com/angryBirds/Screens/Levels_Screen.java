@@ -3,12 +3,16 @@ package com.angryBirds.Screens;
 import com.angryBirds.Levels.BaseLevel;
 import com.angryBirds.Levels.Level_1;
 import com.angryBirds.Main;
+import com.angryBirds.Utils.CustomButton;
 import com.angryBirds.Utils.SaveData;
+import com.angryBirds.Utils.musicControl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -44,17 +48,37 @@ public class Levels_Screen implements Screen {
     private Image portal_I1;
     private Image portal_I2;
     private Image portal_I3;
+    private Texture exitButtonTexture;
+    private Texture exitButtonTexture_Clicked;
+    private Rectangle exitBounds;
+    private final float EXIT_SIZE = 100;
+    private boolean isExitHovered = false;
+    private CustomButton exitButton;
+    private Screen PrevScreen;
 
-    public Levels_Screen(Main game) { // constructor
+
+    public Levels_Screen(Main game, Screen prev) { // constructor
         this.game = game;
-
+        this.PrevScreen = prev;
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         stage = new Stage(viewport, game.batch);
 
+        exitButtonTexture = game.assets.get("exitButton1.png", Texture.class);
+        exitButtonTexture_Clicked = game.assets.get("exitButton1_pressed.png", Texture.class);
+        exitBounds = new Rectangle(10, WORLD_HEIGHT - EXIT_SIZE - 10, EXIT_SIZE, EXIT_SIZE);
+
+        exitButton = new CustomButton(game, exitBounds, exitButtonTexture, exitButtonTexture_Clicked, exitButtonTexture, () -> {
+            game.setScreen(prev);
+        });
+
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
         loadTextures();
         setupStage();
+        stage.addActor(exitButton); // Add exit button to the stage
+
+//
+//        mc.crossFade("audio/theme_1.mp3",0.3f);
     }
 
     private void loadTextures() { // loading texture files
@@ -87,7 +111,7 @@ public class Levels_Screen implements Screen {
 
         portal_I1.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {// event listner for button
+            public void clicked(InputEvent event, float x, float y) {// event listener for button
                 createLevel1();
             }
         });
@@ -137,14 +161,11 @@ public class Levels_Screen implements Screen {
             });
 
             stage.addActor(savedGamePortal);
-        }
-        else {
+        } else {
             System.out.println("No saved game found");
         }
-
     }
 
-        // In Levels_Screen.java
     private void loadSavedGame() {
         SaveData savedGame = BaseLevel.loadSavedGameFile();
         if (savedGame != null) {
@@ -170,6 +191,22 @@ public class Levels_Screen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1); // for clearing up the previous stage
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+        isExitHovered = exitBounds.contains(mousePos.x, mousePos.y);
+
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+        exitButton.workHover(game, isExitHovered, mousePos);
+        game.batch.end();
+
+        if (Gdx.input.justTouched()) {
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
+            exitButton.workClick(game, touchPos);
+        }
 
         stage.act(delta);
         stage.draw();
@@ -198,7 +235,7 @@ public class Levels_Screen implements Screen {
     } // function for creating the new level
 
     @Override
-    public void dispose() { // disposing thr textures and stage
+    public void dispose() { // disposing the textures and stage
         stage.dispose();
         backgroundTexture.dispose();
         ground_shape.dispose();

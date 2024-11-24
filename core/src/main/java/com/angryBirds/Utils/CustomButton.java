@@ -1,4 +1,5 @@
 package com.angryBirds.Utils;
+
 import com.angryBirds.Main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,7 +7,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Timer;
-
 
 public class CustomButton extends Image {
     private float HOVER_SCALE = 1.05f;
@@ -17,9 +17,8 @@ public class CustomButton extends Image {
     private Texture hoverTexture;
     private Rectangle bounds;
     private boolean isPressed = false;
-    // System.out.println("")
 
-    public CustomButton(Main game,Rectangle bounds, Texture defaultTexture, Texture pressedTexture,Texture hoverTexture,Runnable onClickAction) {
+    public CustomButton(Main game, Rectangle bounds, Texture defaultTexture, Texture pressedTexture, Texture hoverTexture, Runnable onClickAction) {
         super(defaultTexture);
         this.game = game;
         this.defaultTexture = defaultTexture;
@@ -28,32 +27,26 @@ public class CustomButton extends Image {
         this.bounds = bounds;
         this.hoverTexture = hoverTexture;
 
-        setPosition(bounds.x,bounds.y);
+        setPosition(bounds.x, bounds.y);
         setSize(bounds.width, bounds.height);
-
-
     }
 
-    public void Draw(Main x){
-        x.batch.draw(defaultTexture,bounds.x,bounds.y,bounds.width,bounds.height);
+    public void draw(Main x) {
+        x.batch.draw(defaultTexture, bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
-    public boolean isHover(Vector3 vec){
-        return bounds.contains(vec.x,vec.y);
+    public boolean isHover(Vector3 vec) {
+        return bounds.contains(vec.x, vec.y);
     }
 
-    public void workHover(Main x, boolean hover,Vector3 vec){
-        if(isPressed){
+    public void workHover(Main x, boolean hover, Vector3 vec) {
+        if (isPressed) {
             x.batch.draw(pressedTexture, bounds.x, bounds.y, bounds.width, bounds.height);
+        } else if (hover) {
+            x.batch.draw(hoverTexture, bounds.x - ((bounds.width * HOVER_SCALE - bounds.width) / 2), bounds.y - ((bounds.height * HOVER_SCALE - bounds.height) / 2), bounds.width * HOVER_SCALE, bounds.height * HOVER_SCALE);
+        } else {
+            x.batch.draw(defaultTexture, bounds.x, bounds.y, bounds.width, bounds.height);
         }
-        else if(hover){
-            x.batch.draw(defaultTexture,bounds.x - ((bounds.width*HOVER_SCALE - bounds.width)/2) , bounds.y - ((bounds.height*HOVER_SCALE - bounds.height)/2),bounds.width*HOVER_SCALE,bounds.height*HOVER_SCALE);
-        }
-        else{
-            x.batch.draw(hoverTexture,bounds.x,bounds.y,bounds.width,bounds.height);
-        }
-
-
     }
 
     public void workClick(Main x, Vector3 vec) {
@@ -65,12 +58,11 @@ public class CustomButton extends Image {
                     isPressed = false; // Reset the pressed state after delay
                     Gdx.app.postRunnable(onClickAction); // Perform the click action
                 }
-            }, 0.2f); // 0.5 seconds delay
+            }, 0.2f); // 0.2 seconds delay
         }
     }
 
-    public void setScale(float fract){
+    public void setScale(float fract) {
         this.HOVER_SCALE = fract;
     }
-
 }

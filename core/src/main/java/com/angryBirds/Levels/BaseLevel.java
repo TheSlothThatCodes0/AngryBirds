@@ -11,6 +11,7 @@ import com.angryBirds.Pigs.NormalPig;
 import com.angryBirds.Pigs.Pig;
 import com.angryBirds.Screens.*;
 import com.angryBirds.Utils.SaveData;
+import com.angryBirds.Utils.musicControl;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -88,6 +89,8 @@ public abstract class BaseLevel implements Screen {
     protected Matrix4 debugMatrix; // Add this as class field
     protected Launcher launcher;
 
+    private musicControl mc;
+
     public BaseLevel(Main game, boolean loadFromSave) {
         this.loadingFromSave = loadFromSave;
         this.game = game;
@@ -110,6 +113,10 @@ public abstract class BaseLevel implements Screen {
         world.setContactListener(new CollisionHandler());
         debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
         debugMatrix = new Matrix4(camera.combined.cpy().scl(PPM));
+
+        this.mc = musicControl.getInstance();
+//        mc.fadeOut();
+        mc.crossFade("audio/theme_3.mp3",2.0f);
 
         loadNavigationButtonTextures();
         setupNavigationButtons();

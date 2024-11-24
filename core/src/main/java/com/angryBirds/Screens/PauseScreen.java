@@ -2,6 +2,7 @@ package com.angryBirds.Screens;
 
 import com.angryBirds.Main;
 import com.angryBirds.Levels.BaseLevel;
+import com.angryBirds.Utils.musicControl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -29,9 +30,12 @@ public class PauseScreen implements Screen {
     private static final float WORLD_WIDTH = 1920;
     private static final float WORLD_HEIGHT = 1080;
 
+    private musicControl mc;
+
     public PauseScreen(Main game, Screen previousScreen) { // constructor
         this.game = game;
         this.previousScreen = previousScreen;
+        mc = musicControl.getInstance();
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
@@ -83,7 +87,8 @@ public class PauseScreen implements Screen {
                     BaseLevel level = (BaseLevel) previousScreen;
                     level.saveGameState();
                 }
-                game.setScreen(new Levels_Screen(game));
+                mc.crossFade("audio/theme_1.mp3",3.0f);
+                game.setScreen(new Levels_Screen(game,previousScreen));
             }
         });
 
@@ -96,6 +101,7 @@ public class PauseScreen implements Screen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                mc.crossFade("audio/theme_1.mp3",3.0f);
                 game.setScreen(new MainMenu(game));
             }
         });
