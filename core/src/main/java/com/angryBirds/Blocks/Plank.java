@@ -10,6 +10,7 @@ public class Plank extends Block {
         super(game, 200, 25,world); // 300 and 50
         loadTexture(material);
         setPosition(x, y);
+        setInitialHealth(material);
         float density = 1.0f;
         float friction = 0.3f;
         float restitution = 0.1f;

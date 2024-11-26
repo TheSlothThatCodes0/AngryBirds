@@ -38,16 +38,17 @@ public class Levels_Screen implements Screen {
     private Texture ground_shape;
     private Texture launcher1;
     private Texture launcher2;
-    private Texture rbird;
     private Texture portal_T;
+    private Texture save_portal_T;
+
 
     private Image background;
     private Image launch1;
     private Image launch2;
-    private Image redBird;
     private Image portal_I1;
     private Image portal_I2;
     private Image portal_I3;
+    private Image save_portal;
     private Texture exitButtonTexture;
     private Texture exitButtonTexture_Clicked;
     private Rectangle exitBounds;
@@ -56,6 +57,14 @@ public class Levels_Screen implements Screen {
     private CustomButton exitButton;
     private Screen PrevScreen;
 
+    private float animationTime = 0;
+    private float floatAmplitude = 10f; // pixels to move up/down
+    private float floatSpeed = 2f; // speed of floating motion
+    private float baseY1, baseY2, baseY3; // store initial Y positions
+
+    private float phase1 = 0f;
+    private float phase2 = (float)(Math.PI * 2/3); // 120 degrees offset
+    private float phase3 = (float)(Math.PI * 4/3); // 240 degrees offset
 
     public Levels_Screen(Main game, Screen prev) { // constructor
         this.game = game;
@@ -68,17 +77,18 @@ public class Levels_Screen implements Screen {
         exitButtonTexture_Clicked = game.assets.get("exitButton1_pressed.png", Texture.class);
         exitBounds = new Rectangle(10, WORLD_HEIGHT - EXIT_SIZE - 10, EXIT_SIZE, EXIT_SIZE);
 
-        exitButton = new CustomButton(game, exitBounds, exitButtonTexture, exitButtonTexture_Clicked, exitButtonTexture, () -> {
-            game.setScreen(prev);
-        });
+        exitButton = new CustomButton(game, exitBounds, exitButtonTexture, exitButtonTexture_Clicked, exitButtonTexture,
+                () -> {
+                    game.setScreen(prev);
+                });
 
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
         loadTextures();
         setupStage();
         stage.addActor(exitButton); // Add exit button to the stage
 
-//
-//        mc.crossFade("audio/theme_1.mp3",0.3f);
+        //
+        // mc.crossFade("audio/theme_1.mp3",0.3f);
     }
 
     private void loadTextures() { // loading texture files
@@ -86,7 +96,7 @@ public class Levels_Screen implements Screen {
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
         portal_T = new Texture("portal.png");
-        rbird = new Texture("red_bird.png");
+        save_portal_T = new Texture("save_portal.png");
     }
 
     private void setupStage() { // wrapping textures to images and setting up images
@@ -100,10 +110,6 @@ public class Levels_Screen implements Screen {
         launch2 = new Image(launcher2);
         launch2.setPosition(327, 340);
         launch2.setScaling(Scaling.fit);
-
-        redBird = new Image(rbird);
-        redBird.setPosition(320, 400);
-        redBird.setScaling(Scaling.fit);
 
         portal_I1 = new Image(portal_T);
         portal_I1.setPosition(1500, 250);
@@ -124,11 +130,6 @@ public class Levels_Screen implements Screen {
         portal_I3.setPosition(600, 300 + launch1.getHeight() + 125);
         portal_I3.setScaling(Scaling.fit);
 
-        float rw = redBird.getWidth();
-        float rh = redBird.getHeight();
-        float sf = 0.4f;
-        redBird.setSize(rw * sf, rh * sf);
-
         float pw = portal_I1.getWidth();
         float ph = portal_I1.getHeight();
         float sf_p = 0.4f;
@@ -136,9 +137,18 @@ public class Levels_Screen implements Screen {
         portal_I2.setSize(pw * sf_p, ph * sf_p);
         portal_I3.setSize(pw * sf_p, ph * sf_p);
 
+        // Set all portals to the same base height
+        float commonBaseY = 300 + launch1.getHeight() - 100; // using what was previously baseY2
+        baseY1 = commonBaseY;
+        baseY2 = commonBaseY;
+        baseY3 = commonBaseY;
+
+        portal_I1.setPosition(1600, commonBaseY);
+        portal_I2.setPosition(1200, commonBaseY);
+        portal_I3.setPosition(800, commonBaseY);
+
         stage.addActor(background);
         stage.addActor(launch2);
-        stage.addActor(redBird);
         stage.addActor(launch1);
         stage.addActor(portal_I1);
         stage.addActor(portal_I2);
@@ -147,7 +157,7 @@ public class Levels_Screen implements Screen {
         // Add saved game portal if save exists
         SaveData savedGame = loadSavedGameFile();
         if (savedGame != null) {
-            Image savedGamePortal = new Image(portal_T);
+            Image savedGamePortal = new Image(save_portal_T);
             savedGamePortal.setPosition(900, 250);
             savedGamePortal.setScaling(Scaling.fit);
 
@@ -189,6 +199,19 @@ public class Levels_Screen implements Screen {
 
     @Override
     public void render(float delta) {
+        // Update animation time
+        animationTime += delta;
+        
+        // Calculate offsets using sine wave with different phases
+        float offsetY1 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase1);
+        float offsetY2 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase2);
+        float offsetY3 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase3);
+        
+        // Update portal positions with individual offsets
+        portal_I1.setY(baseY1 + offsetY1);
+        portal_I2.setY(baseY2 + offsetY2);
+        portal_I3.setY(baseY3 + offsetY3);
+
         Gdx.gl.glClearColor(0, 0, 0, 1); // for clearing up the previous stage
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

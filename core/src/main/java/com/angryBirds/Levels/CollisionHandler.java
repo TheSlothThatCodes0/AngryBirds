@@ -12,6 +12,8 @@ public class CollisionHandler implements ContactListener {
     private static final float BIRD_DAMAGE_MULTIPLIER = 1.0f;   
     private static final float MAX_DAMAGE = 50.0f;            
     private static boolean damageEnabled = false;
+    // Add constant for block damage
+    private static final float BLOCK_HEALTH_DAMAGE_MULTIPLIER = 0.5f;
 
     public static void enableDamage() {
         damageEnabled = true;
@@ -52,6 +54,8 @@ public class CollisionHandler implements ContactListener {
         if (userDataB instanceof Pig) {
             handlePigCollision((Pig)userDataB, userDataA, bodyB, bodyA);
         }
+
+        handleCollision(userDataA, userDataB, bodyA, bodyB);
     }
 
     private void handlePigCollision(Pig pig, Object otherObject, Body pigBody, Body otherBody) {
@@ -75,6 +79,27 @@ public class CollisionHandler implements ContactListener {
             pig.takeDamage(damage);
             System.out.println("Pig health after hit: " + pig.health);
         }
+    }
+
+    private void handleCollision(Object objectA, Object objectB, Body bodyA, Body bodyB) {
+        float impactForce = calculateImpactForce(bodyA, bodyB);
+        
+        // Handle Bird -> Block collision
+        if (objectA instanceof Bird && objectB instanceof Block) {
+            handleBirdBlockCollision((Bird)objectA, (Block)objectB, impactForce);
+        }
+        // Handle Block -> Bird collision
+        else if (objectA instanceof Block && objectB instanceof Bird) {
+            handleBirdBlockCollision((Bird)objectB, (Block)objectA, impactForce);
+        }
+    }
+
+    private void handleBirdBlockCollision(Bird bird, Block block, float impactForce) {
+        if (impactForce < VELOCITY_THRESHOLD) return;
+        
+        float damage = Math.min(impactForce * BLOCK_HEALTH_DAMAGE_MULTIPLIER, MAX_DAMAGE);
+        System.out.println("Bird hit block with force: " + impactForce + " causing damage: " + damage);
+        block.takeDamage(damage);
     }
 
     private float calculateImpactForce(Body bodyA, Body bodyB) {

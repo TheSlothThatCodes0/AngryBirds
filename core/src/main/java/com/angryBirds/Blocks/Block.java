@@ -30,6 +30,15 @@ public abstract class Block extends Image {
     protected static final short MASK_BIRDS = -1; // Collide with everything
     protected static final short MASK_PIGS = -1;
 
+    protected float health;
+    protected float maxHealth;
+
+    protected static final float STONE_HEALTH = 200f;
+    protected static final float WOOD_HEALTH = 150f;
+    protected static final float ICE_HEALTH = 100f;
+
+    private boolean markedForDestruction = false;
+
     public Block(Main game, float width, float height, World world) {
         super();
         this.game = game;
@@ -110,6 +119,35 @@ public abstract class Block extends Image {
 
     protected void updateTexture() {
         setDrawable(new TextureRegionDrawable(blockTexture));
+    }
+
+    public void takeDamage(float damage) {
+        health -= damage;
+        System.out.println("Block damaged! Health: " + health);
+        if (health <= 0) {
+            markedForDestruction = true; // Mark for destruction instead of immediate disposal
+        }
+    }
+
+    public boolean isMarkedForDestruction() {
+        return markedForDestruction;
+    }
+
+    protected void setInitialHealth(String material) {
+        switch (material.toLowerCase()) {
+            case "stone":
+                maxHealth = STONE_HEALTH;
+                break;
+            case "wood":
+                maxHealth = WOOD_HEALTH;
+                break;
+            case "ice":
+                maxHealth = ICE_HEALTH;
+                break;
+            default:
+                maxHealth = WOOD_HEALTH;
+        }
+        health = maxHealth;
     }
 
     public void dispose() {

@@ -8,6 +8,7 @@ public class Cube extends Block {
         super(game, 80, 80, world); // was 140
         loadTexture(material);
         setPosition(x, y);
+        setInitialHealth(material);
 
         // Create physics body with material-specific properties
         float density = 1.0f;

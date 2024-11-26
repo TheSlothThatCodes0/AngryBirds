@@ -90,6 +90,7 @@ public abstract class BaseLevel implements Screen {
     protected Launcher launcher;
 
     private musicControl mc;
+    private Array<Block> blocksToDestroy;
 
     public BaseLevel(Main game, boolean loadFromSave) {
         this.loadingFromSave = loadFromSave;
@@ -111,8 +112,8 @@ public abstract class BaseLevel implements Screen {
 
         world = new World(new Vector2(0, -20f), true);
         world.setContactListener(new CollisionHandler());
-        debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-        debugMatrix = new Matrix4(camera.combined.cpy().scl(PPM));
+        // debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
+        // debugMatrix = new Matrix4(camera.combined.cpy().scl(PPM));
 
         this.mc = musicControl.getInstance();
 //        mc.fadeOut();
@@ -120,6 +121,7 @@ public abstract class BaseLevel implements Screen {
 
         loadNavigationButtonTextures();
         setupNavigationButtons();
+        blocksToDestroy = new Array<>();
 
     }
 
@@ -420,9 +422,10 @@ public abstract class BaseLevel implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
 
-
+        cleanupDestroyedBlocks();
+        
         world.step(1 / 60f, 6, 2);
-        debugRenderer.render(world, camera.combined.scl(PPM));
+        // debugRenderer.render(world, camera.combined.scl(PPM));
 
         stateTime += delta;
         if (stateTime >= frameDuration) {
@@ -446,10 +449,35 @@ public abstract class BaseLevel implements Screen {
         stage.draw();
         checkWinCondition();
 
-        // Debug rendering - only do this once with correct scaling
-        debugMatrix = camera.combined.cpy();
-        debugMatrix.scl(PPM);
-        debugRenderer.render(world, debugMatrix);
+        // // Debug rendering - only do this once with correct scaling
+        // debugMatrix = camera.combined.cpy();
+        // debugMatrix.scl(PPM);
+        // debugRenderer.render(world, debugMatrix);
+    }
+
+    private void cleanupDestroyedBlocks() {
+        // Clear the array first
+        blocksToDestroy.clear();
+        
+        // Check for blocks that need to be destroyed
+        for (Image image : blocks) {
+            if (image instanceof Block) {
+                Block block = (Block) image;
+                if (block.isMarkedForDestruction()) {
+                    blocksToDestroy.add(block);
+                }
+            }
+        }
+        
+        // Remove and dispose of the marked blocks
+        for (Block block : blocksToDestroy) {
+            blocks.removeValue(block, true);
+            block.remove(); // Remove from stage
+            if (block.body != null) {
+                world.destroyBody(block.body);
+                block.body = null;
+            }
+        }
     }
 
     @Override
@@ -471,9 +499,9 @@ public abstract class BaseLevel implements Screen {
             world.dispose();
         }
 
-        if (debugRenderer != null) {
-            debugRenderer.dispose();
-        }
+        // if (debugRenderer != null) {
+        //     debugRenderer.dispose();
+        // }
 
         // Then dispose of game objects
         for (Image block : blocks) {

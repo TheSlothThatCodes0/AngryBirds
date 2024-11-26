@@ -10,7 +10,7 @@ public class Column extends Block {
         super(game, 25, 200, world); // Set width and height for vertical column
         loadTexture(material);
         setPosition(x, y);
-
+        setInitialHealth(material);
         float density = getDensity(material);
         float friction = getFriction(material);
         float restitution = getRestitution(material);
