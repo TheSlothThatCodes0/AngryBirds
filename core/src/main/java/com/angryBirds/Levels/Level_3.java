@@ -71,35 +71,35 @@ public class Level_3 extends BaseLevel {
         addBlock(new Plank(game, "wood", base_x + 100, base_y + 3*column_height + 2*plank_height + buffer_size, world));
         addBlock(new Plank(game, "wood", base_x + 100 + 185, base_y + 3*column_height + 2*plank_height + buffer_size, world));
 
-        addBlock(new Column(game, "stone", base_x + 190, base_y + 3*column_height + 3*plank_height + buffer_size, world));
+        addBlock(new Column(game, "stone", base_x + 210, base_y + 3*column_height + 3*plank_height + buffer_size, world));
         addBlock(new Column(game, "stone", base_x + 190 + 185, base_y + 3*column_height + 3*plank_height + buffer_size, world));
 
         addBlock(new Plank(game, "wood", base_x + 190, base_y + 4*column_height + 3*plank_height + buffer_size, world));
-
-
-        // Level 2: Middle structure
-//        addBlock(new Column(game, "stone", base_x + 200, base_y + column_height + plank_height, world));
-//        addBlock(new Column(game, "stone", base_x + 400, base_y + column_height + plank_height, world));
-//
-//        addBlock(new Plank(game, "wood", base_x + 300, base_y + 2 * column_height + plank_height, world));
-//
-//        // Level 3: Top structure
-//        addBlock(new Column(game, "stone", base_x + 300, base_y + 2 * column_height + 2 * plank_height, world));
-//        addBlock(new Plank(game, "wood", base_x + 300, base_y + 3 * column_height + 2 * plank_height, world));
 
 
         // Pig placements similar to Level_2 strategy
         addPig(new NormalPig(game, "small", base_x + 50 - xOffset, base_y + cube_size + buffer_size, world));
 
 // Adding pigs on top of the columns
-        addPig(new NormalPig(game, "small", base_x - xOffset, base_y + column_height + plank_height + buffer_size + cube_size, world));
-        addPig(new NormalPig(game, "small", base_x + 3*185 - xOffset, base_y + column_height + plank_height + buffer_size + cube_size, world));
+        addPig(new NormalPig(game, "small", base_x + 200, base_y + 2*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 200+185 , base_y + 2*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 150, base_y + 2*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 150+185 , base_y + 2*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 250, base_y + 2*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 250+185 , base_y + 2*column_height + 2*plank_height + buffer_size, world));
+
+        addPig(new NormalPig(game, "small", base_x + 200, base_y + 1*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 200+185 , base_y + 1*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 150, base_y + 1*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 150+185 , base_y + 1*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 250, base_y + 1*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "small", base_x + 250+185 , base_y + 1*column_height + 2*plank_height + buffer_size, world));
 
 // King Pig in a prominent position (top of the structure)
-        addPig(new KingPig(game, base_x + 190 + 185 - xOffset, base_y + 4*column_height + 3*plank_height + buffer_size, world));
+        addPig(new KingPig(game, base_x + 350 + 185 - xOffset, base_y + 4*column_height + 3*plank_height + buffer_size, world));
 
 // Big Pig in the middle of columns
-        addPig(new NormalPig(game, "big", base_x + 285 - xOffset, base_y + 2*column_height + 2*plank_height + buffer_size, world));
+        addPig(new NormalPig(game, "big", base_x + 320 + 185 - xOffset, base_y + 3*column_height + 3*plank_height + buffer_size, world));
 
         System.out.println("Level 3 initialized with blocks and pigs");
     }
