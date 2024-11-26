@@ -20,8 +20,9 @@ public abstract class Bird extends Image {
     protected World world;
     public boolean isLaunched = false;
     public boolean isDragging = false;
+    public boolean isDead = false;
 
-    private static final float DISAPPEAR_TIME = 5.0f;
+    private static final float DISAPPEAR_TIME = 10.0f;
     private float timeSinceLaunch = 0f;
 
     protected static final short CATEGORY_GROUND = 0x0001;
@@ -123,6 +124,7 @@ public void act(float delta) {
     if (isLaunched) {
         timeSinceLaunch += delta;
         if (timeSinceLaunch >= DISAPPEAR_TIME) {
+            isDead = true;
             dispose();
             remove(); // Remove from stage
             return;

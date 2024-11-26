@@ -129,7 +129,7 @@ public class SettingsScreen implements Screen {
             if (backBounds.contains(touchPos.x, touchPos.y)) {
                 game.setScreen(new MainMenu(game));
             } else if (creditsBounds.contains(touchPos.x, touchPos.y)) {
-                // game.setScreen(new CreditsScreen(game)); // Will be implemented later
+                 game.setScreen(new EndCredit(game)); // Will be implemented later
             } else if (containsInRotatedSpace(sliderKnob, rotatedPoint)) {
                 isDraggingSlider = true;
             }

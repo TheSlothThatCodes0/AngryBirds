@@ -2,6 +2,8 @@ package com.angryBirds.Screens;
 
 import com.angryBirds.Levels.BaseLevel;
 import com.angryBirds.Levels.Level_1;
+import com.angryBirds.Levels.Level_2;
+import com.angryBirds.Levels.Level_3;
 import com.angryBirds.Main;
 import com.angryBirds.Utils.CustomButton;
 import com.angryBirds.Utils.SaveData;
@@ -126,9 +128,23 @@ public class Levels_Screen implements Screen {
         portal_I2.setPosition(1100, 300 + launch1.getHeight() - 100);
         portal_I2.setScaling(Scaling.fit);
 
+        portal_I2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {// event listener for button
+                createLevel2();
+            }
+        });
+
         portal_I3 = new Image(portal_T);
         portal_I3.setPosition(600, 300 + launch1.getHeight() + 125);
         portal_I3.setScaling(Scaling.fit);
+
+        portal_I3.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {// event listener for button
+                createLevel3();
+            }
+        });
 
         float pw = portal_I1.getWidth();
         float ph = portal_I1.getHeight();
@@ -201,12 +217,12 @@ public class Levels_Screen implements Screen {
     public void render(float delta) {
         // Update animation time
         animationTime += delta;
-        
+
         // Calculate offsets using sine wave with different phases
         float offsetY1 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase1);
         float offsetY2 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase2);
         float offsetY3 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase3);
-        
+
         // Update portal positions with individual offsets
         portal_I1.setY(baseY1 + offsetY1);
         portal_I2.setY(baseY2 + offsetY2);
@@ -256,6 +272,14 @@ public class Levels_Screen implements Screen {
     private void createLevel1() {
         game.setScreen(new Level_1(game, false));
     } // function for creating the new level
+
+    private void createLevel2() {
+        game.setScreen(new Level_2(game, false));
+    } // function for creating the new level
+
+    private void createLevel3() {
+        game.setScreen(new Level_3(game, false));
+    }
 
     @Override
     public void dispose() { // disposing the textures and stage

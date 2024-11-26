@@ -37,6 +37,7 @@ public class PauseScreen implements Screen {
         this.previousScreen = previousScreen;
         mc = musicControl.getInstance();
 
+
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);

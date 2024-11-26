@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -32,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -91,6 +93,8 @@ public abstract class BaseLevel implements Screen {
 
     private musicControl mc;
     private Array<Block> blocksToDestroy;
+    private boolean isPaused = false;
+
 
     public BaseLevel(Main game, boolean loadFromSave) {
         this.loadingFromSave = loadFromSave;
@@ -198,7 +202,8 @@ public abstract class BaseLevel implements Screen {
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PauseScreen(game, BaseLevel.this));
+                pauseGame();
+                game.setScreen(new PauseScreen1(game, BaseLevel.this));
             }
         });
 
@@ -418,16 +423,29 @@ public abstract class BaseLevel implements Screen {
         }
     }
 
-    @Override
+    public void pauseGame() {
+        isPaused = true;
+        Gdx.input.setInputProcessor(null);
+    }
+
+    public void resumeGame() {
+        isPaused = false;
+        Gdx.input.setInputProcessor(stage);
+    }
+
     public void render(float delta) {
+        // If paused, use a delta of 0 to freeze simulation
+        float actualDelta = isPaused ? 0 : delta;
+
         ScreenUtils.clear(1, 1, 1, 1);
 
-        cleanupDestroyedBlocks();
-        
-        world.step(1 / 60f, 6, 2);
-        // debugRenderer.render(world, camera.combined.scl(PPM));
+        // Only step the world if not paused
+        if (!isPaused) {
+            cleanupDestroyedBlocks();
+            world.step(1 / 60f, 6, 2);
+        }
 
-        stateTime += delta;
+        stateTime += actualDelta;
         if (stateTime >= frameDuration) {
             currentFrame = (currentFrame + 1) % backgroundFrames.length;
             stateTime = 0;
@@ -442,23 +460,20 @@ public abstract class BaseLevel implements Screen {
             game.batch.end();
         }
 
-
-
-        // Draw the stage (game objects)
-        stage.act(delta);
+        // Draw the stage with controlled delta
+        stage.act(actualDelta);
         stage.draw();
-        checkWinCondition();
 
-        // // Debug rendering - only do this once with correct scaling
-        // debugMatrix = camera.combined.cpy();
-        // debugMatrix.scl(PPM);
-        // debugRenderer.render(world, debugMatrix);
+        // Only check end conditions if not paused
+        if (!isPaused) {
+            checkEndCondition();
+        }
     }
 
     private void cleanupDestroyedBlocks() {
         // Clear the array first
         blocksToDestroy.clear();
-        
+
         // Check for blocks that need to be destroyed
         for (Image image : blocks) {
             if (image instanceof Block) {
@@ -468,7 +483,7 @@ public abstract class BaseLevel implements Screen {
                 }
             }
         }
-        
+
         // Remove and dispose of the marked blocks
         for (Block block : blocksToDestroy) {
             blocks.removeValue(block, true);
@@ -546,6 +561,39 @@ public abstract class BaseLevel implements Screen {
 
         if (stage != null) {
             stage.dispose();
+        }
+    }
+
+    protected void checkEndCondition() {
+        boolean allPigsDead = true;
+        boolean allBirdsInactive = true;
+        for (Image x : pigs) {
+            if (((Pig)x).health > 0) {
+                allPigsDead = false;
+                break;
+            }
+        }
+        for(Image x : birds){
+            if(!((Bird) x).isDead){
+                allBirdsInactive = false;
+                break;
+            }
+        }
+        if (allPigsDead) {
+//            Timer.schedule(new Timer.Task() {
+//                @Override
+//                public void run() {
+////                    game.setScreen(new WinScreen(game));
+//                }}, 5);
+            game.setScreen(new WinScreen(game));
+        }
+        else if(allBirdsInactive && !allPigsDead){
+//            Timer.schedule(new Timer.Task() {
+//                @Override
+//                public void run() {
+//
+//                }}, 3);
+            game.setScreen(new LossScreen(game));
         }
     }
 

@@ -36,6 +36,7 @@ public class SplashScreen implements Screen {
         game.assets.load("MainMenuBG.jpg", Texture.class);
         game.assets.load("MainMenuBG1.jpg", Texture.class);
         game.assets.load("settings.png", Texture.class);
+        game.assets.load("settingsScreenBG1.png", Texture.class);
         game.assets.load("Settings_1.png", Texture.class);
         game.assets.load("Settings_1_clicked.png", Texture.class);
         game.assets.load("exitButton1.png", Texture.class);
@@ -71,6 +72,9 @@ public class SplashScreen implements Screen {
         game.assets.load("playButton1_clicked.png", Texture.class); // Add this line
         game.assets.load("exitButton1.png", Texture.class);
         game.assets.load("exitButton1_pressed.png", Texture.class);
+        game.assets.load("play.png", Texture.class);
+        game.assets.load("cut.png", Texture.class);
+        game.assets.load("saveGame.png", Texture.class);
 // ... other texture loadings
     }
 
