@@ -78,8 +78,8 @@ public class Levels_Screen implements Screen {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         stage = new Stage(viewport, game.batch);
 
-        exitButtonTexture = game.assets.get("exitButton1.png", Texture.class);
-        exitButtonTexture_Clicked = game.assets.get("exitButton1_pressed.png", Texture.class);
+        exitButtonTexture = game.assets.get("backArrow.png", Texture.class);
+        exitButtonTexture_Clicked = game.assets.get("backArrow.png", Texture.class);
         exitBounds = new Rectangle(10, WORLD_HEIGHT - EXIT_SIZE - 10, EXIT_SIZE, EXIT_SIZE);
 
         exitButton = new CustomButton(game, exitBounds, exitButtonTexture, exitButtonTexture_Clicked, exitButtonTexture,

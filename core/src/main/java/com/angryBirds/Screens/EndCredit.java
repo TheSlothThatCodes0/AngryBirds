@@ -43,20 +43,19 @@ public class EndCredit implements Screen {
         batch = new SpriteBatch();
 
         creditsText = "Credits\n\n" +
-                      "Game Design: John Doe\n" +
-                      "Programming: Jane Smith\n" +
-                      "Art: Alice Johnson\n" +
-                      "Music: Bob Brown\n\n" +
-                      "Thank you for playing!\n" +
-            "This game was created for educational purposes only.\n"
-            + "All rights to the Angry Birds franchise belong to Rovio Entertainment Corporation.\n"
-            + "This game is not affiliated with or endorsed by Rovio Entertainment Corporation.\n"
-            + "Angry Birds is a trademark of Rovio Entertainment Corporation.\n"
-            + "This game was created by me all by me.\n"
-            + "I am the best game developer in the world.\n"
-            + "I am the best game developer in the world.\n"
-            + "I am the best game developer in the world.\n"
-            + "The cost of creating this was my sanity.\n";
+            "-------------------------------------\n" +
+            "Student 1: Siddharth Yadav : 2023525\n" +
+            "Student 2: Shaman Ranjan : 2023498\n" +
+            "-------------------------------------\n\n" +
+            "Thank you for playing!\n\n" +
+            "This game was created as the final Project for the course Advanced Programming for the batch 2027.\n\n"
+            + "This game is not affiliated with or endorsed by Rovio Entertainment Corporation.\n\n"
+            + "Angry Birds is a trademark of Rovio Entertainment Corporation.\n\n"
+            + "The cost of creating this was my sanity.\n\n"
+            + "I hope you enjoyed the game\n\n"
+            + "I really do not know what to write in the end Credits\n\n"
+            + "Also junit sucks.\n\n\n\n\n\n\n\n\n\n\n\n" +
+            "Bye.";
 
         creditsY = -WORLD_HEIGHT / 10;
     }

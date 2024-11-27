@@ -118,7 +118,7 @@ public abstract class BaseLevel implements Screen {
         world.setContactListener(new CollisionHandler());
 
         this.mc = musicControl.getInstance();
-        mc.crossFade("audio/theme_3.mp3",2.0f);
+        mc.crossFade("audio/theme_3.mp3",0.7f);
 
         loadNavigationButtonTextures();
         setupNavigationButtons();

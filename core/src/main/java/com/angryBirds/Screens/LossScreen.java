@@ -1,6 +1,7 @@
 package com.angryBirds.Screens;
 
 import com.angryBirds.Main;
+import com.angryBirds.Utils.musicControl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,6 +31,7 @@ public class LossScreen implements Screen{
 
     protected Texture levelSelectTexture;
     protected ImageButton levelSelectButton;
+    private musicControl mc;
 
     public LossScreen(Main game) {
         this.game = game;
@@ -37,6 +39,7 @@ public class LossScreen implements Screen{
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         stage = new Stage(viewport, game.batch);
+        this.mc = musicControl.getInstance();
 
         camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
         loadTextures();
@@ -95,6 +98,7 @@ public class LossScreen implements Screen{
         stage.act(v);
         stage.draw();
         if (levelSelectButton.isPressed()) {
+            mc.crossFade("audio/theme_1.mp3",0.5f);
             game.setScreen(new MainMenu(game));
         }
     }

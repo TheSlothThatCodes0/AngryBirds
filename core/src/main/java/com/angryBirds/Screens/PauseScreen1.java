@@ -97,7 +97,7 @@ public class PauseScreen1 implements Screen {
                     BaseLevel level = (BaseLevel) previousScreen;
                     level.saveGameState();
                 }
-                mc.crossFade("audio/theme_1.mp3",3.0f);
+                mc.crossFade("audio/theme_1.mp3",1.0f);
                 game.setScreen(new Levels_Screen(game,previousScreen));
             }
         });
@@ -110,6 +110,7 @@ public class PauseScreen1 implements Screen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                mc.crossFade("audio/theme_1.mp3",1.0f);
                 game.setScreen(new MainMenu(game));
             }
         });
