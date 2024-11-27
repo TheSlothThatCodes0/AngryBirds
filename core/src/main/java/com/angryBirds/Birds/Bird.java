@@ -57,7 +57,6 @@ public abstract class Bird extends Image {
 
         Shape shape;
         if (this instanceof YellowBird) {
-            // Triangular hitbox for yellow bird
             PolygonShape polygonShape = new PolygonShape();
             Vector2[] vertices = new Vector2[3];
             vertices[0] = new Vector2(-birdWidth / (2 * PPM), -birdHeight / (2 * PPM));
@@ -66,7 +65,6 @@ public abstract class Bird extends Image {
             polygonShape.set(vertices);
             shape = polygonShape;
         } else {
-            // Circular hitbox for red and blue birds
             CircleShape circleShape = new CircleShape();
             circleShape.setRadius(birdWidth / (2 * PPM));
             shape = circleShape;
@@ -84,15 +82,13 @@ public abstract class Bird extends Image {
         body.setUserData(this);
         shape.dispose();
 
-        // Initially deactivate physics
         body.setActive(false);
 
-        // Fix the bird in place initially
         if (!isLaunched) {
             body.setAngularVelocity(0);
             body.setLinearVelocity(0, 0);
-            body.setFixedRotation(true); // Prevent rotation
-            body.setAwake(false); // Put the body to sleep
+            body.setFixedRotation(true);
+            body.setAwake(false);
         }
     }
 
@@ -101,8 +97,8 @@ public abstract class Bird extends Image {
         body.setAwake(true);
         body.setFixedRotation(false);
         body.setLinearVelocity(velocityX, velocityY);
-        body.setGravityScale(1); // Enable gravity after launch
-        timeSinceLaunch = 0f; // Reset timer on launch
+        body.setGravityScale(1);
+        timeSinceLaunch = 0f;
     }
 
     @Override
@@ -120,27 +116,24 @@ public void act(float delta) {
         }
     }
 
-    // Update disappear timer if launched
     if (isLaunched) {
         timeSinceLaunch += delta;
         if (timeSinceLaunch >= DISAPPEAR_TIME) {
             isDead = true;
             dispose();
-            remove(); // Remove from stage
+            remove();
             return;
         }
     }
 
     if (body != null) {
         if (!body.isActive()) {
-            // Keep bird fixed at current visual position when physics are disabled
             Vector2 position = new Vector2(
                 (getX() + getWidth()/2) / PPM,
                 (getY() + getHeight()/2) / PPM
             );
             body.setTransform(position, 0);
         } else if (!isDragging) {
-            // Update visual position from physics body
             float centerX = body.getPosition().x * PPM;
             float centerY = body.getPosition().y * PPM;
             float x = centerX - (getWidth() / 2);

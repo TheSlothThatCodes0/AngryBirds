@@ -73,12 +73,9 @@ public class Launcher {
                     Bird bird = (Bird) hit;
 
                     if (selectedBird == null) {
-                        // First click - select and position bird
                         selectedBird = bird;
-                        // Remove bird from current position
                         selectedBird.remove();
 
-                        // Position bird between launcher parts
                         float initialX = launcherBase.getX() + launcherBase.getWidth() / 2 + BIRD_OFFSET_X;
                         float initialY = launcherBase.getY() + BIRD_OFFSET_Y;
                         selectedBird.setPosition(
@@ -88,19 +85,15 @@ public class Launcher {
                         temp_x = initialX - selectedBird.getWidth() / 2;
                         temp_y = initialY - selectedBird.getHeight() / 2;
 
-                        // Disable physics completely
                         selectedBird.getBody().setActive(false);
 
-                        // Update z-index order
                         launcherBase.setZIndex(1);
                         selectedBird.setZIndex(2);
                         launcherTop.setZIndex(3);
 
-                        // Re-add bird to stage
                         stage.addActor(selectedBird);
 
                     } else if (hit == selectedBird) {
-                        // Second click - start dragging
                         selectedBird.isDragging = true;
                         dragStart = touchPoint;
                         dragCurrent = touchPoint;
@@ -119,12 +112,10 @@ public class Launcher {
                         updateBirdPosition();
                     }
                     else {
-                        // Calculate the closest point on the boundary
                         float angle = MathUtils.atan2(y - temp_y, x - temp_x);
                         float boundaryX = temp_x + 400 * MathUtils.cos(angle);
                         float boundaryY = temp_y + 400 * MathUtils.sin(angle);
 
-                        // Ensure the bird stays above the minimum y boundary
                         if (boundaryY < 80) {
                             boundaryY = 80;
                         }
@@ -153,25 +144,21 @@ public class Launcher {
         if (selectedBird == null)
             return;
 
-        // Update bird position directly to cursor position
         selectedBird.setPosition(
                 dragCurrent.x - selectedBird.getWidth() / 2,
                 dragCurrent.y - selectedBird.getHeight() / 2);
 
-        // Update physics body's position
         selectedBird.getBody().setTransform(
                 dragCurrent.x / PPM,
                 dragCurrent.y / PPM,
                 selectedBird.getBody().getAngle());
 
-        // Remove launcher rotation for now
         launcherTop.setRotation(0);
     }
 
         private void launchBird() {
         if (selectedBird == null) return;
 
-        // Calculate launch vector from current position to launch point
         Vector2 launchVector = new Vector2(
             launcherBase.getX() + launcherBase.getWidth()/2 + BIRD_OFFSET_X,
             launcherBase.getY() + BIRD_OFFSET_Y

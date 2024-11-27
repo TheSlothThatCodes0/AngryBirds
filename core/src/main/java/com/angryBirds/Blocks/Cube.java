@@ -10,7 +10,6 @@ public class Cube extends Block {
         setPosition(x, y);
         setInitialHealth(material);
 
-        // Create physics body with material-specific properties
         float density = 1.0f;
         float friction = 0.3f;
         float restitution = 0.1f;
@@ -84,6 +83,6 @@ public class Cube extends Block {
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);
         }
-        updateTexture();  // Make sure this is called after setting the texture
+        updateTexture();
     }
 }

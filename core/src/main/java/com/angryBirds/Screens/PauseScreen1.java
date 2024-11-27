@@ -32,7 +32,7 @@ public class PauseScreen1 implements Screen {
 
     private musicControl mc;
 
-    public PauseScreen1(Main game, Screen previousScreen) { // constructor
+    public PauseScreen1(Main game, Screen previousScreen) {
         this.game = game;
         this.previousScreen = previousScreen;
         mc = musicControl.getInstance();
@@ -52,7 +52,7 @@ public class PauseScreen1 implements Screen {
         setupUI();
     }
 
-    private void setupUI() { // loading and setting up all the assets
+    private void setupUI() {
         float pauseScreenWidth = WORLD_WIDTH*1.5f;
         float pauseScreenHeight = WORLD_HEIGHT*1.5f;
         float pauseScreenX = (WORLD_WIDTH - pauseScreenWidth) / 2;
@@ -102,7 +102,6 @@ public class PauseScreen1 implements Screen {
             }
         });
 
-        // Exit button
         Image exitButton = new Image(exitButtonTexture);
         exitButton.setSize(exitButton.getWidth() * buttonScale, exitButton.getHeight() * buttonScale);
         exitButton.setPosition(

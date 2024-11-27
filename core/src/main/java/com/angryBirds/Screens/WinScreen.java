@@ -42,7 +42,7 @@ public class WinScreen implements Screen{
         setupNavigationButtons();
     }
 
-    private void loadTextures() { // texture loading
+    private void loadTextures() {
         backgroundTexture = new Texture("winScreen.png");
 
     }
@@ -62,7 +62,7 @@ public class WinScreen implements Screen{
         }
     }
 
-    private void setupNavigationButtons() { // button setup
+    private void setupNavigationButtons() {
         float padding = 20f;
 
         ImageButton.ImageButtonStyle levelSelectStyle = new ImageButton.ImageButtonStyle();

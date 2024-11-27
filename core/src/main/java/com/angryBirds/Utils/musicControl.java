@@ -108,17 +108,14 @@ public class musicControl {
             final Music previousMusic = currentMusic;
             final float prevVolume = currentVolume;
 
-            // Reset current music reference but don't dispose the previous one yet
             currentMusic = null;
 
             try {
-                // Load new music
                 currentMusic = Gdx.audio.newMusic(Gdx.files.internal(newMusicPath));
                 currentMusic.setLooping(true);
                 currentMusic.setVolume(0f); // Start at zero volume
                 currentMusic.play();
 
-                // Create crossfade effect
                 Timer.schedule(new Timer.Task() {
                     float elapsed = 0f;
                     boolean isRunning = true;
@@ -163,7 +160,6 @@ public class musicControl {
                 }
             }
         } else {
-            // If no music is currently playing, simply load and fade in the new music
             loadMusic(newMusicPath);
             fadeIn(duration);
         }

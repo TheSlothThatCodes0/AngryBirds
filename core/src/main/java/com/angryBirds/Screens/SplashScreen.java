@@ -20,19 +20,19 @@ public class SplashScreen implements Screen {
     private static final float MINIMUM_SPLASH_TIME = 5f;
     private boolean assetsLoaded = false;
 
-    public SplashScreen(Main game) {  // constructor
+    public SplashScreen(Main game) {
         this.game = game;
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         camera.position.set(WORLD_WIDTH/2, WORLD_HEIGHT/2, 0);
 
-        splashImage = new Texture("splashScreen.png");  // texture for background
+        splashImage = new Texture("splashScreen.png");
         loadingBird = new Texture("loading.png");
         queueAssets();
     }
 
-    private void queueAssets() {  // preloading every assets
+    private void queueAssets() {
         game.assets.load("MainMenuBG.jpg", Texture.class);
         game.assets.load("MainMenuBG1.jpg", Texture.class);
         game.assets.load("settings.png", Texture.class);
@@ -95,7 +95,7 @@ public class SplashScreen implements Screen {
 
         assetsLoaded = game.assets.update();
 
-        if (elapsed >= MINIMUM_SPLASH_TIME && assetsLoaded) {  // delay for loading assets
+        if (elapsed >= MINIMUM_SPLASH_TIME && assetsLoaded) {
             game.setScreen(new MainMenu(game));
             return;
         }

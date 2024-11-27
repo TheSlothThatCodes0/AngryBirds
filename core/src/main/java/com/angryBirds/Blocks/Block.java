@@ -54,8 +54,6 @@ public abstract class Block extends Image {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = type.equals("ground") ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody;
 
-        // Convert screen coordinates to physics world coordinates
-        // Add half the width/height to center the body on the sprite
         bodyDef.position.set(
                 (x + blockWidth / 2) / PPM,
                 (y + blockHeight / 2) / PPM);
@@ -72,8 +70,8 @@ public abstract class Block extends Image {
         }
         else{
             shape.setAsBox(
-                blockWidth / (2 * PPM), // half-width
-                blockHeight / (2 * PPM) // half-height
+                blockWidth / (2 * PPM),
+                blockHeight / (2 * PPM)
             );
         }
 
@@ -94,22 +92,17 @@ public abstract class Block extends Image {
     public void act(float delta) {
         super.act(delta);
         if (body != null) {
-            // Get the center position from physics body
             float centerX = body.getPosition().x * PPM;
             float centerY = body.getPosition().y * PPM;
 
-            // Calculate the position to center the texture on the physics body
-            float x = centerX - (getWidth() / 2); // Subtract half width to center horizontally
-            float y = centerY - (getHeight() / 2); // Subtract half height to center vertically
+            float x = centerX - (getWidth() / 2);
+            float y = centerY - (getHeight() / 2);
 
-            // Update visual position
             setPosition(x, y);
 
-            // Update rotation around the center
             setRotation((float) Math.toDegrees(body.getAngle()));
             setOrigin(getWidth() / 2, getHeight() / 2); // Set rotation origin to center
 
-            // Debug output for positions below ground
             if (y < 0) {
                 System.out.println("Warning: Block position below ground! Physics pos: " +
                         body.getPosition().y + ", Screen pos: " + y);
@@ -127,7 +120,7 @@ public abstract class Block extends Image {
         health -= damage;
         System.out.println("Block damaged! Health: " + health);
         if (health <= 0) {
-            markedForDestruction = true; // Mark for destruction instead of immediate disposal
+            markedForDestruction = true;
         }
     }
 

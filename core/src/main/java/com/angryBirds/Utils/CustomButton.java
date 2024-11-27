@@ -51,14 +51,14 @@ public class CustomButton extends Image {
 
     public void workClick(Main x, Vector3 vec) {
         if (bounds.contains(vec.x, vec.y)) {
-            isPressed = true; // Set the pressed state
+            isPressed = true;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    isPressed = false; // Reset the pressed state after delay
-                    Gdx.app.postRunnable(onClickAction); // Perform the click action
+                    isPressed = false;
+                    Gdx.app.postRunnable(onClickAction);
                 }
-            }, 0.2f); // 0.2 seconds delay
+            }, 0.2f);
         }
     }
 

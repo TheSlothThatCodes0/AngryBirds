@@ -20,20 +20,16 @@ public class RedBird extends Bird {
     @Override
     public void triggerSpecialAbility() {
         if (body != null && isLaunched && !specialAbilityUsed) {
-            // Store center position before scaling
             float centerX = body.getPosition().x;
             float centerY = body.getPosition().y;
 
-            // Double visual size
             setSize(getWidth() * 2, getHeight() * 2);
 
-            // Update physics body size
             for (Fixture fixture : body.getFixtureList()) {
                 CircleShape shape = (CircleShape) fixture.getShape();
                 shape.setRadius(shape.getRadius() * 2);
             }
 
-            // Reset mass data and keep bird centered at same position
             body.resetMassData();
             body.setTransform(centerX, centerY, body.getAngle());
         }

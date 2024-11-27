@@ -50,7 +50,7 @@ public abstract class BaseLevel implements Screen {
     protected static final short MASK_BLOCKS = -1; // Collide with everything
     protected static final short MASK_BIRDS = -1; // Collide with everything
     public boolean loadingFromSave = false;
-    // protected static final short MASK_PIGS = -1; // Collide with everything
+    // protected static final short MASK_PISS = -1; // Collide with everything
 
     protected Main game;
     protected OrthographicCamera camera;
@@ -116,11 +116,8 @@ public abstract class BaseLevel implements Screen {
 
         world = new World(new Vector2(0, -20f), true);
         world.setContactListener(new CollisionHandler());
-        // debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-        // debugMatrix = new Matrix4(camera.combined.cpy().scl(PPM));
 
         this.mc = musicControl.getInstance();
-//        mc.fadeOut();
         mc.crossFade("audio/theme_3.mp3",2.0f);
 
         loadNavigationButtonTextures();
@@ -171,8 +168,8 @@ public abstract class BaseLevel implements Screen {
     protected void debugPhysicsBodies() {
         StringBuilder debug = new StringBuilder("Physics World Bodies:\n");
 
-        Array<Body> bodies = new Array<>(); // Create an Array to store bodies
-        world.getBodies(bodies); // Pass the array to getBodies()
+        Array<Body> bodies = new Array<>();
+        world.getBodies(bodies);
 
         for (Body body : bodies) {
             debug.append(String.format(
@@ -188,8 +185,8 @@ public abstract class BaseLevel implements Screen {
 
     private void setupLauncher() {
         launcher = new Launcher(world, stage,
-                new Vector2(300, 105), // Launch point coordinates
-                launcher1, launcher2 // Pass existing launcher textures
+                new Vector2(300, 105),
+                launcher1, launcher2
         );
     }
 
@@ -270,8 +267,6 @@ public abstract class BaseLevel implements Screen {
         stage.addActor(restartButton);
     }
 
-    // _____________________________ game saving ___________________________
-
     public static void clearSavedGame() {
         try {
             FileHandle file = Gdx.files.local("save.json");
@@ -289,7 +284,6 @@ public abstract class BaseLevel implements Screen {
         SaveData saveData = new SaveData();
         saveData.levelName = this.getClass().getSimpleName();
 
-        // Save birds
         for (Image image : birds) {
             if (image instanceof Bird) {
                 Bird bird = (Bird) image;
@@ -320,7 +314,6 @@ public abstract class BaseLevel implements Screen {
             }
         }
 
-        // Save pigs
         for (Image image : pigs) {
             if (image instanceof Pig) {
                 Pig pig = (Pig) image;
@@ -360,25 +353,20 @@ public abstract class BaseLevel implements Screen {
 
     public void loadFromSaveData(SaveData saveData) {
         this.loadingFromSave = true;
-        // Load the background
         setBackground("frame_0_delay-0.1s.png");
-        // Load ground
         addBlock(new Ground(game, "stone", 0, 0, world));
-        // Load birds
         for (SaveData.GameObjectData birdData : saveData.birds) {
             Bird bird = createBirdFromData(birdData);
             if (bird != null) {
                 addBird(bird);
             }
         }
-        // Load blocks
         for (SaveData.GameObjectData blockData : saveData.blocks) {
             Block block = createBlockFromData(blockData);
             if (block != null) {
                 addBlock(block);
             }
         }
-        // Load pigs
         for (SaveData.GameObjectData pigData : saveData.pigs) {
             Pig pig = createPigFromData(pigData);
             if (pig != null) {
@@ -441,12 +429,10 @@ public abstract class BaseLevel implements Screen {
     }
 
     public void render(float delta) {
-        // If paused, use a delta of 0 to freeze simulation
         float actualDelta = isPaused ? 0 : delta;
 
         ScreenUtils.clear(1, 1, 1, 1);
 
-        // Only step the world if not paused
         if (!isPaused) {
             cleanupDestroyedBlocks();
             world.step(1 / 60f, 6, 2);
@@ -467,21 +453,17 @@ public abstract class BaseLevel implements Screen {
             game.batch.end();
         }
 
-        // Draw the stage with controlled delta
         stage.act(actualDelta);
         stage.draw();
 
-        // Only check end conditions if not paused
         if (!isPaused) {
             checkEndCondition();
         }
     }
 
     private void cleanupDestroyedBlocks() {
-        // Clear the array first
         blocksToDestroy.clear();
 
-        // Check for blocks that need to be destroyed
         for (Image image : blocks) {
             if (image instanceof Block) {
                 Block block = (Block) image;
@@ -491,10 +473,9 @@ public abstract class BaseLevel implements Screen {
             }
         }
 
-        // Remove and dispose of the marked blocks
         for (Block block : blocksToDestroy) {
             blocks.removeValue(block, true);
-            block.remove(); // Remove from stage
+            block.remove();
             if (block.body != null) {
                 world.destroyBody(block.body);
                 block.body = null;
@@ -510,9 +491,7 @@ public abstract class BaseLevel implements Screen {
 
     @Override
     public void dispose() {
-        // First dispose of all physics bodies
         if (world != null) {
-            // Remove all bodies first
             Array<Body> bodies = new Array<>();
             world.getBodies(bodies);
             for (Body body : bodies) {
@@ -520,12 +499,6 @@ public abstract class BaseLevel implements Screen {
             }
             world.dispose();
         }
-
-        // if (debugRenderer != null) {
-        //     debugRenderer.dispose();
-        // }
-
-        // Then dispose of game objects
         for (Image block : blocks) {
             if (block instanceof Block) {
                 ((Block) block).dispose();
@@ -587,19 +560,9 @@ public abstract class BaseLevel implements Screen {
             }
         }
         if (allPigsDead) {
-//            Timer.schedule(new Timer.Task() {
-//                @Override
-//                public void run() {
-////                    game.setScreen(new WinScreen(game));
-//                }}, 5);
             game.setScreen(new WinScreen(game));
         }
         else if(allBirdsInactive && !allPigsDead){
-//            Timer.schedule(new Timer.Task() {
-//                @Override
-//                public void run() {
-//
-//                }}, 3);
             game.setScreen(new LossScreen(game));
         }
     }

@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainMenu implements Screen {
-//    private Music backGroundMusic;
     private Main game;
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -110,25 +109,6 @@ public class MainMenu implements Screen {
 
         settingsButton.workHover(game,isSettingsHovered,mousePos);/////////////////////////////////////////////////////////////////////////////////
 
-
-
-        // Draw settings button with hover effect
-//        if (isSettingsHovered) {
-//            float scaledWidth = settingsBounds.width * HOVER_SCALE;
-//            float scaledHeight = settingsBounds.height * HOVER_SCALE;
-//            float offsetX = (scaledWidth - settingsBounds.width) / 2;
-//            float offsetY = (scaledHeight - settingsBounds.height) / 2;
-//
-//            game.batch.draw(settingsButton,
-//                settingsBounds.x - offsetX,
-//                settingsBounds.y - offsetY,
-//                scaledWidth,
-//                scaledHeight);
-//        } else {
-//            game.batch.draw(settingsButton, settingsBounds.x, settingsBounds.y,
-//                settingsBounds.width, settingsBounds.height);
-//        }
-
         game.batch.end();
 
         if (Gdx.input.justTouched()) {
@@ -141,20 +121,6 @@ public class MainMenu implements Screen {
             settingsButton.setScale(1.5f);
             settingsButton.workClick(game,touchPos);///////////////////////////////////////////////////////////////////////////////////////
 
-//            if (exitBounds.contains(touchPos.x, touchPos.y) && !isExiting) {
-//                // Start exit sequence
-//                isExiting = true;
-//                Timer.schedule(new Timer.Task() {
-//                    @Override
-//                    public void run() {
-//                        Gdx.app.exit();
-//                    }
-//                }, 0.3f);
-//            }
-
-//        if (settingsBounds.contains(touchPos.x, touchPos.y)) {
-//                game.setScreen(new SettingsScreen(game));
-//            }
         }
     }
 
@@ -175,7 +141,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void hide() {
-        
     }
 
     @Override

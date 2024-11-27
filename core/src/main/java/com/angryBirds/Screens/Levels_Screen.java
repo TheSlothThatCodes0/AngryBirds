@@ -63,15 +63,15 @@ public class Levels_Screen implements Screen {
     private Screen PrevScreen;
 
     private float animationTime = 0;
-    private float floatAmplitude = 10f; // pixels to move up/down
-    private float floatSpeed = 2f; // speed of floating motion
-    private float baseY1, baseY2, baseY3; // store initial Y positions
+    private float floatAmplitude = 10f;
+    private float floatSpeed = 2f;
+    private float baseY1, baseY2, baseY3;
 
     private float phase1 = 0f;
-    private float phase2 = (float)(Math.PI * 2/3); // 120 degrees offset
-    private float phase3 = (float)(Math.PI * 4/3); // 240 degrees offset
+    private float phase2 = (float)(Math.PI * 2/3);
+    private float phase3 = (float)(Math.PI * 4/3);
 
-    public Levels_Screen(Main game, Screen prev) { // constructor
+    public Levels_Screen(Main game, Screen prev) {
         this.game = game;
         this.PrevScreen = prev;
         camera = new OrthographicCamera();
@@ -90,13 +90,10 @@ public class Levels_Screen implements Screen {
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
         loadTextures();
         setupStage();
-        stage.addActor(exitButton); // Add exit button to the stage
-
-        //
-        // mc.crossFade("audio/theme_1.mp3",0.3f);
+        stage.addActor(exitButton);
     }
 
-    private void loadTextures() { // loading texture files
+    private void loadTextures() {
         backgroundTexture = new Texture("level_background1.jpg");
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
@@ -106,7 +103,7 @@ public class Levels_Screen implements Screen {
         save_portal_T = new Texture("save_portal.png");
     }
 
-    private void setupStage() { // wrapping textures to images and setting up images
+    private void setupStage() {
         background = new Image(backgroundTexture);
         background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
 
@@ -124,7 +121,7 @@ public class Levels_Screen implements Screen {
 
         portal_I1.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {// event listener for button
+            public void clicked(InputEvent event, float x, float y) {
                 createLevel1();
             }
         });
@@ -135,7 +132,7 @@ public class Levels_Screen implements Screen {
 
         portal_I2.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {// event listener for button
+            public void clicked(InputEvent event, float x, float y) {
                 createLevel2();
             }
         });
@@ -146,7 +143,7 @@ public class Levels_Screen implements Screen {
 
         portal_I3.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {// event listener for button
+            public void clicked(InputEvent event, float x, float y) {
                 createLevel3();
             }
         });
@@ -159,7 +156,7 @@ public class Levels_Screen implements Screen {
         portal_I3.setSize(pw * sf_p, ph * sf_p);
 
         // Set all portals to the same base height
-        float commonBaseY = 300 + launch1.getHeight() - 100; // using what was previously baseY2
+        float commonBaseY = 300 + launch1.getHeight() - 100;
         baseY1 = commonBaseY;
         baseY2 = commonBaseY;
         baseY3 = commonBaseY;
@@ -201,7 +198,6 @@ public class Levels_Screen implements Screen {
         SaveData savedGame = BaseLevel.loadSavedGameFile();
         if (savedGame != null) {
             try {
-                // Create the level instance with loadingFromSave = true
                 Class<?> levelClass = Class.forName("com.angryBirds.Levels." + savedGame.levelName);
                 Constructor<?> constructor = levelClass.getConstructor(Main.class, boolean.class);
                 BaseLevel level = (BaseLevel) constructor.newInstance(game, true);
@@ -220,20 +216,17 @@ public class Levels_Screen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Update animation time
         animationTime += delta;
 
-        // Calculate offsets using sine wave with different phases
         float offsetY1 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase1);
         float offsetY2 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase2);
         float offsetY3 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase3);
 
-        // Update portal positions with individual offsets
         portal_I1.setY(baseY1 + offsetY1);
         portal_I2.setY(baseY2 + offsetY2);
         portal_I3.setY(baseY3 + offsetY3);
 
-        Gdx.gl.glClearColor(0, 0, 0, 1); // for clearing up the previous stage
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -276,18 +269,18 @@ public class Levels_Screen implements Screen {
 
     private void createLevel1() {
         game.setScreen(new Level_1(game, false));
-    } // function for creating the new level
+    }
 
     private void createLevel2() {
         game.setScreen(new Level_2(game, false));
-    } // function for creating the new level
+    }
 
     private void createLevel3() {
         game.setScreen(new Level_3(game, false));
     }
 
     @Override
-    public void dispose() { // disposing the textures and stage
+    public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
         ground_shape.dispose();

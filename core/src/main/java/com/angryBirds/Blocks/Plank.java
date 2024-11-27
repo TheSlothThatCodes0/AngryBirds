@@ -82,6 +82,6 @@ public class Plank extends Block {
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);
         }
-        updateTexture();  // Make sure this is called after setting the texture
+        updateTexture();
     }
 }
