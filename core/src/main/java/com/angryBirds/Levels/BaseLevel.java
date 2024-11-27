@@ -285,9 +285,7 @@ public abstract class BaseLevel implements Screen {
     }
 
     public void saveGameState() {
-        // Clear any existing saves first
         clearSavedGame();
-
         SaveData saveData = new SaveData();
         saveData.levelName = this.getClass().getSimpleName();
 
@@ -299,6 +297,7 @@ public abstract class BaseLevel implements Screen {
                 if (body != null) {
                     saveData.birds.add(new SaveData.GameObjectData(
                         bird.getClass().getSimpleName(),
+                        "",
                         body.getPosition().x * PPM,
                         body.getPosition().y * PPM,
                         body.getAngle()));
@@ -312,10 +311,11 @@ public abstract class BaseLevel implements Screen {
                 Body body = block.body;
                 if (body != null) {
                     saveData.blocks.add(new SaveData.GameObjectData(
-                            block.getClass().getSimpleName(),
-                            body.getPosition().x * PPM,
-                            body.getPosition().y * PPM,
-                            body.getAngle()));
+                        block.getClass().getSimpleName(),
+                        block.getMaterial(),
+                        body.getPosition().x * PPM,
+                        body.getPosition().y * PPM,
+                        body.getAngle()));
                 }
             }
         }
@@ -328,6 +328,7 @@ public abstract class BaseLevel implements Screen {
                 if (body != null) {
                     saveData.pigs.add(new SaveData.GameObjectData(
                             pig.getClass().getSimpleName(),
+                            "",
                             body.getPosition().x * PPM,
                             body.getPosition().y * PPM,
                             body.getAngle()));
@@ -402,11 +403,17 @@ public abstract class BaseLevel implements Screen {
     private Block createBlockFromData(SaveData.GameObjectData data) {
         switch (data.type) {
             case "Cube":
-                return new Cube(game, "stone", data.x, data.y, world);
+                return new Cube(game, data.material, data.x, data.y, world, data.angle);
             case "Plank":
-                return new Plank(game, "wood", data.x, data.y, world);
+                return new Plank(game, data.material, data.x, data.y, world, data.angle);
             case "Triangle":
-                return new Triangle(game, "wood", data.x, data.y, world);
+                return new Triangle(game, data.material, data.x, data.y, world, data.angle);
+            case "Column":
+                return new Column(game, data.material, data.x, data.y, world, data.angle);
+            case "Wall":
+                return new Wall(game, data.x, data.y, world);
+            case "Ground":
+                return new Ground(game, data.material, data.x, data.y, world);
             default:
                 return null;
         }

@@ -7,10 +7,41 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Triangle extends Block {
 
     public Triangle(Main game, String material,float x,float y, World world) {
-        super(game, 80, 80, world); // 120 120
+        super(game, 80, 80, world, material); // 120 120
         loadTexture(material);
         setPosition(x,y);
         setInitialHealth(material);
+        float density = 1.0f;
+        float friction = 0.3f;
+        float restitution = 0.1f;
+
+        switch (material.toLowerCase()) {
+            case "stone":
+                density = 2.0f;
+                friction = 0.4f;
+                restitution = 0.1f;
+                break;
+            case "wood":
+                density = 0.5f;
+                friction = 0.3f;
+                restitution = 0.2f;
+                break;
+            case "ice":
+                density = 0.8f;
+                friction = 0.1f;
+                restitution = 0.3f;
+                break;
+        }
+
+        createPhysicsBody(x, y, density, friction, restitution,"triangle");
+    }
+
+    public Triangle(Main game, String material,float x,float y, World world, float rotation) {
+        super(game, 80, 80, world, material); // 120 120
+        loadTexture(material);
+        setPosition(x,y);
+        setInitialHealth(material);
+        setRotation(rotation);
         float density = 1.0f;
         float friction = 0.3f;
         float restitution = 0.1f;

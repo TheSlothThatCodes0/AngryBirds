@@ -8,7 +8,7 @@ import static com.angryBirds.Main.PPM;
 
 public class Ground extends Block {
     public Ground(Main game, String material, float x, float y, World world) {
-        super(game, 4000, 60, world);
+        super(game, 4000, 60, world, material);
         setPosition(x, y);
 
         float density = 1f;
@@ -22,6 +22,5 @@ public class Ground extends Block {
 
     @Override
     public void loadTexture(String material) {
-        // Empty implementation - no texture needed
     }
 }

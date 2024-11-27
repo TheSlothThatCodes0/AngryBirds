@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Wall extends Block {
     public Wall(Main game, float x, float y, World world) {
-        super(game, 60, 1080, world); // Set width and height for the right wall
+        super(game, 60, 1080, world, ""); // Set width and height for the right wall
         setPosition(x, y);
 
         float density = 1f;

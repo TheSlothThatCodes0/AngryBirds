@@ -20,7 +20,7 @@ public class Main extends Game {
         batch = new SpriteBatch();
         assets = new AssetManager();
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        BaseLevel.clearSavedGame();
+        // BaseLevel.clearSavedGame();
 
         mc = musicControl.getInstance();
         mc.loadMusic("audio/theme_1.mp3");

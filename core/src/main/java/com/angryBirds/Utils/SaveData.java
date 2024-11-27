@@ -14,19 +14,22 @@ public class SaveData implements Serializable {
 
     public static class GameObjectData implements Serializable {
         public String type;
+        public String material; // Add this field
         public float x;
         public float y;
         public float angle;
 
         public GameObjectData() {
             this.type = "";
+            this.material = "";
             this.x = 0;
             this.y = 0;
             this.angle = 0;
         }
 
-        public GameObjectData(String type, float x, float y, float angle) {
+        public GameObjectData(String type, String material, float x, float y, float angle) {
             this.type = type;
+            this.material = material;
             this.x = x;
             this.y = y;
             this.angle = angle;

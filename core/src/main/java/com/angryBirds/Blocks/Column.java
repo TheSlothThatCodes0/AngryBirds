@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Column extends Block {
 
     public Column(Main game, String material, float x, float y, World world) {
-        super(game, 25, 200, world); // Set width and height for vertical column
+        super(game, 25, 200, world, material);
         loadTexture(material);
         setPosition(x, y);
         setInitialHealth(material);
@@ -17,6 +17,20 @@ public class Column extends Block {
 
         createPhysicsBody(x, y, density, friction, restitution, "column");
     }
+
+    public Column(Main game, String material, float x, float y, World world, float rotation) {
+        super(game, 25, 200, world, material);
+        loadTexture(material);
+        setPosition(x, y);
+        setInitialHealth(material);
+        float density = getDensity(material);
+        float friction = getFriction(material);
+        float restitution = getRestitution(material);
+        setRotation(rotation);
+        createPhysicsBody(x, y, density, friction, restitution, "column");
+    }
+
+
 
     private float getDensity(String material) {
         switch (material.toLowerCase()) {

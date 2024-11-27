@@ -16,6 +16,7 @@ public abstract class Block extends Image {
     protected Texture blockTexture;
     protected float blockWidth;
     protected float blockHeight;
+    protected String material;
 
     public Body body;
     protected World world;
@@ -39,12 +40,13 @@ public abstract class Block extends Image {
 
     private boolean markedForDestruction = false;
 
-    public Block(Main game, float width, float height, World world) {
+    public Block(Main game, float width, float height, World world, String material) {
         super();
         this.game = game;
         this.world = world;
         this.blockWidth = width;
         this.blockHeight = height;
+        this.material = material;
         setSize(blockWidth, blockHeight);
     }
 
@@ -160,5 +162,9 @@ public abstract class Block extends Image {
             blockTexture.dispose();
             blockTexture = null;
         }
+    }
+
+    public String getMaterial() {
+        return material;
     }
 }
