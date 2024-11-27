@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Wall extends Block {
     public Wall(Main game, float x, float y, World world) {
-        super(game, 60, 1080, world); // Set width and height for the right wall
+        super(game, 60, 1080, world);
         setPosition(x, y);
 
         float density = 1f;
@@ -13,11 +13,11 @@ public class Wall extends Block {
         float restitution = 0.0f;
 
         createPhysicsBody(x, y, density, friction, restitution, "ground");
-        setVisible(false); // Make the actor invisible
+        setVisible(false);
     }
 
     @Override
     public void loadTexture(String material) {
-        // Empty implementation - no texture needed
+
     }
 }

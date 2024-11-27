@@ -45,7 +45,6 @@ public class Level_3 extends BaseLevel {
         addBlock(new Wall(game, WORLD_WIDTH, buffer_size, world));
         addBlock(new Wall(game, -90, buffer_size, world));
 
-        // Level 3 specific blocks
         addBlock(new Column(game, "stone", base_x, base_y, world));
         addBlock(new Column(game, "stone", base_x + 175, base_y, world));
         addBlock(new Column(game, "stone", base_x + 190, base_y, world));
@@ -77,10 +76,8 @@ public class Level_3 extends BaseLevel {
         addBlock(new Plank(game, "wood", base_x + 190, base_y + 4*column_height + 3*plank_height + buffer_size, world));
 
 
-        // Pig placements similar to Level_2 strategy
         addPig(new NormalPig(game, "small", base_x + 50 - xOffset, base_y + cube_size + buffer_size, world));
 
-// Adding pigs on top of the columns
         addPig(new NormalPig(game, "small", base_x + 200, base_y + 2*column_height + 2*plank_height + buffer_size, world));
         addPig(new NormalPig(game, "small", base_x + 200+185 , base_y + 2*column_height + 2*plank_height + buffer_size, world));
         addPig(new NormalPig(game, "small", base_x + 150, base_y + 2*column_height + 2*plank_height + buffer_size, world));
@@ -95,10 +92,8 @@ public class Level_3 extends BaseLevel {
         addPig(new NormalPig(game, "small", base_x + 250, base_y + 1*column_height + 2*plank_height + buffer_size, world));
         addPig(new NormalPig(game, "small", base_x + 250+185 , base_y + 1*column_height + 2*plank_height + buffer_size, world));
 
-// King Pig in a prominent position (top of the structure)
         addPig(new KingPig(game, base_x + 350 + 185 - xOffset, base_y + 4*column_height + 3*plank_height + buffer_size, world));
 
-// Big Pig in the middle of columns
         addPig(new NormalPig(game, "big", base_x + 320 + 185 - xOffset, base_y + 3*column_height + 3*plank_height + buffer_size, world));
 
         System.out.println("Level 3 initialized with blocks and pigs");
@@ -106,13 +101,9 @@ public class Level_3 extends BaseLevel {
 
     @Override
     public void render(float delta) {
-        // Call parent render which handles debug rendering
         super.render(delta);
 
-        // Add any Level_3 specific rendering here
-        // Your existing rendering code without the debug renders
         game.batch.begin();
-        // Your existing rendering code
         game.batch.end();
     }
 }

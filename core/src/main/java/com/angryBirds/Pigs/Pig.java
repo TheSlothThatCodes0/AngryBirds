@@ -23,13 +23,11 @@ public abstract class Pig extends Image {
     protected static final float DAMAGE_MULTIPLIER = 0.1f;
     public boolean winc = false;
 
-    // Physics categories
     protected static final short CATEGORY_GROUND = 0x0001;
     protected static final short CATEGORY_BLOCKS = 0x0002;
     protected static final short CATEGORY_BIRDS = 0x0004;
     protected static final short CATEGORY_PIGS = 0x0008;
 
-    // Add field for marking destruction
     private boolean markedForDestruction = false;
 
     private Sound deathSound;
@@ -42,7 +40,6 @@ public abstract class Pig extends Image {
         setPosition(x, y);
         createPhysicsBody(x, y);
 
-        // Initialize font for health display
         healthFont = new com.badlogic.gdx.graphics.g2d.BitmapFont();
         healthFont.setColor(1, 0, 0, 1); // Red color
 
@@ -67,7 +64,7 @@ public abstract class Pig extends Image {
 
             if (health <= 0) {
                 System.out.println("Pig marked for destruction!");
-                markedForDestruction = true; // Mark for destruction instead of immediate dispose
+                markedForDestruction = true;
                 winc = true;
             }
         }
@@ -98,7 +95,6 @@ public abstract class Pig extends Image {
         body.setUserData(this);
         circle.dispose();
 
-        // Keep body active but prevent rotation
         body.setActive(true);
         body.setFixedRotation(true);
         canRoll = false;
@@ -108,7 +104,6 @@ public abstract class Pig extends Image {
     public void act(float delta) {
         super.act(delta);
 
-        // Handle queued destruction
         if (markedForDestruction && body != null) {
 
             deathSound.play(1.0f);
@@ -117,7 +112,6 @@ public abstract class Pig extends Image {
         }
 
         if (body != null) {
-            // Update position
             float centerX = body.getPosition().x * PPM;
             float centerY = body.getPosition().y * PPM;
             float x = centerX - (getWidth() / 2);
@@ -130,7 +124,6 @@ public abstract class Pig extends Image {
 
             setOrigin(getWidth() / 2, getHeight() / 2);
 
-            // Update health display only if pig is alive
             if (!markedForDestruction && game.batch != null && healthFont != null) {
                 game.batch.begin();
                 healthFont.draw(game.batch,
@@ -151,7 +144,7 @@ public abstract class Pig extends Image {
         if (body != null && !canRoll) {
             canRoll = true;
             body.setFixedRotation(false);
-            body.setAngularVelocity(0); // Reset any existing angular velocity
+            body.setAngularVelocity(0);
         }
     }
 

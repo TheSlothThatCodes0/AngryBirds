@@ -114,7 +114,7 @@ public class SettingsScreen implements Screen {
         handleInput();
     }
 
-    private void handleInput() { // for handling clicks and drag
+    private void handleInput() {
         if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);

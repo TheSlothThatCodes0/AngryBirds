@@ -31,7 +31,7 @@ public class LossScreen implements Screen{
     protected Texture levelSelectTexture;
     protected ImageButton levelSelectButton;
 
-    public LossScreen(Main game) { // constructor
+    public LossScreen(Main game) {
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -45,7 +45,7 @@ public class LossScreen implements Screen{
         setupNavigationButtons();
     }
 
-    private void loadTextures() { //background texture loaded
+    private void loadTextures() {
         backgroundTexture = new Texture("yousuck.png");
 
     }
@@ -65,7 +65,7 @@ public class LossScreen implements Screen{
         }
     }
 
-    private void setupNavigationButtons() {  // button setup
+    private void setupNavigationButtons() {
         float padding = 20f;
 
         ImageButton.ImageButtonStyle levelSelectStyle = new ImageButton.ImageButtonStyle();

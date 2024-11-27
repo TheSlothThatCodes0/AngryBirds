@@ -16,12 +16,10 @@ public class Ground extends Block {
         float restitution = 0.1f;
 
         createPhysicsBody(x, y, density, friction, restitution, "ground");
-        // Remove loadTexture call
-        setVisible(false); // Make the actor invisible
+        setVisible(false);
     }
 
     @Override
     public void loadTexture(String material) {
-        // Empty implementation - no texture needed
     }
 }

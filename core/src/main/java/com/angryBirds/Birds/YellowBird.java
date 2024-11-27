@@ -25,31 +25,25 @@ public class YellowBird extends Bird {
         if (body != null && isLaunched && !specialAbilityUsed) {
             // Get current velocity
             Vector2 currentVel = body.getLinearVelocity();
-            
-            // Store initial position for debugging
+
             lastPosition = new Vector2(body.getPosition());
-            
-            // Wake up the body and ensure it's active
+
             body.setAwake(true);
             body.setActive(true);
-            
-            // Apply new velocity directly
+
             float newVelX = currentVel.x * YELLOW_SPEED_MULTIPLIER;
             float newVelY = currentVel.y * YELLOW_SPEED_MULTIPLIER;
-            
-            // Set the new velocity
+
             body.setLinearVelocity(newVelX, newVelY);
-            
-            // Apply an immediate impulse in the direction of motion
+
             Vector2 impulse = new Vector2(newVelX, newVelY).scl(0.1f);
             body.applyLinearImpulse(impulse, body.getWorldCenter(), true);
-            
-            // Reset any angular velocity that might interfere
+
             body.setAngularVelocity(0);
-            
+
             specialAbilityUsed = true;
             timeSinceBoost = 0;
-            
+
             System.out.println("Boost applied - Position: " + lastPosition);
             System.out.println("New velocity set to: (" + newVelX + ", " + newVelY + ")");
         }

@@ -32,7 +32,7 @@ public class PauseScreen implements Screen {
 
     private musicControl mc;
 
-    public PauseScreen(Main game, Screen previousScreen) { // constructor
+    public PauseScreen(Main game, Screen previousScreen) {
         this.game = game;
         this.previousScreen = previousScreen;
         mc = musicControl.getInstance();
@@ -53,7 +53,7 @@ public class PauseScreen implements Screen {
         setupUI();
     }
 
-    private void setupUI() { // loading and setting up all the assets
+    private void setupUI() {
         Image background = new Image(backgroundTexture);
         background.setSize(WORLD_WIDTH, WORLD_HEIGHT);
         stage.addActor(background);
@@ -74,7 +74,6 @@ public class PauseScreen implements Screen {
             }
         });
 
-        // Save button
         Image saveButton = new Image(saveButtonTexture);
         saveButton.setSize(saveButton.getWidth() * buttonScale, saveButton.getHeight() * buttonScale);
         saveButton.setPosition(
@@ -83,7 +82,6 @@ public class PauseScreen implements Screen {
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Get the current game state from BaseLevel
                 if (previousScreen instanceof BaseLevel) {
                     BaseLevel level = (BaseLevel) previousScreen;
                     level.saveGameState();
@@ -128,7 +126,7 @@ public class PauseScreen implements Screen {
     }
 
     @Override
-    public void dispose() { // disposing of the assets
+    public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
         resumeButtonTexture.dispose();

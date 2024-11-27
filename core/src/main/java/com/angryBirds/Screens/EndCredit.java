@@ -26,7 +26,7 @@ public class EndCredit implements Screen {
     // Credits scrolling variables
     private String creditsText;
     private float creditsY;
-    private final float SCROLL_SPEED = 100f; // pixels per second
+    private final float SCROLL_SPEED = 100f;
 
     public EndCredit(Main game) {
         this.game = game;
@@ -58,7 +58,6 @@ public class EndCredit implements Screen {
             + "I am the best game developer in the world.\n"
             + "The cost of creating this was my sanity.\n";
 
-        // Start the credits text just below the bottom of the screen
         creditsY = -WORLD_HEIGHT / 10;
     }
 
@@ -66,7 +65,6 @@ public class EndCredit implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
 
-        // Update the position of the credits text
         creditsY += SCROLL_SPEED * delta;
 
         batch.setProjectionMatrix(camera.combined);
