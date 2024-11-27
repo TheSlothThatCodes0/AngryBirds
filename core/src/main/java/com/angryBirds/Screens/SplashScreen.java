@@ -49,11 +49,11 @@ public class SplashScreen implements Screen {
         game.assets.load("backArrow.png", Texture.class);
         game.assets.load("yellow_bird.png", Texture.class);
         game.assets.load("g_b.png",Texture.class);
-        game.assets.load("g_p.png",Texture.class);
         game.assets.load("g_t.png",Texture.class);
         game.assets.load("s_b.png",Texture.class);
-        game.assets.load("s_p.png",Texture.class);
         game.assets.load("s_t.png",Texture.class);
+        game.assets.load("g_p.png",Texture.class);
+        game.assets.load("s_p.png",Texture.class);
         game.assets.load("w_p.png",Texture.class);
         game.assets.load("w_b.png",Texture.class);
         game.assets.load("w_t.png",Texture.class);
@@ -75,6 +75,16 @@ public class SplashScreen implements Screen {
         game.assets.load("play.png", Texture.class);
         game.assets.load("cut.png", Texture.class);
         game.assets.load("saveGame.png", Texture.class);
+
+        game.assets.load("gh_p.png",Texture.class);
+        game.assets.load("sh_p.png",Texture.class);
+        game.assets.load("wh_p.png",Texture.class);
+
+        game.assets.load("portal1.png",Texture.class);
+        game.assets.load("portal2.png",Texture.class);
+        game.assets.load("portal3.png",Texture.class);
+
+        game.assets.load("woodButton.png",Texture.class);
 // ... other texture loadings
     }
 

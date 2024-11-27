@@ -40,7 +40,10 @@ public class Levels_Screen implements Screen {
     private Texture ground_shape;
     private Texture launcher1;
     private Texture launcher2;
-    private Texture portal_T;
+    private Texture portal_1;
+    private Texture portal_2;
+    private Texture portal_3;
+
     private Texture save_portal_T;
 
 
@@ -97,7 +100,9 @@ public class Levels_Screen implements Screen {
         backgroundTexture = new Texture("level_background1.jpg");
         launcher1 = new Texture("launcher_1.png");
         launcher2 = new Texture("launcher_2.png");
-        portal_T = new Texture("portal.png");
+        portal_1 = new Texture("portal1.png");
+        portal_2 = new Texture("portal2.png");
+        portal_3 = new Texture("portal3.png");
         save_portal_T = new Texture("save_portal.png");
     }
 
@@ -113,7 +118,7 @@ public class Levels_Screen implements Screen {
         launch2.setPosition(327, 340);
         launch2.setScaling(Scaling.fit);
 
-        portal_I1 = new Image(portal_T);
+        portal_I1 = new Image(portal_3);
         portal_I1.setPosition(1500, 250);
         portal_I1.setScaling(Scaling.fit);
 
@@ -124,7 +129,7 @@ public class Levels_Screen implements Screen {
             }
         });
 
-        portal_I2 = new Image(portal_T);
+        portal_I2 = new Image(portal_2);
         portal_I2.setPosition(1100, 300 + launch1.getHeight() - 100);
         portal_I2.setScaling(Scaling.fit);
 
@@ -135,7 +140,7 @@ public class Levels_Screen implements Screen {
             }
         });
 
-        portal_I3 = new Image(portal_T);
+        portal_I3 = new Image(portal_1);
         portal_I3.setPosition(600, 300 + launch1.getHeight() + 125);
         portal_I3.setScaling(Scaling.fit);
 
@@ -288,6 +293,8 @@ public class Levels_Screen implements Screen {
         ground_shape.dispose();
         launcher1.dispose();
         launcher2.dispose();
-        portal_T.dispose();
+        portal_1.dispose();
+        portal_2.dispose();
+        portal_3.dispose();
     }
 }

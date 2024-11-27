@@ -40,7 +40,7 @@ public class SettingsScreen implements Screen {
     private final float SLIDER_WIDTH = 600;
     private final float SLIDER_HEIGHT = 25;
     private final float KNOB_SIZE = 40;
-    private final float CREDITS_BUTTON_WIDTH = 300;
+    private final float CREDITS_BUTTON_WIDTH = 100;
     private final float CREDITS_BUTTON_HEIGHT = 100;
 
     private musicControl mc;
@@ -59,12 +59,12 @@ public class SettingsScreen implements Screen {
 
         woodBoardTexture = game.assets.get("settingsScreenBG1.jpg", Texture.class);
         backButton = game.assets.get("backArrow.png", Texture.class);
-        creditsButton = game.assets.get("credits.png", Texture.class);
+        creditsButton = game.assets.get("woodButton.png", Texture.class);
 
         backBounds = new Rectangle(10, WORLD_HEIGHT - BUTTON_SIZE - 10,  // setting the area for click detection
             BUTTON_SIZE, BUTTON_SIZE);
         creditsBounds = new Rectangle((WORLD_WIDTH - CREDITS_BUTTON_WIDTH) / 2,  // setting the area for click detection
-            WORLD_HEIGHT * 0.3f, CREDITS_BUTTON_WIDTH, CREDITS_BUTTON_HEIGHT);
+            WORLD_HEIGHT * 0.45f, CREDITS_BUTTON_WIDTH, CREDITS_BUTTON_HEIGHT);
 
         float sliderX = (WORLD_WIDTH - SLIDER_WIDTH) / 2;
         float sliderY = WORLD_HEIGHT * 0.6f;
@@ -88,7 +88,7 @@ public class SettingsScreen implements Screen {
 
         game.batch.draw(backButton, backBounds.x, backBounds.y,
             backBounds.width, backBounds.height);
-        game.batch.draw(creditsButton, creditsBounds.x, creditsBounds.y,
+        game.batch.draw(creditsButton, creditsBounds.x , creditsBounds.y,
             creditsBounds.width, creditsBounds.height);
 
         font.draw(game.batch, "Volume: " + (int)(volume * 100) + "%", // vloume slider bar

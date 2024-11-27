@@ -61,13 +61,13 @@ public class Column extends Block {
     public void loadTexture(String material) {
         switch (material.toLowerCase()) {
             case "stone":
-                blockTexture = game.assets.get("s_p.png", Texture.class); // Use appropriate texture
+                blockTexture = game.assets.get("sh_p.png", Texture.class); // Use appropriate texture
                 break;
             case "wood":
-                blockTexture = game.assets.get("w_p.png", Texture.class); // Use appropriate texture
+                blockTexture = game.assets.get("wh_p.png", Texture.class); // Use appropriate texture
                 break;
             case "ice":
-                blockTexture = game.assets.get("g_p.png", Texture.class); // Use appropriate texture
+                blockTexture = game.assets.get("gh_p.png", Texture.class); // Use appropriate texture
                 break;
             default:
                 throw new IllegalArgumentException("Invalid material: " + material);
