@@ -68,7 +68,6 @@ public class Level_2 extends BaseLevel {
         addBlock(new Triangle(game, "wood", 1545 - xOffset, ground_height + 3*column_height + 3*plank_height + buffer_size, world));
         addBlock(new Triangle(game, "wood", 1670 - xOffset, ground_height + 3*column_height + 3*plank_height + buffer_size, world));
 
-        addPig(new NormalPig(game, "small", 130 - xOffset, ground_height + cube_size + buffer_size, world));
         addPig(new NormalPig(game, "small", 1370 - xOffset, ground_height + column_height + plank_height + buffer_size + 2*cube_size, world));
         addPig(new NormalPig(game, "small", 1870 - xOffset, ground_height + column_height + plank_height + buffer_size + 2*cube_size, world));
 

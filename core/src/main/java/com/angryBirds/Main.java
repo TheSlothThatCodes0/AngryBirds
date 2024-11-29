@@ -27,7 +27,6 @@ public class Main extends Game {
         mc.fadeIn(3.0f);
 
         setScreen(new SplashScreen(this));
-
     }
 
     public SpriteBatch getBatch() {
