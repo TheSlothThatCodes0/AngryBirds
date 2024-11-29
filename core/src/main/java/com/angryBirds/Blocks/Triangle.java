@@ -37,11 +37,12 @@ public class Triangle extends Block {
     }
 
     public Triangle(Main game, String material,float x,float y, World world, float rotation) {
-        super(game, 80, 80, world, material); // 120 120
+        super(game, 80, 80, world, material); 
         loadTexture(material);
         setPosition(x,y);
         setInitialHealth(material);
         setRotation(rotation);
+        body.setTransform(body.getPosition(), (float) Math.toRadians(rotation));
         float density = 1.0f;
         float friction = 0.3f;
         float restitution = 0.1f;

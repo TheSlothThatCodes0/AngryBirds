@@ -41,16 +41,7 @@ import java.lang.reflect.Constructor;
 
 public abstract class BaseLevel implements Screen {
 
-    protected static final short CATEGORY_GROUND = 0x0001; // 1 in binary
-    protected static final short CATEGORY_BLOCKS = 0x0002; // 2 in binary
-    protected static final short CATEGORY_BIRDS = 0x0004; // 4 in binary
-    protected static final short CATEGORY_PIGS = 0x0008; // 8 in binary
-
-    protected static final short MASK_GROUND = -1; // Collide with everything
-    protected static final short MASK_BLOCKS = -1; // Collide with everything
-    protected static final short MASK_BIRDS = -1; // Collide with everything
     public boolean loadingFromSave = false;
-    // protected static final short MASK_PISS = -1; // Collide with everything
 
     protected Main game;
     protected OrthographicCamera camera;
@@ -88,13 +79,12 @@ public abstract class BaseLevel implements Screen {
     protected World world;
     protected Box2DDebugRenderer debugRenderer;
     protected static final float PPM = 5;
-    protected Matrix4 debugMatrix; // Add this as class field
+    protected Matrix4 debugMatrix;
     protected Launcher launcher;
 
     private musicControl mc;
     private Array<Block> blocksToDestroy;
     private boolean isPaused = false;
-
 
     public BaseLevel(Main game, boolean loadFromSave) {
         this.loadingFromSave = loadFromSave;
@@ -118,7 +108,7 @@ public abstract class BaseLevel implements Screen {
         world.setContactListener(new CollisionHandler());
 
         this.mc = musicControl.getInstance();
-        mc.crossFade("audio/theme_3.mp3",0.7f);
+        mc.crossFade("audio/theme_3.mp3", 0.7f);
 
         loadNavigationButtonTextures();
         setupNavigationButtons();
@@ -127,17 +117,17 @@ public abstract class BaseLevel implements Screen {
     }
 
     protected void checkWinCondition() {
-    boolean allPigsDead = true;
-    for (Image x : pigs) {
-        if (((Pig)x).health > 0) {
-            allPigsDead = false;
-            break;
+        boolean allPigsDead = true;
+        for (Image x : pigs) {
+            if (((Pig) x).health > 0) {
+                allPigsDead = false;
+                break;
+            }
+        }
+        if (allPigsDead) {
+            game.setScreen(new WinScreen(game));
         }
     }
-    if (allPigsDead) {
-        game.setScreen(new WinScreen(game));
-    }
-}
 
     private void loadBackgroundTextures() {
         backgroundFrames = new Texture[8];
@@ -186,8 +176,7 @@ public abstract class BaseLevel implements Screen {
     private void setupLauncher() {
         launcher = new Launcher(world, stage,
                 new Vector2(300, 105),
-                launcher1, launcher2
-        );
+                launcher1, launcher2);
     }
 
     private void setupPauseButton() {
@@ -287,45 +276,36 @@ public abstract class BaseLevel implements Screen {
         for (Image image : birds) {
             if (image instanceof Bird) {
                 Bird bird = (Bird) image;
-                Body body = bird.getBody();
-                if (body != null) {
-                    saveData.birds.add(new SaveData.GameObjectData(
+                saveData.birds.add(new SaveData.GameObjectData(
                         bird.getClass().getSimpleName(),
                         "",
-                        body.getPosition().x * PPM,
-                        body.getPosition().y * PPM,
-                        body.getAngle()));
-                }
+                        bird.getX(),
+                        bird.getY(),
+                        bird.getRotation()));
             }
         }
 
         for (Image image : blocks) {
             if (image instanceof Block) {
                 Block block = (Block) image;
-                Body body = block.body;
-                if (body != null) {
-                    saveData.blocks.add(new SaveData.GameObjectData(
+                saveData.blocks.add(new SaveData.GameObjectData(
                         block.getClass().getSimpleName(),
                         block.getMaterial(),
-                        body.getPosition().x * PPM,
-                        body.getPosition().y * PPM,
-                        body.getAngle()));
-                }
+                        block.getX(), 
+                        block.getY(),
+                        block.getRotation()));
             }
         }
 
         for (Image image : pigs) {
             if (image instanceof Pig) {
                 Pig pig = (Pig) image;
-                Body body = pig.getBody();
-                if (body != null) {
-                    saveData.pigs.add(new SaveData.GameObjectData(
-                            pig.getClass().getSimpleName(),
-                            "",
-                            body.getPosition().x * PPM,
-                            body.getPosition().y * PPM,
-                            body.getAngle()));
-                }
+                saveData.pigs.add(new SaveData.GameObjectData(
+                        pig.getClass().getSimpleName(),
+                        "",
+                        pig.getX(), 
+                        pig.getY(),
+                        pig.getRotation()));
             }
         }
 
@@ -335,86 +315,6 @@ public abstract class BaseLevel implements Screen {
             file.writeString(json, false);
         } catch (Exception e) {
             System.out.println("Error saving game: " + e.getMessage());
-        }
-    }
-
-    public static SaveData loadSavedGameFile() {
-        try {
-            FileHandle file = Gdx.files.local("save.json");
-            if (file.exists()) {
-                String json = file.readString();
-                return new Json().fromJson(SaveData.class, json);
-            }
-        } catch (Exception e) {
-            System.out.println("Error loading save: " + e.getMessage());
-        }
-        return null;
-    }
-
-    public void loadFromSaveData(SaveData saveData) {
-        this.loadingFromSave = true;
-        setBackground("frame_0_delay-0.1s.png");
-        addBlock(new Ground(game, "stone", 0, 0, world));
-        for (SaveData.GameObjectData birdData : saveData.birds) {
-            Bird bird = createBirdFromData(birdData);
-            if (bird != null) {
-                addBird(bird);
-            }
-        }
-        for (SaveData.GameObjectData blockData : saveData.blocks) {
-            Block block = createBlockFromData(blockData);
-            if (block != null) {
-                addBlock(block);
-            }
-        }
-        for (SaveData.GameObjectData pigData : saveData.pigs) {
-            Pig pig = createPigFromData(pigData);
-            if (pig != null) {
-                addPig(pig);
-            }
-        }
-    }
-
-    private Bird createBirdFromData(SaveData.GameObjectData data) {
-        switch (data.type) {
-            case "RedBird":
-                return new RedBird(game, data.x, data.y, world);
-            case "BlueBird":
-                return new BlueBird(game, data.x, data.y, world);
-            case "YellowBird":
-                return new YellowBird(game, data.x, data.y, world);
-            default:
-                return null;
-        }
-    }
-
-    private Block createBlockFromData(SaveData.GameObjectData data) {
-        switch (data.type) {
-            case "Cube":
-                return new Cube(game, data.material, data.x, data.y, world, data.angle);
-            case "Plank":
-                return new Plank(game, data.material, data.x, data.y, world, data.angle);
-            case "Triangle":
-                return new Triangle(game, data.material, data.x, data.y, world, data.angle);
-            case "Column":
-                return new Column(game, data.material, data.x, data.y, world, data.angle);
-            case "Wall":
-                return new Wall(game, data.x, data.y, world);
-            case "Ground":
-                return new Ground(game, data.material, data.x, data.y, world);
-            default:
-                return null;
-        }
-    }
-
-    private Pig createPigFromData(SaveData.GameObjectData data) {
-        switch (data.type) {
-            case "NormalPig":
-                return new NormalPig(game, "small", data.x, data.y, world);
-            case "KingPig":
-                return new KingPig(game, data.x, data.y, world);
-            default:
-                return null;
         }
     }
 
@@ -548,21 +448,20 @@ public abstract class BaseLevel implements Screen {
         boolean allPigsDead = true;
         boolean allBirdsInactive = true;
         for (Image x : pigs) {
-            if (((Pig)x).health > 0) {
+            if (((Pig) x).health > 0) {
                 allPigsDead = false;
                 break;
             }
         }
-        for(Image x : birds){
-            if(!((Bird) x).isDead){
+        for (Image x : birds) {
+            if (!((Bird) x).isDead) {
                 allBirdsInactive = false;
                 break;
             }
         }
         if (allPigsDead) {
             game.setScreen(new WinScreen(game));
-        }
-        else if(allBirdsInactive && !allPigsDead){
+        } else if (allBirdsInactive && !allPigsDead) {
             game.setScreen(new LossScreen(game));
         }
     }

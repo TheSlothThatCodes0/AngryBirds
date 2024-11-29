@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class YellowBird extends Bird {
-    private static final float YELLOW_SPEED_MULTIPLIER = 2.5f;
+    public static final float YELLOW_SPEED_MULTIPLIER = 2.5f;
     private Vector2 lastPosition;
     private float timeSinceBoost = 0;
 

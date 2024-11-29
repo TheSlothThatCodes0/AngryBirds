@@ -15,8 +15,13 @@ buildscript {
 }
 
 allprojects {
+  apply plugin: 'java'
   apply plugin: 'eclipse'
   apply plugin: 'idea'
+
+  repositories {
+    mavenCentral()
+  }
 
   // This allows you to "Build and run using IntelliJ IDEA", an option in IDEA's Settings.
   idea {
@@ -24,6 +29,19 @@ allprojects {
       outputDir file('build/classes/java/main')
       testOutputDir file('build/classes/java/test')
     }
+  }
+
+  dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation "org.mockito:mockito-core:5.3.1"
+    testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    testImplementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+  }
+
+  test {
+    useJUnitPlatform()
   }
 }
 
@@ -71,3 +89,4 @@ subprojects {
 }
 
 eclipse.project.name = 'angry-birds' + '-parent'
+

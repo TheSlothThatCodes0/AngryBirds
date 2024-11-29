@@ -1,15 +1,13 @@
 package com.angryBirds.Screens;
 
-import com.angryBirds.Levels.BaseLevel;
-import com.angryBirds.Levels.Level_1;
-import com.angryBirds.Levels.Level_2;
-import com.angryBirds.Levels.Level_3;
+import com.angryBirds.Levels.*;
 import com.angryBirds.Main;
 import com.angryBirds.Utils.CustomButton;
 import com.angryBirds.Utils.SaveData;
 import com.angryBirds.Utils.musicControl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,13 +17,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.lang.reflect.Constructor;
-
-import static com.angryBirds.Levels.BaseLevel.loadSavedGameFile;
 
 public class Levels_Screen implements Screen {
     private Main game;
@@ -45,7 +42,6 @@ public class Levels_Screen implements Screen {
     private Texture portal_3;
 
     private Texture save_portal_T;
-
 
     private Image background;
     private Image launch1;
@@ -68,8 +64,12 @@ public class Levels_Screen implements Screen {
     private float baseY1, baseY2, baseY3;
 
     private float phase1 = 0f;
-    private float phase2 = (float)(Math.PI * 2/3);
-    private float phase3 = (float)(Math.PI * 4/3);
+    private float phase2 = (float) (Math.PI * 2 / 3);
+    private float phase3 = (float) (Math.PI * 4 / 3);
+
+    private Image savedGamePortal;
+    private float baseSaveY;
+    private float phaseSave = (float) (Math.PI); 
 
     public Levels_Screen(Main game, Screen prev) {
         this.game = game;
@@ -91,6 +91,19 @@ public class Levels_Screen implements Screen {
         loadTextures();
         setupStage();
         stage.addActor(exitButton);
+    }
+
+    private SaveData loadSavedGameFile() {
+        try {
+            FileHandle file = Gdx.files.local("save.json");
+            if (file.exists()) {
+                String json = file.readString();
+                return new Json().fromJson(SaveData.class, json);
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading save: " + e.getMessage());
+        }
+        return null;
     }
 
     private void loadTextures() {
@@ -155,7 +168,6 @@ public class Levels_Screen implements Screen {
         portal_I2.setSize(pw * sf_p, ph * sf_p);
         portal_I3.setSize(pw * sf_p, ph * sf_p);
 
-        // Set all portals to the same base height
         float commonBaseY = 300 + launch1.getHeight() - 100;
         baseY1 = commonBaseY;
         baseY2 = commonBaseY;
@@ -172,11 +184,10 @@ public class Levels_Screen implements Screen {
         stage.addActor(portal_I2);
         stage.addActor(portal_I3);
 
-        // Add saved game portal if save exists
         SaveData savedGame = loadSavedGameFile();
         if (savedGame != null) {
-            Image savedGamePortal = new Image(save_portal_T);
-            savedGamePortal.setPosition(900, 250);
+            savedGamePortal = new Image(save_portal_T);
+            savedGamePortal.setPosition(1200, 250);
             savedGamePortal.setScaling(Scaling.fit);
 
             savedGamePortal.setSize(pw * sf_p, ph * sf_p);
@@ -184,28 +195,16 @@ public class Levels_Screen implements Screen {
             savedGamePortal.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    loadSavedGame();
+                    game.setScreen(new Saved_Level(game));
                 }
             });
 
+            // Set the base Y position
+            baseSaveY = 250;
+            
             stage.addActor(savedGamePortal);
         } else {
             System.out.println("No saved game found");
-        }
-    }
-
-    private void loadSavedGame() {
-        SaveData savedGame = BaseLevel.loadSavedGameFile();
-        if (savedGame != null) {
-            try {
-                Class<?> levelClass = Class.forName("com.angryBirds.Levels." + savedGame.levelName);
-                Constructor<?> constructor = levelClass.getConstructor(Main.class, boolean.class);
-                BaseLevel level = (BaseLevel) constructor.newInstance(game, true);
-                level.loadFromSaveData(savedGame);
-                game.setScreen(level);
-            } catch (Exception e) {
-                System.out.println("Error loading level: " + e.getMessage());
-            }
         }
     }
 
@@ -218,13 +217,18 @@ public class Levels_Screen implements Screen {
     public void render(float delta) {
         animationTime += delta;
 
-        float offsetY1 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase1);
-        float offsetY2 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase2);
-        float offsetY3 = floatAmplitude * (float)Math.sin(animationTime * floatSpeed + phase3);
+        float offsetY1 = floatAmplitude * (float) Math.sin(animationTime * floatSpeed + phase1);
+        float offsetY2 = floatAmplitude * (float) Math.sin(animationTime * floatSpeed + phase2);
+        float offsetY3 = floatAmplitude * (float) Math.sin(animationTime * floatSpeed + phase3);
 
         portal_I1.setY(baseY1 + offsetY1);
         portal_I2.setY(baseY2 + offsetY2);
         portal_I3.setY(baseY3 + offsetY3);
+
+        if (savedGamePortal != null) {
+            float offsetSave = floatAmplitude * (float) Math.sin(animationTime * floatSpeed + phaseSave);
+            savedGamePortal.setY(baseSaveY + offsetSave);
+        }
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -250,7 +254,7 @@ public class Levels_Screen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) { // full screen
+    public void resize(int width, int height) {
         viewport.update(width, height, true);
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
     }

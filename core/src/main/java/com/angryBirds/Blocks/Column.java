@@ -28,6 +28,7 @@ public class Column extends Block {
         float restitution = getRestitution(material);
         setRotation(rotation);
         createPhysicsBody(x, y, density, friction, restitution, "column");
+        body.setTransform(body.getPosition(), (float) Math.toRadians(rotation));
     }
 
 

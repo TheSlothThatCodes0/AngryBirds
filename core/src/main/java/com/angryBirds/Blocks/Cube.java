@@ -41,6 +41,7 @@ public class Cube extends Block {
         setPosition(x, y);
         setInitialHealth(material);
         setRotation(rotation);
+        body.setTransform(body.getPosition(), (float) Math.toRadians(rotation));
 
         // Create physics body with material-specific properties
         float density = 1.0f;

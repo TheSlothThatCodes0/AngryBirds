@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Plank extends Block {
 
     public Plank(Main game, String material,float x, float y, World world) {
-        super(game, 200, 25,world, material); // 300 and 50
+        super(game, 200, 25,world, material);
         loadTexture(material);
         setPosition(x, y);
         setInitialHealth(material);
@@ -37,11 +37,12 @@ public class Plank extends Block {
     }
 
     public Plank(Main game, String material,float x, float y, World world, float rotation) {
-        super(game, 200, 25,world, material); // 300 and 50
+        super(game, 200, 25,world, material); 
         loadTexture(material);
         setPosition(x, y);
         setInitialHealth(material);
         setRotation(rotation);
+        body.setTransform(body.getPosition(), (float) Math.toRadians(rotation));
         float density = 1.0f;
         float friction = 0.3f;
         float restitution = 0.1f;

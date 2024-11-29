@@ -63,8 +63,8 @@ public abstract class Block extends Image {
         PolygonShape shape = new PolygonShape();
         if(type.equalsIgnoreCase("triangle")){
             Vector2[] triangleVertices = new Vector2[3];
-            triangleVertices[0] = new Vector2(-blockWidth/(2*PPM), -blockHeight/(2*PPM));  // bottom left
-             triangleVertices[1] = new Vector2(blockWidth/(2*PPM), -blockHeight/(2*PPM));   // bottom right
+            triangleVertices[0] = new Vector2(-blockWidth/(2*PPM), -blockHeight/(2*PPM));
+             triangleVertices[1] = new Vector2(blockWidth/(2*PPM), -blockHeight/(2*PPM));  
              triangleVertices[2] = new Vector2(0, blockHeight/(2*PPM));
             shape.set(triangleVertices);
         }
@@ -101,12 +101,7 @@ public abstract class Block extends Image {
             setPosition(x, y);
 
             setRotation((float) Math.toDegrees(body.getAngle()));
-            setOrigin(getWidth() / 2, getHeight() / 2); // Set rotation origin to center
-
-            if (y < 0) {
-                System.out.println("Warning: Block position below ground! Physics pos: " +
-                        body.getPosition().y + ", Screen pos: " + y);
-            }
+            setOrigin(getWidth() / 2, getHeight() / 2);
         }
     }
 

@@ -109,7 +109,7 @@ public class CollisionHandler implements ContactListener {
 
         float massA = bodyA.getMass();
         float massB = bodyB.getMass();
-        float scaledImpact = (impactSpeed * Math.min(massA, massB)) * 0.1f; // Scale down by factor of 0.1
+        float scaledImpact = (impactSpeed * Math.min(massA, massB)) * 0.1f; 
 
         return Math.min(scaledImpact, 100.0f);
     }
