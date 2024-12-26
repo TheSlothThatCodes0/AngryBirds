@@ -276,12 +276,14 @@ public abstract class BaseLevel implements Screen {
         for (Image image : birds) {
             if (image instanceof Bird) {
                 Bird bird = (Bird) image;
-                saveData.birds.add(new SaveData.GameObjectData(
+                if(!bird.isDead){
+                    saveData.birds.add(new SaveData.GameObjectData(
                         bird.getClass().getSimpleName(),
                         "",
                         bird.getX(),
                         bird.getY(),
                         bird.getRotation()));
+                }
             }
         }
 
@@ -291,7 +293,7 @@ public abstract class BaseLevel implements Screen {
                 saveData.blocks.add(new SaveData.GameObjectData(
                         block.getClass().getSimpleName(),
                         block.getMaterial(),
-                        block.getX(), 
+                        block.getX(),
                         block.getY(),
                         block.getRotation()));
             }
@@ -300,12 +302,14 @@ public abstract class BaseLevel implements Screen {
         for (Image image : pigs) {
             if (image instanceof Pig) {
                 Pig pig = (Pig) image;
-                saveData.pigs.add(new SaveData.GameObjectData(
+                if(!pig.winc){
+                    saveData.pigs.add(new SaveData.GameObjectData(
                         pig.getClass().getSimpleName(),
                         "",
-                        pig.getX(), 
+                        pig.getX(),
                         pig.getY(),
                         pig.getRotation()));
+                }
             }
         }
 
