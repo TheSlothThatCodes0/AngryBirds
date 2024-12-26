@@ -1,5 +1,10 @@
-Shaman Ranjan(2023498) 
-Siddharth Yadav(2023498)
+# Angry Birds Clone 
+
+This is a clone of the famous game "Angry Birds" made as a project in the Advanced Programming Course. The game was entirely coded in Java and tested with junit. Most of the assessts were handrawn by Shaman. The game was developed using the libgdx library.
+
+## Demo Video
+
+<video controls src="Attachments/The final.mp4" title="Title"></video>
 
 ## How to run the project
 
@@ -17,3 +22,8 @@ Siddharth Yadav(2023498)
 4) The exit button closes the game
 5) Inside the game there are two buttons on the top left, one green and one red. The green button takes you to the win screen and the red button takes you to the lose screen
 6) There is also a pause button inside the level screen that pauses the game and takes you to the pause menu where you can resume the game, go to the main menu or save the game.
+
+## Tech Stack Used
+- libgdx library
+- junit
+- gradle
