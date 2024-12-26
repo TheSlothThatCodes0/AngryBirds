@@ -4,7 +4,14 @@ This is a clone of the famous game "Angry Birds" made as a project in the Advanc
 
 ## Demo Video
 
-<video controls src="Attachments/The final.mp4" title="Title"></video>
+
+
+
+https://github.com/user-attachments/assets/b95e17d3-5866-401c-b3f7-12bde2d39b78
+
+
+
+
 
 ## How to run the project
 
